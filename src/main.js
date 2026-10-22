@@ -6,8 +6,8 @@ import { analyzeTargetUrl, analyzeTargetUrlSync } from "./data/techDatabase.js";
 const state = {
   lang: localStorage.getItem("wappalyzer_lang") || (navigator.language.startsWith("id") ? "id" : "en"),
   theme: localStorage.getItem("wappalyzer_theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"),
-  currentScanDomain: "polri.go.id",
-  currentScanData: analyzeTargetUrlSync("polri.go.id"),
+  currentScanDomain: "fti.uajy.ac.id",
+  currentScanData: analyzeTargetUrlSync("fti.uajy.ac.id"),
   isExtensionActive: true
 };
 
@@ -348,11 +348,11 @@ document.addEventListener("DOMContentLoaded", () => {
   applyTheme(state.theme);
   applyTranslations();
 
-  // Initial Scan directly for polri.go.id (Photo Reference)
+  // Initial Scan directly for fti.uajy.ac.id (Photo Reference)
   renderScanResults();
 
   const scanInput = document.getElementById("scan-domain-input");
-  if (scanInput) scanInput.value = "polri.go.id";
+  if (scanInput) scanInput.value = "fti.uajy.ac.id";
 
   // Popup Switch Toggle
   const popupSwitch = document.getElementById("popup-switch");
