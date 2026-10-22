@@ -88,6 +88,57 @@ button {
   gap: var(--space-2);
 }
 
+.nav-item {
+  position: relative;
+}
+
+.nav-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-2);
+  min-width: 260px;
+  z-index: 1000;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.nav-item:hover .nav-dropdown,
+.nav-item:focus-within .nav-dropdown {
+  display: flex;
+}
+
+.dropdown-item {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--color-on-surface);
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+
+.dropdown-item:hover {
+  background-color: var(--color-surface-subtle);
+  text-decoration: none;
+}
+
+.dropdown-item strong {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+}
+
+.dropdown-item span {
+  font-size: var(--font-size-xs);
+  color: var(--color-on-surface-disabled);
+}
+
 .nav-link-btn {
   display: inline-flex;
   align-items: center;
@@ -200,12 +251,13 @@ button {
   gap: var(--space-3);
 }
 
-.scan-form-row {
+.scan-form, .scan-form-row {
   display: flex;
   gap: var(--space-2);
+  margin: var(--space-3) 0;
 }
 
-.scan-input-field {
+.scan-input, .scan-input-field {
   flex: 1;
   height: 44px;
   padding: 0 var(--space-3);
@@ -216,13 +268,13 @@ button {
   font-size: var(--font-size-sm);
 }
 
-.scan-input-field:focus {
+.scan-input:focus, .scan-input-field:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(70, 8, 173, 0.15);
 }
 
-.scan-action-btn {
+.scan-submit-btn, .scan-action-btn {
   height: 44px;
   padding: 0 var(--space-4);
   background-color: var(--color-primary);
@@ -230,15 +282,17 @@ button {
   font-weight: 600;
   font-size: var(--font-size-sm);
   border-radius: var(--radius-md);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
   white-space: nowrap;
   transition: background-color var(--transition-fast);
+  cursor: pointer;
+  border: none;
 }
 
-.scan-action-btn:hover {
+.scan-submit-btn:hover, .scan-action-btn:hover {
   background-color: var(--color-primary-hover);
 }
 
@@ -280,18 +334,21 @@ button {
 
 /* Wappalyzer Popup Card (Matching Exact Reference Photo) */
 .wappalyzer-popup-card {
-  background-color: var(--color-surface);
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--color-outline);
-  box-shadow: var(--shadow-lg);
+  border: 1px solid #d1d5db !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25) !important;
   overflow: hidden;
+  max-width: 660px;
+  margin: 24px auto 0;
   transition: all var(--transition-normal);
 }
 
 /* Popup Header Bar */
 .wappalyzer-popup-header {
-  background-color: #1e1160;
-  color: #ffffff;
+  background-color: #1e1160 !important;
+  color: #ffffff !important;
   padding: 14px 20px;
   display: flex;
   align-items: center;
@@ -312,6 +369,7 @@ button {
 .popup-brand-title {
   font-size: 18px;
   font-weight: 700;
+  color: #ffffff !important;
   letter-spacing: -0.01em;
 }
 
@@ -369,8 +427,8 @@ button {
 
 /* Popup Tabs Bar */
 .wappalyzer-popup-tabs {
-  background-color: var(--color-surface);
-  border-bottom: 1px solid var(--color-outline);
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e5e7eb !important;
   padding: 0 20px;
   display: flex;
   align-items: center;
@@ -389,7 +447,7 @@ button {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--color-on-surface-disabled);
+  color: #6b7280 !important;
   height: 100%;
   position: relative;
   display: flex;
@@ -398,15 +456,11 @@ button {
 }
 
 .popup-tab-btn:hover {
-  color: var(--color-on-surface);
+  color: #1a1a1a !important;
 }
 
 .popup-tab-btn.active {
-  color: var(--color-primary);
-}
-
-[data-theme="dark"] .popup-tab-btn.active {
-  color: #a47aff;
+  color: #2563eb !important;
 }
 
 .popup-tab-btn.active::after {
@@ -416,7 +470,7 @@ button {
   left: 0;
   right: 0;
   height: 3px;
-  background-color: #2196f3;
+  background-color: #2563eb !important;
   border-radius: 3px 3px 0 0;
 }
 
@@ -425,20 +479,23 @@ button {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  border: 1px solid #2196f3;
+  border: 1px solid #d1d5db !important;
   border-radius: var(--radius-sm);
-  color: #2196f3;
+  color: #374151 !important;
+  background-color: #ffffff !important;
   font-size: 13px;
   font-weight: 600;
   transition: all var(--transition-fast);
 }
 
 .popup-export-btn:hover {
-  background-color: rgba(33, 150, 243, 0.08);
+  background-color: #f3f4f6 !important;
 }
 
 /* Popup Body (Matching 2-Column Category Layout in Photo) */
 .wappalyzer-popup-body {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
   padding: 24px;
   min-height: 360px;
 }
@@ -461,10 +518,10 @@ button {
 }
 
 .category-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--color-on-surface-variant);
-  margin-bottom: 8px;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #4b5563 !important;
+  margin-bottom: 8px !important;
   text-transform: none;
 }
 
@@ -497,22 +554,22 @@ button {
 }
 
 .tech-name-link {
-  color: #2196f3;
-  font-weight: 500;
+  color: #2196f3 !important;
+  font-weight: 500 !important;
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  text-decoration: underline !important;
+  text-underline-offset: 2px !important;
 }
 
 .tech-name-link:hover {
-  color: #1976d2;
+  color: #1976d2 !important;
 }
 
 .tech-version-tag {
-  color: var(--color-on-surface-disabled);
-  font-size: 12px;
-  font-weight: 400;
-  margin-left: 2px;
+  color: #6b7280 !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  margin-left: 2px !important;
 }
 
 /* Feature Steps Section */
