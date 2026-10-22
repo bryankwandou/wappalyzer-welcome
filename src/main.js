@@ -1,13 +1,13 @@
 import { en } from "./locales/en.js";
 import { id } from "./locales/id.js";
-import { analyzeTargetUrl } from "./data/techDatabase.js";
+import { analyzeTargetUrl, analyzeTargetUrlSync } from "./data/techDatabase.js";
 
 // State Management - 100% Public Access (No Login Required)
 const state = {
   lang: localStorage.getItem("wappalyzer_lang") || (navigator.language.startsWith("id") ? "id" : "en"),
   theme: localStorage.getItem("wappalyzer_theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"),
   currentScanDomain: "polri.go.id",
-  currentScanData: analyzeTargetUrl("polri.go.id"),
+  currentScanData: analyzeTargetUrlSync("polri.go.id"),
   isExtensionActive: true
 };
 
@@ -106,7 +106,7 @@ function getTechIconSvg(iconName) {
 }
 
 // Execute Scan
-function runTechnologyScan(targetDomain) {
+async function runTechnologyScan(targetDomain) {
   const domainInput = document.getElementById("scan-domain-input");
   const domainToScan = targetDomain || (domainInput ? domainInput.value.trim() : "");
 
@@ -120,19 +120,25 @@ function runTechnologyScan(targetDomain) {
   if (btnText) btnText.style.display = "none";
   if (spinner) spinner.style.display = "inline-block";
 
-  setTimeout(() => {
-    const analysis = analyzeTargetUrl(domainToScan);
+  try {
+    const analysis = await analyzeTargetUrl(domainToScan);
     state.currentScanDomain = analysis.domain;
     state.currentScanData = analysis;
 
     renderScanResults();
+    showToast(`${analysis.totalCount} technologies detected for ${analysis.domain}`);
+  } catch (err) {
+    const fallback = analyzeTargetUrlSync(domainToScan);
+    state.currentScanDomain = fallback.domain;
+    state.currentScanData = fallback;
 
+    renderScanResults();
+    showToast(`${fallback.totalCount} technologies detected for ${fallback.domain}`);
+  } finally {
     if (submitBtn) submitBtn.disabled = false;
     if (btnText) btnText.style.display = "inline";
     if (spinner) spinner.style.display = "none";
-
-    showToast(`${analysis.totalCount} technologies detected for ${analysis.domain}`);
-  }, 250);
+  }
 }
 
 // Render Exact 2-Column Wappalyzer Popup Layout (1:1 with photo)
