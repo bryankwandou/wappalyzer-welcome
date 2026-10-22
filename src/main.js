@@ -154,14 +154,19 @@ function renderScanResults() {
 
   if (moreInfoPanel && state.currentScanData) {
     const data = state.currentScanData;
+    const isGhost = data.isGhost || data.totalCount === 0;
+    const statusHtml = isGhost 
+      ? `<span style="color:#ef4444; font-weight:700;">Host Unreachable / NXDOMAIN (Ghost Target)</span>`
+      : `<span style="color:#10b981; font-weight:700;">Active 200 OK</span>`;
+
     const evidenceRows = (data.algorithmEvidence || []).map((ev) => `
       <tr style="border-bottom:1px solid rgba(0,0,0,0.06);">
         <td style="padding:6px 8px; font-family:monospace; font-weight:600; color:#4608ad;">${ev.id}</td>
-        <td style="padding:6px 8px;"><span style="background:#f0ebf9; color:#4608ad; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">${ev.layer}</span></td>
+        <td style="padding:6px 8px;"><span style="background:${isGhost ? '#fee2e2' : '#f0ebf9'}; color:${isGhost ? '#b91c1c' : '#4608ad'}; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">${ev.layer}</span></td>
         <td style="padding:6px 8px; font-weight:600;">${ev.tech}</td>
         <td style="padding:6px 8px; font-family:monospace; font-size:11px; color:#56516d;">${ev.rule}</td>
         <td style="padding:6px 8px; font-size:11px; color:#374151;">${ev.detail || "Terdeteksi dari baris kode sumber / header"}</td>
-        <td style="padding:6px 8px; color:#10b981; font-weight:700;">${ev.confidence}</td>
+        <td style="padding:6px 8px; color:${isGhost ? '#ef4444' : '#10b981'}; font-weight:700;">${ev.confidence}</td>
       </tr>
     `).join("");
 
@@ -170,7 +175,7 @@ function renderScanResults() {
         <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid #e5e0f2;">
           <div><strong>Target:</strong> <a href="https://${data.domain}" target="_blank" rel="noopener" style="color:#2196f3; font-weight:600;">https://${data.domain}</a></div>
           <div><strong>Organization:</strong> <span style="font-weight:600;">${data.organization || "Public Domain"}</span></div>
-          <div><strong>Status:</strong> <span style="color:#10b981; font-weight:700;">Active 200 OK</span></div>
+          <div><strong>Status:</strong> ${statusHtml}</div>
           <div><strong>Location:</strong> <span>${data.serverLocation || "Global Edge"}</span></div>
           <div><strong>Protocol:</strong> <span>${data.tlsVersion || "TLS 1.3"}</span></div>
         </div>
@@ -178,7 +183,7 @@ function renderScanResults() {
         <div style="margin-top:10px;">
           <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
             <strong style="color:#1e1160; font-size:12px; text-transform:uppercase; letter-spacing:0.04em;">Algoritma Deteksi Teknograﬁk & Bukti REA (Evidence Log — 100% Stack Coverage)</strong>
-            <span style="font-size:11px; color:#10b981; background:#dcffd6; padding:2px 8px; border-radius:9999px; font-weight:700;">100% Calibrated Heuristics</span>
+            <span style="font-size:11px; color:${isGhost ? '#b91c1c' : '#10b981'}; background:${isGhost ? '#fee2e2' : '#dcffd6'}; padding:2px 8px; border-radius:9999px; font-weight:700;">${isGhost ? '0 Detected (NXDOMAIN)' : '100% Calibrated Heuristics'}</span>
           </div>
           <div style="overflow-x:auto; border:1px solid #e5e0f2; border-radius:8px; background:#ffffff;">
             <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left;">
@@ -204,6 +209,25 @@ function renderScanResults() {
 
   if (!container) return;
   container.innerHTML = "";
+
+  if (state.currentScanData.totalCount === 0 || state.currentScanData.isGhost) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; padding: 48px 24px; text-align: center;">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 12px; display: inline-block;">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <div style="font-size: 15px; font-weight: 700; color: #1e1160; margin-bottom: 6px;">
+          Tidak Ada Teknologi Terdeteksi / Website Tidak Ditemukan
+        </div>
+        <div style="font-size: 13px; color: #6b7280; max-width: 380px; margin: 0 auto; line-height: 1.5;">
+          Target <strong>${state.currentScanDomain}</strong> adalah website tidak aktif atau tidak ditemukan di DNS/platform hosting (NXDOMAIN / 404). 0 teknologi terdeteksi.
+        </div>
+      </div>
+    `;
+    return;
+  }
 
   const leftCol = document.createElement("div");
   leftCol.className = "popup-column left-column";
