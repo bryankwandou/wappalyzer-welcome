@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4608ad">
+  <meta name="description" content="Welcome to Wappalyzer. Start with instant website technology profiling, lead enrichment, and competitor stack tracking.">
+  <title>Welcome to Wappalyzer - Wappalyzer</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 114 97'><path d='M57.0285 0 L0 40.89 L57.0285 84.66 L114 40.9 Z' fill='%234608ad'/><polygon points='57 74.6 6.5 48.4 0 53.1 57 96.9 114 56 107.5 48.4' fill='%231c0172'/></svg>">
+  <link rel="stylesheet" href="./src/styles.css">
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="container header-container">
+      <a href="#" class="brand-link" aria-label="Wappalyzer Home">
+        <svg class="brand-logo-svg" viewBox="0 0 389 97" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g fill="#FFFFFF">
+            <!-- Diamond Icon -->
+            <polygon opacity="0.6" points="57.0285 74.6616 6.5385 48.4526 0.0015 53.1396 -0.0005 56.0066 57.0285 96.9046 114.0545 56.0086 114.0585 53.1426 107.5185 48.4526"></polygon>
+            <path d="M57.0285 0 L0.0025 40.8963 L-0.0005 43.7633 L57.0285 84.6623 L114.0545 43.7653 L114.0575 40.8983 L57.0285 0 Z M64.4895 40.3623 L57.5365 30.7743 L63.4645 26.4363 L75.8235 44.7273 L70.8465 48.3703 L57.5555 42.8723 L57.4985 42.9133 L65.0675 52.5983 L60.0905 56.2403 L35.0915 47.1963 L41.0385 42.8443 L54.1065 47.9333 L54.1805 47.8783 L46.9285 38.5343 L51.6075 35.1113 L64.4145 40.4173 L64.4895 40.3623 Z"></path>
+            <!-- Wappalyzer Wordmark -->
+            <g transform="translate(133, 24)">
+              <polygon points="47.19 1.65 36.84 34.74 29.72 34.74 24.18 12.98 24.11 12.98 18.36 34.74 11.24 34.74 0.89 1.65 9.19 1.65 14.79 21.96 14.85 21.96 19.97 1.65 28.18 1.65 33.23 21.96 33.29 21.96 38.89 1.65"></polygon>
+              <path d="M57.87 28.76 C60.53 28.76 62.69 26.64 62.69 23.39 C62.69 20.25 60.62 17.98 57.89 17.98 C55.12 17.98 53.01 20.14 53.01 23.39 C53.01 26.6 55.03 28.76 57.87 28.76 Z M69.69 11.95 L69.69 34.74 L62.78 34.74 L62.78 32.28 L62.69 32.28 C61.24 34.19 59.1 35.17 56.37 35.17 C50.1 35.17 45.64 30.42 45.64 23.37 C45.64 16.41 50.14 11.52 56.03 11.52 C58.49 11.52 60.69 12.48 62.31 14.36 L62.4 14.36 L62.4 11.95 Z"></path>
+              <path d="M91.23 23.39 C91.23 20.14 89.11 17.98 86.34 17.98 C83.43 17.98 81.34 20.25 81.34 23.39 C81.34 26.64 83.5 28.76 86.36 28.76 C89.2 28.76 91.23 26.6 91.23 23.39 M98.59 23.37 C98.59 30.42 94.11 35.17 87.86 35.17 C85.25 35.17 83.2 34.21 81.72 32.51 L81.61 32.51 L81.61 43.94 L74.33 43.94 L74.33 11.95 L81.63 11.95 L81.63 14.41 L81.72 14.41 C83.36 12.5 85.63 11.52 88.2 11.52 C94.09 11.52 98.59 16.41 98.59 23.37"></path>
+              <path d="M119.15 23.39 C119.15 20.14 117.03 17.98 114.26 17.98 C111.35 17.98 109.26 20.25 109.26 23.39 C109.26 26.64 111.42 28.76 114.28 28.76 C117.12 28.76 119.15 26.6 119.15 23.39 M126.51 23.37 C126.51 30.42 122.04 35.17 115.78 35.17 C113.17 35.17 111.12 34.21 109.64 32.51 L109.53 32.51 L109.53 43.94 L102.25 43.94 L102.25 11.95 L109.55 11.95 L109.55 14.41 L109.64 14.41 C111.28 12.5 113.55 11.52 116.12 11.52 C122.01 11.52 126.51 16.41 126.51 23.37"></path>
+              <path d="M141.25 28.76 C143.91 28.76 146.07 26.64 146.07 23.39 C146.07 20.25 144 17.98 141.27 17.98 C138.5 17.98 136.38 20.14 136.38 23.39 C136.38 26.6 138.41 28.76 141.25 28.76 Z M153.07 11.95 L153.07 34.74 L146.16 34.74 L146.16 32.28 L146.07 32.28 C144.61 34.19 142.48 35.17 139.75 35.17 C133.47 35.17 129.02 30.42 129.02 23.37 C129.02 16.41 133.52 11.52 139.41 11.52 C141.86 11.52 144.07 12.48 145.68 14.36 L145.77 14.36 L145.77 11.95 Z"></path>
+              <polygon points="157.96 34.74 165.21 34.74 165.21 0.45 157.96 0.45"></polygon>
+              <polygon points="192.11 11.95 180.15 43.94 172.94 43.94 176.88 33.19 167.99 11.95 175.54 11.95 180.17 24.3 180.29 24.3 184.65 11.95"></polygon>
+              <polygon points="203.25 28.78 203.25 28.87 212.94 28.87 212.94 34.74 193.72 34.74 193.72 29.87 203.57 17.89 203.57 17.8 194.59 17.8 194.59 11.95 213.32 11.95 213.32 16.77"></polygon>
+              <path d="M222.26 20.96 L230.78 20.91 C230.31 18.71 228.83 17.34 226.65 17.34 C224.46 17.34 222.73 18.61 222.26 20.96 Z M237.92 23.14 C237.92 23.78 237.81 24.8 237.74 25.3 L222.23 25.3 C222.76 27.87 225.01 29.23 227.62 29.23 C229.74 29.23 231.58 28.3 233.15 26.48 L237.01 30.82 C235.08 33.26 231.58 35.17 226.85 35.17 C220.1 35.17 215.01 30.39 215.01 23.34 C215.01 16.43 219.89 11.52 226.58 11.52 C233.22 11.52 237.92 16.36 237.92 23.14 Z"></path>
+              <path d="M255.75 11.54 L255.75 19.39 C255.09 19.34 254.41 19.34 254.05 19.34 C250.59 19.34 248.82 21.52 248.82 24.5 L248.82 34.74 L241.54 34.74 L241.54 11.95 L248.82 11.95 L248.82 15 L248.91 15 C250.63 12.73 253 11.52 255.5 11.52 C255.57 11.52 255.68 11.52 255.75 11.54"></path>
+            </g>
+          </g>
+        </svg>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="desktop-nav" aria-label="Main Navigation">
+        <!-- Products Dropdown -->
+        <div class="nav-item">
+          <button type="button" class="nav-link-btn" aria-expanded="false" id="products-menu-btn">
+            <span data-i18n="nav.products">Products</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.41 8.58L12 13.17L16.59 8.58L18 10L12 16L6 10L7.41 8.58Z"/></svg>
+          </button>
+          <div class="nav-dropdown" role="menu">
+            <a href="#scanner" class="dropdown-item" role="menuitem">
+              <strong data-i18n="nav.techLookup">Technology lookup</strong>
+              <span data-i18n="nav.techLookupDesc">Find better prospects from the technologies they use</span>
+            </a>
+            <a href="#lead-lists" class="dropdown-item" role="menuitem">
+              <strong data-i18n="nav.leadLists">Lead lists</strong>
+              <span data-i18n="nav.leadListsDesc">Build targeted prospect lists by technology or keyword</span>
+            </a>
+            <a href="#email-verify" class="dropdown-item" role="menuitem">
+              <strong data-i18n="nav.emailVerification">Email verification</strong>
+              <span data-i18n="nav.emailVerificationDesc">Reduce bounces and protect sender reputation</span>
+            </a>
+            <a href="#alerts" class="dropdown-item" role="menuitem">
+              <strong data-i18n="nav.websiteAlerts">Website alerts</strong>
+              <span data-i18n="nav.websiteAlertsDesc">Track website technology changes and competitor stacks</span>
+            </a>
+            <a href="#apps" class="dropdown-item" role="menuitem">
+              <strong data-i18n="nav.apps">Apps</strong>
+              <span data-i18n="nav.appsDesc">Bring website intelligence directly into your workflow</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Pricing Link -->
+        <a href="#pricing" class="nav-link-btn" data-i18n="nav.pricing">Pricing</a>
+
+        <!-- Resources Dropdown -->
+        <div class="nav-item">
+          <button type="button" class="nav-link-btn" aria-expanded="false" id="resources-menu-btn">
+            <span data-i18n="nav.resources">Resources</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.41 8.58L12 13.17L16.59 8.58L18 10L12 16L6 10L7.41 8.58Z"/></svg>
+          </button>
+          <div class="nav-dropdown" role="menu">
+            <a href="#technologies" class="dropdown-item" role="menuitem">
+              <strong data-i18n="nav.technologies">Technologies</strong>
+              <span data-i18n="nav.technologiesDesc">Research over 3,000 technologies and categories</span>
+            </a>
+            <a href="#articles" class="dropdown-item" role="menuitem">
+              <strong data-i18n="nav.articles">Articles</strong>
+              <span data-i18n="nav.articlesDesc">Articles covering technographics and digital trends</span>
+            </a>
+            <a href="#faqs" class="dropdown-item" role="menuitem">
+              <strong data-i18n="nav.faqs">FAQs</strong>
+              <span data-i18n="nav.faqsDesc">Answers to frequently asked questions</span>
+            </a>
+            <a href="#docs" class="dropdown-item" role="menuitem">
+              <strong data-i18n="nav.docs">Documentation</strong>
+              <span data-i18n="nav.docsDesc">API reference and developer integration documentation</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Header Action Buttons -->
+      <div class="header-actions">
+        <!-- Search Trigger -->
+        <button type="button" class="icon-btn" id="search-modal-trigger" aria-label="Open search dialog" title="Quick Search (Ctrl+K)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button type="button" class="icon-btn" id="theme-toggle-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg id="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg id="theme-icon-moon" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+
+        <!-- Language Switcher -->
+        <button type="button" class="lang-switch-btn" id="lang-toggle-btn" aria-label="Switch language">
+          <span id="current-lang-text">ID / EN</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" aria-label="Hero Overview">
+    <div class="container hero-content">
+      <h1 class="hero-title" data-i18n="hero.title">Thanks for installing Wappalyzer!</h1>
+      <p class="hero-subtitle" data-i18n="hero.subtitle">
+        Start with instant website technology profiling, lead enrichment, and competitor stack tracking. Upgrade when you need team automation or bulk exports.
+      </p>
+      <div class="hero-actions">
+        <a href="#scanner" class="btn-primary" data-i18n="hero.primaryCta">Explore Technology Lookup</a>
+        <a href="#docs" class="btn-secondary" data-i18n="hero.secondaryCta">View Documentation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Layout -->
+  <main class="main-wrapper container">
+    <div class="two-col-grid">
+
+      <!-- Column 1: Reverse-Engineered Authentication & Account Module -->
+      <div class="card auth-card" id="auth-section">
+        <div class="auth-header">
+          <div class="auth-tabs" role="tablist">
+            <button type="button" class="auth-tab-btn active" id="tab-btn-signin" role="tab" aria-selected="true" data-tab="signin" data-i18n="auth.signInBtn">Sign in</button>
+            <button type="button" class="auth-tab-btn" id="tab-btn-create" role="tab" aria-selected="false" data-tab="create" data-i18n="auth.createAccountBtn">Create Account</button>
+            <button type="button" class="auth-tab-btn" id="tab-btn-reset" role="tab" aria-selected="false" data-tab="reset" data-i18n="auth.forgotPasswordLink">Reset Password</button>
+          </div>
+          <h2 class="auth-title" id="auth-heading" data-i18n="auth.signInTitle">Sign in to continue</h2>
+          <p class="auth-subtitle" id="auth-subheading" data-i18n="auth.welcomeBack">
+            Welcome back! Please sign in with your email address or Google account.
+          </p>
+        </div>
+
+        <form id="auth-form" novalidate>
+          <!-- Email Input -->
+          <div class="form-group">
+            <label class="form-label" for="auth-email-input" data-i18n="auth.emailLabel">Email address</label>
+            <div class="input-container">
+              <input type="email" class="form-input" id="auth-email-input" required autocomplete="email" placeholder="name@company.com">
+            </div>
+            <div class="form-error-msg" id="email-error-msg" data-i18n="auth.validationEmailRequired">Please enter a valid email address.</div>
+          </div>
+
+          <!-- Password Input -->
+          <div class="form-group" id="password-group">
+            <label class="form-label" for="auth-password-input" id="password-label" data-i18n="auth.passwordLabel">Password</label>
+            <div class="input-container">
+              <input type="password" class="form-input" id="auth-password-input" required autocomplete="current-password" placeholder="Enter your password">
+              <button type="button" class="input-toggle-btn" id="password-toggle-btn" aria-label="Toggle password visibility">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </button>
+            </div>
+            <div class="form-error-msg" id="password-error-msg" data-i18n="auth.validationPasswordRequired">Password must be at least 8 characters.</div>
+          </div>
+
+          <!-- Confirm Password (for registration) -->
+          <div class="form-group" id="confirm-password-group" style="display:none;">
+            <label class="form-label" for="auth-confirm-password-input" data-i18n="auth.confirmPasswordLabel">Confirm password</label>
+            <div class="input-container">
+              <input type="password" class="form-input" id="auth-confirm-password-input" autocomplete="new-password">
+            </div>
+            <div class="form-error-msg" id="confirm-error-msg" data-i18n="auth.validationPasswordsMatch">Passwords do not match.</div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="submit-btn" id="auth-submit-btn">
+            <span id="submit-btn-text" data-i18n="auth.signInBtn">Sign in</span>
+            <span id="submit-spinner" class="spinner" style="display:none;"></span>
+          </button>
+
+          <!-- Divider -->
+          <div class="divider-row" id="auth-divider">
+            <div class="divider-line"></div>
+            <span class="divider-text" data-i18n="auth.orDivider">or</span>
+            <div class="divider-line"></div>
+          </div>
+
+          <!-- Google OAuth Button -->
+          <button type="button" class="google-btn" id="google-sso-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.14-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+            </svg>
+            <span data-i18n="auth.continueGoogle">Continue with Google</span>
+          </button>
+
+          <!-- Alternative Links -->
+          <div class="auth-footer-links" id="auth-footer-links">
+            <span id="auth-switch-prompt">
+              <span id="auth-switch-text" data-i18n="auth.noAccount">Don't have an account?</span>
+              <a href="#" id="auth-switch-link" data-i18n="auth.createAccountLink">Create an account</a>
+            </span>
+            <a href="#" id="auth-forgot-link" data-i18n="auth.forgotPasswordLink">Reset password</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Column 2: Live Technology Profiler / Inspector Scanner -->
+      <div class="card" id="scanner">
+        <span class="scanner-badge" data-i18n="scanner.badge">Live Tech Inspector</span>
+        <h2 class="scanner-title" data-i18n="scanner.title">Instant Technology Profiler</h2>
+        <p class="scanner-subtitle" data-i18n="scanner.subtitle">
+          Analyze any domain or URL to inspect its frameworks, CMS, analytics, CDN, and infrastructure in real time.
+        </p>
+
+        <!-- Scan Form -->
+        <form id="tech-scan-form" class="scan-form">
+          <input type="text" class="scan-input" id="scan-domain-input" placeholder="Enter URL or domain (e.g., github.com, vercel.com, shopify.com)" required>
+          <button type="submit" class="scan-submit-btn" id="scan-submit-btn">
+            <span id="scan-btn-text" data-i18n="scanner.scanBtn">Inspect Stack</span>
+            <span id="scan-spinner" class="spinner" style="display:none;"></span>
+          </button>
+        </form>
+
+        <!-- Popular target quick chips -->
+        <div class="quick-targets-row">
+          <span class="quick-tag-label" data-i18n="scanner.popularSearches">Try popular targets:</span>
+          <button type="button" class="quick-target-chip" data-domain="github.com">github.com</button>
+          <button type="button" class="quick-target-chip" data-domain="vercel.com">vercel.com</button>
+          <button type="button" class="quick-target-chip" data-domain="shopify.com">shopify.com</button>
+          <button type="button" class="quick-target-chip" data-domain="wappalyzer.com">wappalyzer.com</button>
+          <button type="button" class="quick-target-chip" data-domain="wordpress.org">wordpress.org</button>
+        </div>
+
+        <!-- Scan Results -->
+        <div class="scan-results-box" id="scan-results-box">
+          <div class="results-meta">
+            <div class="results-domain" id="results-domain-name">github.com</div>
+            <div class="results-count" id="results-count-text">8 technologies identified with high confidence</div>
+          </div>
+          <div class="tech-cards-grid" id="tech-cards-grid">
+            <!-- Dynamic tech cards inserted by JavaScript -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- 3-Step Getting Started Section -->
+  <section class="steps-section" id="getting-started" aria-label="Getting Started Steps">
+    <div class="container">
+      <div class="section-heading-center">
+        <h2 class="section-title" data-i18n="steps.title">Getting Started with Wappalyzer</h2>
+        <p class="section-subtitle" data-i18n="steps.subtitle">
+          Three simple steps to supercharge your tech stack analysis and lead discovery.
+        </p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <h3 class="step-title" data-i18n="steps.step1Title">1. Pin Extension in Browser</h3>
+          <p class="step-desc" data-i18n="steps.step1Desc">
+            Keep Wappalyzer visible in your toolbar for instant one-click analysis on any page you visit.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <h3 class="step-title" data-i18n="steps.step2Title">2. Lookup Competitors & Leads</h3>
+          <p class="step-desc" data-i18n="steps.step2Desc">
+            Filter prospective leads by the exact CMS, payment gateways, and frameworks they deploy.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <h3 class="step-title" data-i18n="steps.step3Title">3. Set Automated Alerts</h3>
+          <p class="step-desc" data-i18n="steps.step3Desc">
+            Receive instant notifications when tracked websites adopt or drop key software components.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-nav-grid">
+        <!-- Products -->
+        <div>
+          <h3 class="footer-column-title" data-i18n="footer.productsTitle">Products</h3>
+          <ul class="footer-links-list">
+            <li><a href="#lead-lists" class="footer-link" data-i18n="nav.leadLists">Lead lists</a></li>
+            <li><a href="#scanner" class="footer-link" data-i18n="nav.techLookup">Technology lookup</a></li>
+            <li><a href="#email-verify" class="footer-link" data-i18n="nav.emailVerification">Email verification</a></li>
+            <li><a href="#alerts" class="footer-link" data-i18n="nav.websiteAlerts">Website alerts</a></li>
+            <li><a href="#apps" class="footer-link" data-i18n="nav.apps">Apps</a></li>
+          </ul>
+        </div>
+
+        <!-- Use Cases -->
+        <div>
+          <h3 class="footer-column-title" data-i18n="footer.useCasesTitle">Use cases</h3>
+          <ul class="footer-links-list">
+            <li><a href="#lead-gen" class="footer-link" data-i18n="footer.leadGen">Lead generation</a></li>
+            <li><a href="#market-research" class="footer-link" data-i18n="footer.marketResearch">Market research</a></li>
+            <li><a href="#competitor-analysis" class="footer-link" data-i18n="footer.competitorAnalysis">Competitor analysis</a></li>
+            <li><a href="#data-enrichment" class="footer-link" data-i18n="footer.dataEnrichment">Data enrichment</a></li>
+            <li><a href="#security-recon" class="footer-link" data-i18n="footer.securityRecon">Security recon</a></li>
+          </ul>
+        </div>
+
+        <!-- Pricing -->
+        <div>
+          <h3 class="footer-column-title" data-i18n="footer.pricingTitle">Pricing</h3>
+          <ul class="footer-links-list">
+            <li><a href="#pricing" class="footer-link" data-i18n="nav.pricing">Pricing</a></li>
+          </ul>
+        </div>
+
+        <!-- Resources -->
+        <div>
+          <h3 class="footer-column-title" data-i18n="footer.resourcesTitle">Resources</h3>
+          <ul class="footer-links-list">
+            <li><a href="#technologies" class="footer-link" data-i18n="nav.technologies">Technologies</a></li>
+            <li><a href="#articles" class="footer-link" data-i18n="nav.articles">Articles</a></li>
+            <li><a href="#faqs" class="footer-link" data-i18n="nav.faqs">FAQs</a></li>
+            <li><a href="#docs" class="footer-link" data-i18n="nav.docs">Documentation</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <h3 class="footer-column-title" data-i18n="footer.companyTitle">Company</h3>
+          <ul class="footer-links-list">
+            <li><a href="#about" class="footer-link" data-i18n="footer.aboutUs">About us</a></li>
+            <li><a href="#logos" class="footer-link" data-i18n="footer.logos">Logos</a></li>
+            <li><a href="#contact" class="footer-link" data-i18n="footer.contactUs">Contact us</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="footer-bottom-bar">
+        <div class="footer-brand-meta">
+          <span class="footer-status-indicator">
+            <span class="status-pulse-dot" aria-hidden="true"></span>
+            <span id="api-status-text" data-i18n="footer.apiStatus">API status: Operational (99.98%)</span>
+          </span>
+          <button type="button" class="footer-link" id="terms-modal-trigger" data-i18n="footer.terms">Terms of service</button>
+          <button type="button" class="footer-link" id="privacy-modal-trigger" data-i18n="footer.privacy">Privacy policy</button>
+        </div>
+
+        <!-- Social Media SVG Links -->
+        <div class="social-links-row">
+          <!-- X / Twitter -->
+          <a href="https://x.com/Wappalyzer" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Wappalyzer on X">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <!-- Instagram -->
+          <a href="https://instagram.com/wappalyzer" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Wappalyzer on Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <!-- LinkedIn -->
+          <a href="https://linkedin.com/company/wappalyzer" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Wappalyzer on LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M18.5 18.5V13.2A3.26 3.26 0 0 0 15.24 9.94C14.39 9.94 13.4 10.46 12.92 11.24V10.13H10.13V18.5H12.92V13.57C12.92 12.8 13.54 12.17 14.31 12.17A1.4 1.4 0 0 1 15.71 13.57V18.5H18.5M6.88 8.56A1.68 1.68 0 0 0 8.56 6.88C8.56 5.95 7.81 5.19 6.88 5.19A1.69 1.69 0 0 0 5.19 6.88C5.19 7.81 5.95 8.56 6.88 8.56M8.27 18.5V10.13H5.5V18.5H8.27Z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Generic Modal (Search / Terms / Privacy) -->
+  <div class="modal-overlay" id="generic-modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title-text">Modal</h3>
+        <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Close dialog">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body-content">
+        <!-- Dynamic content inserted by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

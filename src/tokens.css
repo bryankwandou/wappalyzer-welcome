@@ -1,0 +1,102 @@
+/* Wappalyzer Design Tokens - Silicon Valley Design Standards */
+:root {
+  /* Brand Tokens */
+  --color-primary: #4608ad;
+  --color-primary-dark: #32067c;
+  --color-primary-darker: #1c0172;
+  --color-primary-light: #f0ebf9;
+  --color-primary-hover: #570cd4;
+
+  --color-accent: #2196f3;
+  --color-accent-light: #e4f2fe;
+  --color-accent-dark: #007cd6;
+
+  --color-success: #4caf50;
+  --color-success-light: #dcffd6;
+  --color-warning: #fb8c00;
+  --color-warning-light: #ffff9e;
+  --color-error: #df323b;
+  --color-error-light: #ffe4d5;
+
+  /* Theme Tokens: Light Mode (Default) */
+  --color-background: #fdfdfd;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-subtle: #f8f7fc;
+  --color-surface-muted: #f0ebf9;
+
+  --color-on-primary: #ffffff;
+  --color-on-surface: #181528;
+  --color-on-surface-variant: #56516d;
+  --color-on-surface-disabled: #948ea8;
+
+  --color-outline: #e5e0f2;
+  --color-outline-subtle: #f0ecf9;
+  --color-outline-focus: #4608ad;
+
+  --shadow-sm: 0 1px 3px rgba(24, 21, 40, 0.05), 0 1px 2px rgba(24, 21, 40, 0.08);
+  --shadow-md: 0 4px 12px rgba(70, 8, 173, 0.08), 0 2px 4px rgba(24, 21, 40, 0.05);
+  --shadow-lg: 0 12px 32px rgba(70, 8, 173, 0.12), 0 4px 8px rgba(24, 21, 40, 0.06);
+
+  /* Typography Scale */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 28px;
+  --font-size-4xl: 32px;
+  --font-size-display: 40px;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.65;
+
+  /* Spacing Scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Theme Tokens: Dark Mode */
+[data-theme="dark"] {
+  --color-background: #0d0c13;
+  --color-surface: #161422;
+  --color-surface-elevated: #1f1c30;
+  --color-surface-subtle: #12101b;
+  --color-surface-muted: #28243e;
+
+  --color-on-primary: #ffffff;
+  --color-on-surface: #f5f4fb;
+  --color-on-surface-variant: #aca6c5;
+  --color-on-surface-disabled: #6d6785;
+
+  --color-outline: #2c2844;
+  --color-outline-subtle: #211e33;
+  --color-outline-focus: #8c57ff;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.55);
+}
