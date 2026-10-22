@@ -2,12 +2,11 @@ import { en } from "./locales/en.js";
 import { id } from "./locales/id.js";
 import { analyzeTargetUrl } from "./data/techDatabase.js";
 
-// State Management
+// State Management - 100% Public Access (No Login Required)
 const state = {
   lang: localStorage.getItem("wappalyzer_lang") || (navigator.language.startsWith("id") ? "id" : "en"),
   theme: localStorage.getItem("wappalyzer_theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"),
-  authTab: "signin", // 'signin' | 'create' | 'reset'
-  currentScanDomain: "github.com",
+  currentScanDomain: "polri.go.id",
   currentScanResults: []
 };
 
@@ -35,23 +34,14 @@ function applyTranslations() {
     el.textContent = t(key);
   });
 
-  // Dynamic inputs placeholders
-  const emailInput = document.getElementById("auth-email-input");
-  const passwordInput = document.getElementById("auth-password-input");
   const scanInput = document.getElementById("scan-domain-input");
-
-  if (emailInput) emailInput.placeholder = t("auth.emailPlaceholder");
-  if (passwordInput) passwordInput.placeholder = t("auth.passwordPlaceholder");
   if (scanInput) scanInput.placeholder = t("scanner.inputPlaceholder");
 
-  // Language button display
   const currentLangText = document.getElementById("current-lang-text");
   if (currentLangText) {
     currentLangText.textContent = state.lang.toUpperCase() === "ID" ? "ID (Bahasa)" : "EN (English)";
   }
 
-  // Update auth tab texts
-  updateAuthTabUI();
   updateScanMetaUI();
 }
 
@@ -88,161 +78,6 @@ function toggleTheme() {
   showToast(nextTheme === "dark" ? "Dark mode activated" : "Light mode activated");
 }
 
-// Auth Tab Switching
-function setAuthTab(tab) {
-  state.authTab = tab;
-
-  document.querySelectorAll(".auth-tab-btn").forEach((btn) => {
-    const isActive = btn.getAttribute("data-tab") === tab;
-    btn.classList.toggle("active", isActive);
-    btn.setAttribute("aria-selected", isActive ? "true" : "false");
-  });
-
-  updateAuthTabUI();
-}
-
-function updateAuthTabUI() {
-  const heading = document.getElementById("auth-heading");
-  const subheading = document.getElementById("auth-subheading");
-  const submitText = document.getElementById("submit-btn-text");
-  const passwordGroup = document.getElementById("password-group");
-  const confirmGroup = document.getElementById("confirm-password-group");
-  const divider = document.getElementById("auth-divider");
-  const googleBtn = document.getElementById("google-sso-btn");
-  const switchPrompt = document.getElementById("auth-switch-prompt");
-  const switchText = document.getElementById("auth-switch-text");
-  const switchLink = document.getElementById("auth-switch-link");
-  const forgotLink = document.getElementById("auth-forgot-link");
-
-  // Reset errors
-  hideErrors();
-
-  if (state.authTab === "signin") {
-    if (heading) heading.textContent = t("auth.signInTitle");
-    if (subheading) subheading.textContent = t("auth.welcomeBack");
-    if (submitText) submitText.textContent = t("auth.signInBtn");
-    if (passwordGroup) passwordGroup.style.display = "block";
-    if (confirmGroup) confirmGroup.style.display = "none";
-    if (divider) divider.style.display = "flex";
-    if (googleBtn) googleBtn.style.display = "flex";
-    if (switchPrompt) switchPrompt.style.display = "block";
-    if (switchText) switchText.textContent = t("auth.noAccount");
-    if (switchLink) {
-      switchLink.textContent = t("auth.createAccountLink");
-      switchLink.setAttribute("data-target-tab", "create");
-    }
-    if (forgotLink) forgotLink.style.display = "inline-block";
-  } else if (state.authTab === "create") {
-    if (heading) heading.textContent = t("auth.createAccountTitle");
-    if (subheading) subheading.textContent = t("auth.welcomeNew");
-    if (submitText) submitText.textContent = t("auth.createAccountBtn");
-    if (passwordGroup) passwordGroup.style.display = "block";
-    if (confirmGroup) confirmGroup.style.display = "block";
-    if (divider) divider.style.display = "flex";
-    if (googleBtn) googleBtn.style.display = "flex";
-    if (switchPrompt) switchPrompt.style.display = "block";
-    if (switchText) switchText.textContent = t("auth.haveAccount");
-    if (switchLink) {
-      switchLink.textContent = t("auth.signInLink");
-      switchLink.setAttribute("data-target-tab", "signin");
-    }
-    if (forgotLink) forgotLink.style.display = "none";
-  } else if (state.authTab === "reset") {
-    if (heading) heading.textContent = t("auth.resetPasswordTitle");
-    if (subheading) subheading.textContent = t("auth.welcomeReset");
-    if (submitText) submitText.textContent = t("auth.sendResetBtn");
-    if (passwordGroup) passwordGroup.style.display = "none";
-    if (confirmGroup) confirmGroup.style.display = "none";
-    if (divider) divider.style.display = "none";
-    if (googleBtn) googleBtn.style.display = "none";
-    if (switchPrompt) switchPrompt.style.display = "block";
-    if (switchText) switchText.textContent = "";
-    if (switchLink) {
-      switchLink.textContent = t("auth.backToSignIn");
-      switchLink.setAttribute("data-target-tab", "signin");
-    }
-    if (forgotLink) forgotLink.style.display = "none";
-  }
-}
-
-function hideErrors() {
-  document.querySelectorAll(".form-error-msg").forEach((el) => {
-    el.classList.remove("visible");
-  });
-}
-
-// Password toggle
-function togglePasswordVisibility() {
-  const input = document.getElementById("auth-password-input");
-  if (!input) return;
-  const isPassword = input.type === "password";
-  input.type = isPassword ? "text" : "password";
-}
-
-// Form Submission & Validation
-function handleAuthSubmit(e) {
-  e.preventDefault();
-  hideErrors();
-
-  const emailInput = document.getElementById("auth-email-input");
-  const passwordInput = document.getElementById("auth-password-input");
-  const confirmInput = document.getElementById("auth-confirm-password-input");
-
-  const email = emailInput ? emailInput.value.trim() : "";
-  const password = passwordInput ? passwordInput.value : "";
-  const confirm = confirmInput ? confirmInput.value : "";
-
-  // Email format check
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!email || !emailRegex.test(email)) {
-    const err = document.getElementById("email-error-msg");
-    if (err) err.classList.add("visible");
-    if (emailInput) emailInput.focus();
-    return;
-  }
-
-  // Password checks
-  if (state.authTab !== "reset") {
-    if (!password || password.length < 8) {
-      const err = document.getElementById("password-error-msg");
-      if (err) err.classList.add("visible");
-      if (passwordInput) passwordInput.focus();
-      return;
-    }
-
-    if (state.authTab === "create") {
-      if (password !== confirm) {
-        const err = document.getElementById("confirm-error-msg");
-        if (err) err.classList.add("visible");
-        if (confirmInput) confirmInput.focus();
-        return;
-      }
-    }
-  }
-
-  // Visual loading feedback
-  const submitBtn = document.getElementById("auth-submit-btn");
-  const submitText = document.getElementById("submit-btn-text");
-  const spinner = document.getElementById("submit-spinner");
-
-  if (submitBtn) submitBtn.disabled = true;
-  if (submitText) submitText.style.display = "none";
-  if (spinner) spinner.style.display = "inline-block";
-
-  setTimeout(() => {
-    if (submitBtn) submitBtn.disabled = false;
-    if (submitText) submitText.style.display = "inline";
-    if (spinner) spinner.style.display = "none";
-
-    if (state.authTab === "reset") {
-      showToast(t("auth.resetSent"));
-      setAuthTab("signin");
-    } else {
-      showToast(t("auth.authSuccess"));
-    }
-  }, 400);
-}
-
 // SVG Icon Generator for tech cards
 function getTechIconSvg(iconName) {
   const svgs = {
@@ -252,7 +87,7 @@ function getTechIconSvg(iconName) {
     cloud: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>`,
     palette: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>`,
     shield: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
-    globe: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>`,
+    globe: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>`,
     "shopping-bag": `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`,
     tag: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>`,
     "file-code": `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="10" y1="13" x2="8" y2="15"></line><line x1="8" y1="15" x2="10" y2="17"></line><line x1="14" y1="13" x2="16" y2="15"></line><line x1="16" y1="15" x2="14" y2="17"></line></svg>`,
@@ -291,7 +126,7 @@ function runTechnologyScan(targetDomain) {
     if (spinner) spinner.style.display = "none";
 
     showToast(`${analysis.results.length} technologies found on ${analysis.domain}`);
-  }, 350);
+  }, 300);
 }
 
 function updateScanMetaUI() {
@@ -390,17 +225,19 @@ function closeModal() {
   modal.setAttribute("aria-hidden", "true");
 }
 
-// Initialize Application
+// Initialize Application - 100% Free Public Mode
 document.addEventListener("DOMContentLoaded", () => {
-  // Apply saved theme & language
   applyTheme(state.theme);
   applyTranslations();
 
-  // Initial Scan
-  const initialData = analyzeTargetUrl("github.com");
+  // Initial Scan directly for polri.go.id
+  const initialData = analyzeTargetUrl("polri.go.id");
   state.currentScanDomain = initialData.domain;
   state.currentScanResults = initialData.results;
   renderScanResults();
+
+  const scanInput = document.getElementById("scan-domain-input");
+  if (scanInput) scanInput.value = "polri.go.id";
 
   // Theme Toggle Event
   const themeBtn = document.getElementById("theme-toggle-btn");
@@ -413,53 +250,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (langBtn) {
     langBtn.addEventListener("click", () => {
       setLanguage(state.lang === "en" ? "id" : "en");
-    });
-  }
-
-  // Auth Tab Events
-  document.querySelectorAll(".auth-tab-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const tab = btn.getAttribute("data-tab");
-      setAuthTab(tab);
-    });
-  });
-
-  // Switch Link in Auth Footer
-  const switchLink = document.getElementById("auth-switch-link");
-  if (switchLink) {
-    switchLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      const targetTab = switchLink.getAttribute("data-target-tab") || "create";
-      setAuthTab(targetTab);
-    });
-  }
-
-  // Forgot password link
-  const forgotLink = document.getElementById("auth-forgot-link");
-  if (forgotLink) {
-    forgotLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      setAuthTab("reset");
-    });
-  }
-
-  // Password Visibility Toggle
-  const passToggleBtn = document.getElementById("password-toggle-btn");
-  if (passToggleBtn) {
-    passToggleBtn.addEventListener("click", togglePasswordVisibility);
-  }
-
-  // Auth Form Submit
-  const authForm = document.getElementById("auth-form");
-  if (authForm) {
-    authForm.addEventListener("submit", handleAuthSubmit);
-  }
-
-  // Google SSO Click Simulation
-  const googleBtn = document.getElementById("google-sso-btn");
-  if (googleBtn) {
-    googleBtn.addEventListener("click", () => {
-      showToast("Google Authentication: Handshake confirmed. Welcome!");
     });
   }
 
@@ -476,7 +266,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".quick-target-chip").forEach((chip) => {
     chip.addEventListener("click", () => {
       const domain = chip.getAttribute("data-domain");
-      const scanInput = document.getElementById("scan-domain-input");
       if (scanInput) scanInput.value = domain;
       runTechnologyScan(domain);
     });
@@ -495,11 +284,11 @@ document.addEventListener("DOMContentLoaded", () => {
         <div style="font-size:13px; color:var(--color-on-surface-variant); line-height: 1.6;">
           <div style="margin-bottom:8px; font-weight:600;">Popular Categories:</div>
           <ul style="list-style:inside disc; display:grid; grid-template-columns:1fr 1fr; gap:6px;">
-            <li>Web Frameworks (Next.js, Nuxt.js)</li>
-            <li>JavaScript Libraries (React, Vue.js)</li>
-            <li>Ecommerce (Shopify, WooCommerce)</li>
+            <li>Web Frameworks (Laravel, Next.js, Nuxt.js)</li>
+            <li>Programming Languages (PHP, TypeScript)</li>
+            <li>Security & WAF (F5 BIG-IP, Cloudflare)</li>
             <li>Content Management (WordPress, Ghost)</li>
-            <li>CDN & Hosting (Cloudflare, Vercel)</li>
+            <li>CDN & Hosting (Vercel, jsDelivr)</li>
             <li>Analytics (Google Analytics 4, Mixpanel)</li>
           </ul>
         </div>
