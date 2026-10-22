@@ -667,6 +667,7 @@ function synthesizeAlgorithmicProfile(domain, tokens, dns) {
     layer: "L1_NETWORK",
     tech: dns.provider.includes("Cloudflare") ? "Cloudflare Anycast" : "DNS-over-HTTPS Wire",
     rule: dns.ip ? `RFC-8484 DoH resolved A-record: ${dns.ip}` : "Autonomous DoH protocol inspection",
+    detail: "Protokol RFC-8484 DNS-over-HTTPS transport resolution query",
     confidence: "100%"
   });
 
@@ -746,11 +747,11 @@ function synthesizeAlgorithmicProfile(domain, tokens, dns) {
     });
 
     evidence.push(
-      { id: "EVID-L3-META", layer: "L3_DOM_META", tech: "Next.js 14.2", rule: "next-head-count + /_next/ chunk bundle graph", confidence: "98%" },
-      { id: "EVID-L4-REACT", layer: "L4_JS_GLOBALS", tech: "React 18.2", rule: "window.__reactFiber / JSX virtual runtime", confidence: "100%" },
-      { id: "EVID-L2-SRV", layer: "L2_HEADERS", tech: "Nginx 1.24", rule: "server header fingerprint + HTTP/2 protocol", confidence: "95%" },
-      { id: "EVID-L1-CF", layer: "L1_NETWORK", tech: "Cloudflare Anycast", rule: "Cloudflare edge ASN + CF-RAY header", confidence: "100%" },
-      { id: "EVID-L3-CSS", layer: "L3_DOM_STYLE", tech: "Tailwind CSS 3.4", rule: "Utility class token distribution in DOM tree", confidence: "96%" }
+      { id: "EVID-L3-META", layer: "L3_DOM_META", tech: "Next.js 14.2", rule: "next-head-count + /_next/ chunk bundle graph", detail: "Tag meta next-head-count dan static chunk manifest bundle", confidence: "98%" },
+      { id: "EVID-L4-REACT", layer: "L4_JS_GLOBALS", tech: "React 18.2", rule: "window.__reactFiber / JSX virtual runtime", detail: "Virtual DOM root instance window.__reactFiber", confidence: "100%" },
+      { id: "EVID-L2-SRV", layer: "L2_HEADERS", tech: "Nginx 1.24", rule: "server header fingerprint + HTTP/2 protocol", detail: "Response header Server: nginx pada transport layer", confidence: "95%" },
+      { id: "EVID-L1-CF", layer: "L1_NETWORK", tech: "Cloudflare Anycast", rule: "Cloudflare edge ASN + CF-RAY header", detail: "Edge Anycast ASN routing dan header cf-ray", confidence: "100%" },
+      { id: "EVID-L3-CSS", layer: "L3_DOM_STYLE", tech: "Tailwind CSS 3.4", rule: "Utility class token distribution in DOM tree", detail: "Distribusi atomik class Tailwind dalam DOM tree", confidence: "96%" }
     );
 
   } else {
@@ -785,8 +786,8 @@ function synthesizeAlgorithmicProfile(domain, tokens, dns) {
     });
 
     evidence.push(
-      { id: "EVID-L2-SRV", layer: "L2_HEADERS", tech: "Nginx 1.24", rule: "HTTP/2 edge proxy fingerprint", confidence: "95%" },
-      { id: "EVID-L1-CDN", layer: "L1_NETWORK", tech: "Cloudflare CDN", rule: "Anycast edge proxy routing", confidence: "98%" }
+      { id: "EVID-L2-SRV", layer: "L2_HEADERS", tech: "Nginx 1.24", rule: "HTTP/2 edge proxy fingerprint", detail: "HTTP/2 edge proxy header Server: nginx", confidence: "95%" },
+      { id: "EVID-L1-CDN", layer: "L1_NETWORK", tech: "Cloudflare CDN", rule: "Anycast edge proxy routing", detail: "Anycast edge proxy routing dan CDN cache", confidence: "98%" }
     );
   }
 
@@ -1050,7 +1051,14 @@ function prepareDomainData(domain, config) {
   // Always include RFC-8484 DNS-over-HTTPS wire inspection if available
   const dnsEv = (config.algorithmEvidence || []).find((e) => e.id === "EVID-L1-DNS");
   if (dnsEv) {
-    finalEvidence.push(dnsEv);
+    finalEvidence.push({
+      id: dnsEv.id || "EVID-L1-DNS",
+      layer: dnsEv.layer || "L1_NETWORK",
+      tech: dnsEv.tech || "DNS-over-HTTPS Wire",
+      rule: dnsEv.rule || "RFC-8484 DoH wire inspection",
+      detail: dnsEv.detail || "Protokol RFC-8484 DNS-over-HTTPS transport resolution query",
+      confidence: dnsEv.confidence || "100%"
+    });
   }
 
   // Iterate over every single technology item detected
@@ -1067,28 +1075,28 @@ function prepareDomainData(domain, config) {
       }
     }
 
+    const catalogEntry = TECH_EVIDENCE_CATALOG[item.name] || {
+      layer: "L3_DOM",
+      rule: `Evaluasi regex pattern untuk ${item.name}`,
+      detail: `Terdeteksi dari baris kode sumber atau tag spesifik untuk ${item.name}`
+    };
+
     if (matchedEv) {
       finalEvidence.push({
         id: matchedEv.id || `EVID-L3-${String(idx + 1).padStart(2, "0")}`,
-        layer: matchedEv.layer || "L3_DOM",
+        layer: matchedEv.layer || catalogEntry.layer || "L3_DOM",
         tech: matchedEv.tech || fullName,
-        rule: matchedEv.rule || "Algorithmic signature pattern match",
-        detail: matchedEv.detail || (TECH_EVIDENCE_CATALOG[item.name]?.detail || "Terdeteksi dari komponen kode / header / script"),
+        rule: matchedEv.rule || catalogEntry.rule || `Algorithmic signature pattern match untuk ${item.name}`,
+        detail: matchedEv.detail || catalogEntry.detail || `Terdeteksi dari komponen kode / header / script untuk ${item.name}`,
         confidence: matchedEv.confidence || item.confidence || "100%"
       });
     } else {
-      const catalogEntry = TECH_EVIDENCE_CATALOG[item.name] || {
-        layer: "L3_DOM",
-        rule: `Evaluasi regex pattern untuk ${item.name}`,
-        detail: `Terdeteksi dari baris kode sumber atau tag spesifik untuk ${item.name}`
-      };
-
       finalEvidence.push({
         id: item.evidenceId || `EVID-AUTO-${String(idx + 1).padStart(2, "0")}`,
-        layer: catalogEntry.layer,
+        layer: catalogEntry.layer || "L3_DOM",
         tech: fullName,
-        rule: catalogEntry.rule,
-        detail: catalogEntry.detail,
+        rule: catalogEntry.rule || `Evaluasi regex pattern untuk ${item.name}`,
+        detail: catalogEntry.detail || `Terdeteksi dari baris kode sumber atau tag spesifik untuk ${item.name}`,
         confidence: item.confidence || "98%"
       });
     }

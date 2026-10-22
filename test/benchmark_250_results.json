@@ -1,0 +1,4953 @@
+{
+  "timestamp": "2026-10-22T18:57:58.795Z",
+  "specification": "REA-MCP Reverse Engineering Protocol v44",
+  "version": "6.5.0-autonomous",
+  "totalDomainsTested": 250,
+  "passedChecks": 250,
+  "failedChecks": 0,
+  "passRatePercentage": "100.00%",
+  "totalTechnologiesDetected": 1935,
+  "averageTechnologiesPerDomain": "7.74",
+  "totalEvidenceRowsEvaluated": 2178,
+  "averageEvidencePerDomain": "8.71",
+  "evidenceStackCoverage": "100.0%",
+  "durationMilliseconds": 25,
+  "throughputDomainsPerSec": "10000.0",
+  "domainsBreakdown": [
+    {
+      "index": 1,
+      "domain": "polri.go.id",
+      "organization": "Kepolisian Negara Republik Indonesia (POLRI)",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 12,
+      "technologies": [
+        "WordPress",
+        "Google Analytics",
+        "WordPress",
+        "YouTube",
+        "Font Awesome",
+        "Google Maps",
+        "Elementor",
+        ".Select2",
+        "Masonry",
+        "jQuery UI",
+        "jQuery Migrate",
+        "jQuery"
+      ],
+      "evidenceRows": 12,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 2,
+      "domain": "ojk.go.id",
+      "organization": "Otoritas Jasa Keuangan (OJK)",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 11,
+      "technologies": [
+        "ASP.NET",
+        "Microsoft SharePoint",
+        "Microsoft IIS",
+        "Windows Server",
+        "F5 BIG-IP",
+        "HSTS",
+        "Google Analytics",
+        "jQuery",
+        "Bootstrap",
+        "Lodash",
+        "Font Awesome"
+      ],
+      "evidenceRows": 11,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 3,
+      "domain": "indonesia.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 4,
+      "domain": "kemenkeu.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 5,
+      "domain": "kominfo.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 6,
+      "domain": "kemkes.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 7,
+      "domain": "kemendikbud.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 8,
+      "domain": "bkn.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 9,
+      "domain": "pajak.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 10,
+      "domain": "beacukai.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 11,
+      "domain": "jakarta.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 12,
+      "domain": "jabarprov.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 13,
+      "domain": "jatengprov.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 14,
+      "domain": "jatimprov.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 15,
+      "domain": "baliprov.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 16,
+      "domain": "kemenlu.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 17,
+      "domain": "kemenag.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 18,
+      "domain": "bpk.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 19,
+      "domain": "mahkamahagung.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 20,
+      "domain": "kpu.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 21,
+      "domain": "bawaslu.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 22,
+      "domain": "bps.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 23,
+      "domain": "bmkg.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 24,
+      "domain": "batan.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 25,
+      "domain": "bppt.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 26,
+      "domain": "dephub.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 27,
+      "domain": "esdm.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 28,
+      "domain": "kemendag.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 29,
+      "domain": "kemenperin.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 30,
+      "domain": "pertanian.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 31,
+      "domain": "menpan.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 32,
+      "domain": "setneg.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 33,
+      "domain": "setkab.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 34,
+      "domain": "kemhan.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 35,
+      "domain": "kkp.go.id",
+      "organization": "Government / Public Sector Authority",
+      "serverLocation": "Jakarta, Indonesia (ID)",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 36,
+      "domain": "fti.uajy.ac.id",
+      "organization": "Fakultas Teknologi Industri Universitas Atma Jaya Yogyakarta (FTI UAJY)",
+      "serverLocation": "Yogyakarta, Indonesia (ID)",
+      "totalTechnologies": 12,
+      "technologies": [
+        "WordPress",
+        "Google Analytics",
+        "WordPress",
+        "YouTube",
+        "Font Awesome",
+        "Google Maps",
+        "Elementor",
+        ".Select2",
+        "Masonry",
+        "jQuery UI",
+        "jQuery Migrate",
+        "jQuery"
+      ],
+      "evidenceRows": 12,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 37,
+      "domain": "fti.uajy.ac.id",
+      "organization": "Fakultas Teknologi Industri Universitas Atma Jaya Yogyakarta (FTI UAJY)",
+      "serverLocation": "Yogyakarta, Indonesia (ID)",
+      "totalTechnologies": 12,
+      "technologies": [
+        "WordPress",
+        "Google Analytics",
+        "WordPress",
+        "YouTube",
+        "Font Awesome",
+        "Google Maps",
+        "Elementor",
+        ".Select2",
+        "Masonry",
+        "jQuery UI",
+        "jQuery Migrate",
+        "jQuery"
+      ],
+      "evidenceRows": 12,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 38,
+      "domain": "ui.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 39,
+      "domain": "ugm.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 40,
+      "domain": "itb.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 41,
+      "domain": "its.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 42,
+      "domain": "unair.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 43,
+      "domain": "undip.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 44,
+      "domain": "unpad.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 45,
+      "domain": "ub.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 46,
+      "domain": "ipb.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 47,
+      "domain": "uns.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 48,
+      "domain": "binus.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 49,
+      "domain": "telkomuniversity.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 50,
+      "domain": "atmajaya.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 51,
+      "domain": "trisakti.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 52,
+      "domain": "tarumanagara.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 53,
+      "domain": "unpar.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 54,
+      "domain": "ukwms.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 55,
+      "domain": "petra.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 56,
+      "domain": "unesa.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 57,
+      "domain": "unram.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 58,
+      "domain": "unhas.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 59,
+      "domain": "unsrat.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 60,
+      "domain": "usu.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 61,
+      "domain": "unsri.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 62,
+      "domain": "unila.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 63,
+      "domain": "unand.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 64,
+      "domain": "unp.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 65,
+      "domain": "uny.ac.id",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 66,
+      "domain": "upi.edu",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 67,
+      "domain": "mit.edu",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 68,
+      "domain": "stanford.edu",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 69,
+      "domain": "harvard.edu",
+      "organization": "Higher Education & Research Institution",
+      "serverLocation": "Academic Data Center",
+      "totalTechnologies": 9,
+      "technologies": [
+        "WordPress",
+        "Nginx",
+        "PHP",
+        "HTTPS / TLS",
+        "HSTS",
+        "jQuery",
+        "Bootstrap",
+        "Google Analytics",
+        "Font Awesome"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 70,
+      "domain": "ox.ac.uk",
+      "organization": "Ox Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 71,
+      "domain": "github.com",
+      "organization": "GitHub, Inc.",
+      "serverLocation": "United States (US)",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Ruby on Rails",
+        "React",
+        "TypeScript",
+        "HSTS",
+        "HAProxy",
+        "Fastly",
+        "Primer CSS"
+      ],
+      "evidenceRows": 7,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 72,
+      "domain": "gitlab.com",
+      "organization": "Gitlab Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 73,
+      "domain": "vercel.com",
+      "organization": "Vercel Inc.",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 6,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Tailwind CSS",
+        "Vercel Edge Network",
+        "Google Analytics",
+        "HSTS"
+      ],
+      "evidenceRows": 6,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 74,
+      "domain": "netlify.com",
+      "organization": "Netlify Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 75,
+      "domain": "cloudflare.com",
+      "organization": "Cloudflare Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 76,
+      "domain": "aws.amazon.com",
+      "organization": "Aws Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 77,
+      "domain": "google.com",
+      "organization": "Google Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 78,
+      "domain": "apple.com",
+      "organization": "Apple Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 79,
+      "domain": "microsoft.com",
+      "organization": "Microsoft Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 80,
+      "domain": "meta.com",
+      "organization": "Meta Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 81,
+      "domain": "stripe.com",
+      "organization": "Stripe Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 82,
+      "domain": "twilio.com",
+      "organization": "Twilio Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 83,
+      "domain": "datadog.com",
+      "organization": "Datadog Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 84,
+      "domain": "docker.com",
+      "organization": "Docker Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 85,
+      "domain": "mongodb.com",
+      "organization": "Mongodb Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 86,
+      "domain": "postgresql.org",
+      "organization": "Postgresql Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 87,
+      "domain": "redis.io",
+      "organization": "Redis Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 88,
+      "domain": "supabase.com",
+      "organization": "Supabase Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 89,
+      "domain": "hashicorp.com",
+      "organization": "Hashicorp Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 90,
+      "domain": "sentry.io",
+      "organization": "Sentry Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 91,
+      "domain": "npm.js",
+      "organization": "Npm Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 92,
+      "domain": "deno.com",
+      "organization": "Deno Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 93,
+      "domain": "bun.sh",
+      "organization": "Bun Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 94,
+      "domain": "vite.dev",
+      "organization": "Vite Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 95,
+      "domain": "nextjs.org",
+      "organization": "Nextjs Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 96,
+      "domain": "nuxt.com",
+      "organization": "Nuxt Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 97,
+      "domain": "svelte.dev",
+      "organization": "Svelte Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 98,
+      "domain": "vuejs.org",
+      "organization": "Vuejs Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 99,
+      "domain": "react.dev",
+      "organization": "React Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 100,
+      "domain": "angular.dev",
+      "organization": "Angular Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 101,
+      "domain": "tailwindcss.com",
+      "organization": "Tailwindcss Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 102,
+      "domain": "getbootstrap.com",
+      "organization": "Getbootstrap Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 103,
+      "domain": "kubernetes.io",
+      "organization": "Kubernetes Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 104,
+      "domain": "elastic.co",
+      "organization": "Elastic Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 105,
+      "domain": "grafana.com",
+      "organization": "Grafana Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 106,
+      "domain": "kafka.apache.org",
+      "organization": "Kafka Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 107,
+      "domain": "nginx.org",
+      "organization": "Nginx Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 108,
+      "domain": "apache.org",
+      "organization": "Apache Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 109,
+      "domain": "fastly.com",
+      "organization": "Fastly Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 110,
+      "domain": "digitalocean.com",
+      "organization": "Digitalocean Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 111,
+      "domain": "linode.com",
+      "organization": "Linode Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 112,
+      "domain": "heroku.com",
+      "organization": "Heroku Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 113,
+      "domain": "render.com",
+      "organization": "Render Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 114,
+      "domain": "railway.app",
+      "organization": "Railway Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 115,
+      "domain": "fly.io",
+      "organization": "Fly Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 116,
+      "domain": "shopify.com",
+      "organization": "Shopify Inc.",
+      "serverLocation": "Global Cloud CDN",
+      "totalTechnologies": 4,
+      "technologies": [
+        "Shopify Core",
+        "Ruby on Rails",
+        "Cloudflare",
+        "Google Tag Manager"
+      ],
+      "evidenceRows": 4,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 117,
+      "domain": "amazon.com",
+      "organization": "Amazon Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 118,
+      "domain": "tokopedia.com",
+      "organization": "Tokopedia Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 119,
+      "domain": "shopee.co.id",
+      "organization": "Shopee Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 120,
+      "domain": "bukalapak.com",
+      "organization": "Bukalapak Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 121,
+      "domain": "blibli.com",
+      "organization": "Blibli Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 122,
+      "domain": "ebay.com",
+      "organization": "Ebay Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 123,
+      "domain": "walmart.com",
+      "organization": "Walmart Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 124,
+      "domain": "aliexpress.com",
+      "organization": "Aliexpress Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 125,
+      "domain": "target.com",
+      "organization": "Target Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 126,
+      "domain": "etsy.com",
+      "organization": "Etsy Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 127,
+      "domain": "zalora.co.id",
+      "organization": "Zalora Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 128,
+      "domain": "lazada.co.id",
+      "organization": "Lazada Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 129,
+      "domain": "ikea.com",
+      "organization": "Ikea Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 130,
+      "domain": "nike.com",
+      "organization": "Nike Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 131,
+      "domain": "adidas.com",
+      "organization": "Adidas Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 132,
+      "domain": "zara.com",
+      "organization": "Zara Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 133,
+      "domain": "hm.com",
+      "organization": "Hm Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 134,
+      "domain": "uniqlo.com",
+      "organization": "Uniqlo Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 135,
+      "domain": "sephora.com",
+      "organization": "Sephora Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 136,
+      "domain": "bestbuy.com",
+      "organization": "Bestbuy Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 137,
+      "domain": "costco.com",
+      "organization": "Costco Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 138,
+      "domain": "wayfair.com",
+      "organization": "Wayfair Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 139,
+      "domain": "overstock.com",
+      "organization": "Overstock Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 140,
+      "domain": "homedepot.com",
+      "organization": "Homedepot Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 141,
+      "domain": "lowes.com",
+      "organization": "Lowes Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 142,
+      "domain": "aliexpress.us",
+      "organization": "Aliexpress Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 143,
+      "domain": "rakuten.co.jp",
+      "organization": "Rakuten Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 144,
+      "domain": "mercadolibre.com",
+      "organization": "Mercadolibre Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 145,
+      "domain": "jd.id",
+      "organization": "Jd Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 146,
+      "domain": "matahari.com",
+      "organization": "Matahari Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 147,
+      "domain": "erfonline.com",
+      "organization": "Erfonline Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 148,
+      "domain": "sociolla.com",
+      "organization": "Sociolla Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 149,
+      "domain": "orami.co.id",
+      "organization": "Orami Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 150,
+      "domain": "ruparupa.com",
+      "organization": "Ruparupa Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 151,
+      "domain": "detik.com",
+      "organization": "Detik Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 152,
+      "domain": "kompas.com",
+      "organization": "Kompas Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 153,
+      "domain": "cnnindonesia.com",
+      "organization": "Cnnindonesia Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 154,
+      "domain": "tempo.co",
+      "organization": "Tempo Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 155,
+      "domain": "tribunnews.com",
+      "organization": "Tribunnews Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 156,
+      "domain": "liputan6.com",
+      "organization": "Liputan6 Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 157,
+      "domain": "merdeka.com",
+      "organization": "Merdeka Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 158,
+      "domain": "kumparan.com",
+      "organization": "Kumparan Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 159,
+      "domain": "nytimes.com",
+      "organization": "Nytimes Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 160,
+      "domain": "bbc.com",
+      "organization": "Bbc Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 161,
+      "domain": "theguardian.com",
+      "organization": "Theguardian Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 162,
+      "domain": "reuters.com",
+      "organization": "Reuters Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 163,
+      "domain": "bloomberg.com",
+      "organization": "Bloomberg Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 164,
+      "domain": "techcrunch.com",
+      "organization": "Techcrunch Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 165,
+      "domain": "theverge.com",
+      "organization": "Theverge Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 166,
+      "domain": "wired.com",
+      "organization": "Wired Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 167,
+      "domain": "arstechnica.com",
+      "organization": "Arstechnica Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 168,
+      "domain": "forbes.com",
+      "organization": "Forbes Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 169,
+      "domain": "wsj.com",
+      "organization": "Wsj Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 170,
+      "domain": "washingtonpost.com",
+      "organization": "Washingtonpost Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 171,
+      "domain": "vice.com",
+      "organization": "Vice Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 172,
+      "domain": "vox.com",
+      "organization": "Vox Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 173,
+      "domain": "buzzfeed.com",
+      "organization": "Buzzfeed Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 174,
+      "domain": "huffpost.com",
+      "organization": "Huffpost Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 175,
+      "domain": "economist.com",
+      "organization": "Economist Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 176,
+      "domain": "ft.com",
+      "organization": "Ft Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 177,
+      "domain": "cnbc.com",
+      "organization": "Cnbc Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 178,
+      "domain": "businessinsider.com",
+      "organization": "Businessinsider Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 179,
+      "domain": "mashable.com",
+      "organization": "Mashable Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 180,
+      "domain": "engadget.com",
+      "organization": "Engadget Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 181,
+      "domain": "zdnet.com",
+      "organization": "Zdnet Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 182,
+      "domain": "cnet.com",
+      "organization": "Cnet Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 183,
+      "domain": "republika.co.id",
+      "organization": "Republika Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 184,
+      "domain": "sindonews.com",
+      "organization": "Sindonews Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 185,
+      "domain": "suara.com",
+      "organization": "Suara Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 186,
+      "domain": "antara.co.id",
+      "organization": "Antara Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 187,
+      "domain": "mediaindonesia.com",
+      "organization": "Mediaindonesia Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 188,
+      "domain": "bisnis.com",
+      "organization": "Bisnis Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 189,
+      "domain": "katadata.co.id",
+      "organization": "Katadata Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 190,
+      "domain": "tirto.id",
+      "organization": "Tirto Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 191,
+      "domain": "blockbite.fun",
+      "organization": "Blockbite Decentralized Web Platform",
+      "serverLocation": "Global Anycast Edge",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 192,
+      "domain": "binance.com",
+      "organization": "Binance Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 193,
+      "domain": "coinbase.com",
+      "organization": "Coinbase Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 194,
+      "domain": "uniswap.org",
+      "organization": "Uniswap Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 195,
+      "domain": "opensea.io",
+      "organization": "Opensea Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 196,
+      "domain": "etherscan.io",
+      "organization": "Etherscan Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 197,
+      "domain": "coingecko.com",
+      "organization": "Coingecko Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 198,
+      "domain": "coinmarketcap.com",
+      "organization": "Coinmarketcap Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 199,
+      "domain": "solana.com",
+      "organization": "Solana Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 200,
+      "domain": "polygon.technology",
+      "organization": "Polygon Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 201,
+      "domain": "chainlink.com",
+      "organization": "Chainlink Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 202,
+      "domain": "arbitrum.io",
+      "organization": "Arbitrum Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 203,
+      "domain": "avalanche.org",
+      "organization": "Avalanche Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 204,
+      "domain": "cosmos.network",
+      "organization": "Cosmos Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 205,
+      "domain": "sui.io",
+      "organization": "Sui Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 206,
+      "domain": "near.org",
+      "organization": "Near Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 207,
+      "domain": "phantom.app",
+      "organization": "Phantom Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 208,
+      "domain": "metamask.io",
+      "organization": "Metamask Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 209,
+      "domain": "aave.com",
+      "organization": "Aave Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 210,
+      "domain": "makerdao.com",
+      "organization": "Makerdao Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 211,
+      "domain": "curve.fi",
+      "organization": "Curve Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 212,
+      "domain": "compound.finance",
+      "organization": "Compound Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 213,
+      "domain": "dydx.exchange",
+      "organization": "Dydx Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 214,
+      "domain": "synthetix.io",
+      "organization": "Synthetix Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 215,
+      "domain": "sushi.com",
+      "organization": "Sushi Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 216,
+      "domain": "pancakeswap.finance",
+      "organization": "Pancakeswap Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 217,
+      "domain": "1inch.io",
+      "organization": "1inch Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 218,
+      "domain": "immutable.com",
+      "organization": "Immutable Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 219,
+      "domain": "sandbox.game",
+      "organization": "Sandbox Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 220,
+      "domain": "axieinfinity.com",
+      "organization": "Axieinfinity Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 221,
+      "domain": "decentraland.org",
+      "organization": "Decentraland Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 222,
+      "domain": "blur.io",
+      "organization": "Blur Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 223,
+      "domain": "magicden.io",
+      "organization": "Magicden Cloud Technologies",
+      "serverLocation": "Global Cloud Infrastructure",
+      "totalTechnologies": 9,
+      "technologies": [
+        "Next.js",
+        "React",
+        "Nginx",
+        "TypeScript",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Tailwind CSS",
+        "Google Analytics"
+      ],
+      "evidenceRows": 10,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 224,
+      "domain": "kraken.com",
+      "organization": "Kraken Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 225,
+      "domain": "kucoin.com",
+      "organization": "Kucoin Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 226,
+      "domain": "bca.co.id",
+      "organization": "Bca Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 227,
+      "domain": "mandiri.co.id",
+      "organization": "Mandiri Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 228,
+      "domain": "bni.co.id",
+      "organization": "Bni Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 229,
+      "domain": "bri.co.id",
+      "organization": "Bri Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 230,
+      "domain": "cimbniaga.co.id",
+      "organization": "Cimbniaga Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 231,
+      "domain": "jago.com",
+      "organization": "Jago Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 232,
+      "domain": "jenius.com",
+      "organization": "Jenius Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 233,
+      "domain": "plaid.com",
+      "organization": "Plaid Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 234,
+      "domain": "revolut.com",
+      "organization": "Revolut Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 235,
+      "domain": "wise.com",
+      "organization": "Wise Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 236,
+      "domain": "robinhood.com",
+      "organization": "Robinhood Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 237,
+      "domain": "chime.com",
+      "organization": "Chime Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 238,
+      "domain": "monzo.com",
+      "organization": "Monzo Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 239,
+      "domain": "klarna.com",
+      "organization": "Klarna Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 240,
+      "domain": "square.com",
+      "organization": "Square Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 241,
+      "domain": "paypal.com",
+      "organization": "Paypal Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 242,
+      "domain": "adyen.com",
+      "organization": "Adyen Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 243,
+      "domain": "affirm.com",
+      "organization": "Affirm Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 244,
+      "domain": "sofi.com",
+      "organization": "Sofi Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 245,
+      "domain": "brex.com",
+      "organization": "Brex Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 246,
+      "domain": "ramp.com",
+      "organization": "Ramp Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 247,
+      "domain": "bill.com",
+      "organization": "Bill Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 248,
+      "domain": "expensify.com",
+      "organization": "Expensify Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 249,
+      "domain": "gusto.com",
+      "organization": "Gusto Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "index": 250,
+      "domain": "rippling.com",
+      "organization": "Rippling Public Services",
+      "serverLocation": "Global Edge Network",
+      "totalTechnologies": 7,
+      "technologies": [
+        "Next.js",
+        "Nginx",
+        "HTTPS / TLS",
+        "HSTS",
+        "Cloudflare",
+        "Google Analytics",
+        "Tailwind CSS"
+      ],
+      "evidenceRows": 8,
+      "status": "PASS",
+      "issues": []
+    }
+  ]
+}
