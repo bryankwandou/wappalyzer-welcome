@@ -287,6 +287,57 @@ export const KNOWN_DOMAINS = {
         items: [{ name: "Cloudflare", version: null, icon: "cloud", url: "https://cloudflare.com" }]
       }
     ]
+  },
+  "lockbit": {
+    domain: "lockbit.supp",
+    leftColumn: [
+      {
+        category: "Network & Routing",
+        items: [
+          { name: "Tor Hidden Service (v3)", version: "0.4.8", icon: "shield", url: "https://www.torproject.org" }
+        ]
+      },
+      {
+        category: "Web servers",
+        items: [
+          { name: "Nginx", version: "1.22.1", icon: "server", url: "https://nginx.org" }
+        ]
+      },
+      {
+        category: "Programming languages",
+        items: [
+          { name: "PHP", version: "8.1", icon: "code", url: "https://www.php.net" },
+          { name: "C / C++", version: null, icon: "code", url: "https://en.wikipedia.org/wiki/C%2B%2B" }
+        ]
+      },
+      {
+        category: "Security",
+        items: [
+          { name: "Proof-of-Work CAPTCHA", version: null, icon: "shield", url: "https://developer.mozilla.org" },
+          { name: "HSTS", version: null, icon: "shield", url: "https://developer.mozilla.org" }
+        ]
+      }
+    ],
+    rightColumn: [
+      {
+        category: "Operating systems",
+        items: [
+          { name: "Linux / Debian", version: "12", icon: "server", url: "https://www.debian.org" }
+        ]
+      },
+      {
+        category: "Databases",
+        items: [
+          { name: "SQLite", version: "3.40", icon: "server", url: "https://www.sqlite.org" }
+        ]
+      },
+      {
+        category: "Cryptography",
+        items: [
+          { name: "AES-256 / ChaCha20", version: null, icon: "shield", url: "https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" }
+        ]
+      }
+    ]
   }
 };
 
@@ -317,6 +368,11 @@ export function analyzeTargetUrl(rawInput) {
   // Polri alias
   if (cleaned.includes("polri")) {
     return prepareDomainData("polri.go.id", KNOWN_DOMAINS["polri.go.id"]);
+  }
+
+  // LockBit alias
+  if (cleaned.includes("lockbit")) {
+    return prepareDomainData("lockbit.supp", KNOWN_DOMAINS["lockbit"]);
   }
 
   for (const [key, value] of Object.entries(KNOWN_DOMAINS)) {
