@@ -58,6 +58,116 @@ export const KNOWN_DOMAINS = {
       }
     ]
   },
+  "ojk.go.id": {
+    domain: "ojk.go.id",
+    leftColumn: [
+      {
+        category: "Web frameworks",
+        items: [
+          { name: "ASP.NET", version: "4.8", icon: "code", url: "https://dotnet.microsoft.com/apps/aspnet" },
+          { name: "Microsoft SharePoint", version: "2019", icon: "microsoft", url: "https://www.microsoft.com/microsoft-365/sharepoint" }
+        ]
+      },
+      {
+        category: "Web servers",
+        items: [
+          { name: "Microsoft IIS", version: "10.0", icon: "server", url: "https://www.iis.net" }
+        ]
+      },
+      {
+        category: "Operating systems",
+        items: [
+          { name: "Windows Server", version: "2022", icon: "microsoft", url: "https://www.microsoft.com/windows-server" }
+        ]
+      },
+      {
+        category: "Security",
+        items: [
+          { name: "F5 BIG-IP", version: "ASM", icon: "f5", url: "https://www.f5.com" },
+          { name: "HSTS", version: null, icon: "shield", url: "https://developer.mozilla.org" },
+          { name: "X-Frame-Options", version: null, icon: "shield", url: "https://developer.mozilla.org" }
+        ]
+      }
+    ],
+    rightColumn: [
+      {
+        category: "Analytics",
+        items: [
+          { name: "Google Analytics", version: "GA4", icon: "google-analytics", url: "https://analytics.google.com" }
+        ]
+      },
+      {
+        category: "JavaScript libraries",
+        items: [
+          { name: "jQuery", version: "3.6.0", icon: "jquery", url: "https://jquery.com" },
+          { name: "Bootstrap", version: "4.6.0", icon: "bootstrap", url: "https://getbootstrap.com" },
+          { name: "Lodash", version: "4.17.21", icon: "code", url: "https://lodash.com" }
+        ]
+      },
+      {
+        category: "Font scripts",
+        items: [
+          { name: "Font Awesome", version: "5.15.4", icon: "font-awesome", url: "https://fontawesome.com" },
+          { name: "Google Font API", version: null, icon: "font-awesome", url: "https://fonts.google.com" }
+        ]
+      }
+    ]
+  },
+  "ojk.com": {
+    domain: "ojk.go.id",
+    leftColumn: [
+      {
+        category: "Web frameworks",
+        items: [
+          { name: "ASP.NET", version: "4.8", icon: "code", url: "https://dotnet.microsoft.com/apps/aspnet" },
+          { name: "Microsoft SharePoint", version: "2019", icon: "microsoft", url: "https://www.microsoft.com/microsoft-365/sharepoint" }
+        ]
+      },
+      {
+        category: "Web servers",
+        items: [
+          { name: "Microsoft IIS", version: "10.0", icon: "server", url: "https://www.iis.net" }
+        ]
+      },
+      {
+        category: "Operating systems",
+        items: [
+          { name: "Windows Server", version: "2022", icon: "microsoft", url: "https://www.microsoft.com/windows-server" }
+        ]
+      },
+      {
+        category: "Security",
+        items: [
+          { name: "F5 BIG-IP", version: "ASM", icon: "f5", url: "https://www.f5.com" },
+          { name: "HSTS", version: null, icon: "shield", url: "https://developer.mozilla.org" },
+          { name: "X-Frame-Options", version: null, icon: "shield", url: "https://developer.mozilla.org" }
+        ]
+      }
+    ],
+    rightColumn: [
+      {
+        category: "Analytics",
+        items: [
+          { name: "Google Analytics", version: "GA4", icon: "google-analytics", url: "https://analytics.google.com" }
+        ]
+      },
+      {
+        category: "JavaScript libraries",
+        items: [
+          { name: "jQuery", version: "3.6.0", icon: "jquery", url: "https://jquery.com" },
+          { name: "Bootstrap", version: "4.6.0", icon: "bootstrap", url: "https://getbootstrap.com" },
+          { name: "Lodash", version: "4.17.21", icon: "code", url: "https://lodash.com" }
+        ]
+      },
+      {
+        category: "Font scripts",
+        items: [
+          { name: "Font Awesome", version: "5.15.4", icon: "font-awesome", url: "https://fontawesome.com" },
+          { name: "Google Font API", version: null, icon: "font-awesome", url: "https://fonts.google.com" }
+        ]
+      }
+    ]
+  },
   "github.com": {
     domain: "github.com",
     leftColumn: [
@@ -194,8 +304,19 @@ export function analyzeTargetUrl(rawInput) {
     return prepareDomainData("polri.go.id", KNOWN_DOMAINS["polri.go.id"]);
   }
 
+  // Exact match
   if (KNOWN_DOMAINS[cleaned]) {
     return prepareDomainData(cleaned, KNOWN_DOMAINS[cleaned]);
+  }
+
+  // OJK specific alias (ojk, ojk.com, ojk.go.id, ojk.id)
+  if (cleaned.includes("ojk")) {
+    return prepareDomainData(cleaned.includes("go.id") ? "ojk.go.id" : cleaned, KNOWN_DOMAINS["ojk.go.id"]);
+  }
+
+  // Polri alias
+  if (cleaned.includes("polri")) {
+    return prepareDomainData("polri.go.id", KNOWN_DOMAINS["polri.go.id"]);
   }
 
   for (const [key, value] of Object.entries(KNOWN_DOMAINS)) {
