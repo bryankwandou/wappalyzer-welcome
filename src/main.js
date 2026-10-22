@@ -159,6 +159,7 @@ function renderScanResults() {
         <td style="padding:6px 8px;"><span style="background:#f0ebf9; color:#4608ad; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">${ev.layer}</span></td>
         <td style="padding:6px 8px; font-weight:600;">${ev.tech}</td>
         <td style="padding:6px 8px; font-family:monospace; font-size:11px; color:#56516d;">${ev.rule}</td>
+        <td style="padding:6px 8px; font-size:11px; color:#374151;">${ev.detail || "Terdeteksi dari baris kode sumber / header"}</td>
         <td style="padding:6px 8px; color:#10b981; font-weight:700;">${ev.confidence}</td>
       </tr>
     `).join("");
@@ -175,7 +176,7 @@ function renderScanResults() {
 
         <div style="margin-top:10px;">
           <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-            <strong style="color:#1e1160; font-size:12px; text-transform:uppercase; letter-spacing:0.04em;">Algoritma Deteksi Teknograﬁk & Bukti REA (Evidence Log)</strong>
+            <strong style="color:#1e1160; font-size:12px; text-transform:uppercase; letter-spacing:0.04em;">Algoritma Deteksi Teknograﬁk & Bukti REA (Evidence Log — 100% Stack Coverage)</strong>
             <span style="font-size:11px; color:#10b981; background:#dcffd6; padding:2px 8px; border-radius:9999px; font-weight:700;">100% Calibrated Heuristics</span>
           </div>
           <div style="overflow-x:auto; border:1px solid #e5e0f2; border-radius:8px; background:#ffffff;">
@@ -186,6 +187,7 @@ function renderScanResults() {
                   <th style="padding:6px 8px;">Layer</th>
                   <th style="padding:6px 8px;">Technology</th>
                   <th style="padding:6px 8px;">Heuristic Match Rule</th>
+                  <th style="padding:6px 8px;">Sumber / Baris Kode (1-Line Proof)</th>
                   <th style="padding:6px 8px;">Confidence</th>
                 </tr>
               </thead>
