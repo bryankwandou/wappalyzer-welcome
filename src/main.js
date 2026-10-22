@@ -7,7 +7,8 @@ const state = {
   lang: localStorage.getItem("wappalyzer_lang") || (navigator.language.startsWith("id") ? "id" : "en"),
   theme: localStorage.getItem("wappalyzer_theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"),
   currentScanDomain: "polri.go.id",
-  currentScanResults: []
+  currentScanData: analyzeTargetUrl("polri.go.id"),
+  isExtensionActive: true
 };
 
 const dictionaries = { en, id };
@@ -41,8 +42,6 @@ function applyTranslations() {
   if (currentLangText) {
     currentLangText.textContent = state.lang.toUpperCase() === "ID" ? "ID (Bahasa)" : "EN (English)";
   }
-
-  updateScanMetaUI();
 }
 
 // Switch Language
@@ -78,25 +77,29 @@ function toggleTheme() {
   showToast(nextTheme === "dark" ? "Dark mode activated" : "Light mode activated");
 }
 
-// SVG Icon Generator for tech cards
+// SVG Brand & Tech Icon Generator (Exact vector replicas)
 function getTechIconSvg(iconName) {
   const svgs = {
-    layers: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>`,
+    wordpress: `<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="#21759B"/><path fill="#ffffff" d="M12 3.2c4.85 0 8.8 3.95 8.8 8.8 0 1.5-.38 2.9-1.05 4.13l-4.24-11.64c-.03-.09-.08-.18-.15-.24-.95-.7-2.1-.85-3.36-1.05zm-6.7 3.53c.63 1.51 1.84 4.91 2.47 6.67l-3.4-9.33c.29.85.61 1.76.93 2.66zm3.66 9.92l-2.5-7.25 3.84 11.16c-.48-.14-.95-.32-1.41-.54l.07-.01v-3.36zm3.04 5.38c-.66 0-1.3-.07-1.92-.2l3.43-9.95 3.52 9.65c-1.55.51-3.23.6-5.03.5zm6.79-4.17c.34-.69.59-1.44.73-2.22l-3.68-10.1c1.48 1.35 2.52 3.19 2.88 5.27.05.26.07.53.07.81 0 2.3-.87 4.4-2.31 5.99l2.31 6.25z"/></svg>`,
+    "google-analytics": `<svg viewBox="0 0 24 24" width="18" height="18"><path fill="#F9AB00" d="M21 19.5h-3a1.5 1.5 0 0 1-1.5-1.5v-12a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 22.5 6v12a1.5 1.5 0 0 1-1.5 1.5z"/><path fill="#E37400" d="M13.5 19.5h-3a1.5 1.5 0 0 1-1.5-1.5v-7a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5v7a1.5 1.5 0 0 1-1.5 1.5z"/><circle fill="#E37400" cx="4.5" cy="18" r="2.2"/></svg>`,
+    youtube: `<svg viewBox="0 0 24 24" width="18" height="18"><rect width="22" height="16" x="1" y="4" rx="4" fill="#FF0000"/><polygon points="9.5 8.5 15.5 12 9.5 15.5" fill="#FFFFFF"/></svg>`,
+    "font-awesome": `<svg viewBox="0 0 24 24" width="18" height="18"><rect width="20" height="20" x="2" y="2" rx="3" fill="#339AF0"/><path fill="#FFFFFF" d="M15 14h-4v-1.8h3.4v-1.4H11V9.2h4.4V7.8H9.6v7.6H15z"/></svg>`,
+    "google-maps": `<svg viewBox="0 0 24 24" width="18" height="18"><path fill="#EA4335" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#4285F4" cx="12" cy="9" r="2.8"/></svg>`,
+    elementor: `<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="#1e1e1e"/><path fill="#FFFFFF" d="M8 8h2.2v8H8zm3.6 0h4.4v2h-4.4zm0 3h4.4v2h-4.4zm0 3h4.4v2h-4.4z"/></svg>`,
+    select2: `<svg viewBox="0 0 24 24" width="18" height="18"><rect width="18" height="7" x="3" y="4" rx="2" fill="#E84D3D"/><rect width="18" height="7" x="3" y="13" rx="2" fill="#3498DB"/><circle cx="17" cy="7.5" r="1.3" fill="#FFFFFF"/><circle cx="7" cy="16.5" r="1.3" fill="#FFFFFF"/></svg>`,
+    masonry: `<svg viewBox="0 0 24 24" width="18" height="18"><rect x="3" y="3" width="8" height="8" rx="1" fill="#1E88E5"/><rect x="13" y="3" width="8" height="12" rx="1" fill="#1E88E5"/><rect x="3" y="13" width="8" height="8" rx="1" fill="#1E88E5"/><rect x="13" y="17" width="8" height="4" rx="1" fill="#1E88E5"/></svg>`,
+    "jquery-ui": `<svg viewBox="0 0 24 24" width="18" height="18"><path fill="#F39C12" d="M12 2L4 5.5v6.5c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5.5L12 2z"/><path fill="#FFFFFF" d="M11 14.5l-3-3 1.2-1.2 1.8 1.8 4.8-4.8 1.2 1.2z"/></svg>`,
+    "jquery-migrate": `<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="#00A896"/><path fill="#FFFFFF" d="M12 5a7 7 0 0 0-7 7h2a5 5 0 0 1 5-5V5zm4.95 2.05l-1.41 1.41A5 5 0 0 1 17 12h2a7 7 0 0 0-2.05-4.95zM7 12H5a7 7 0 0 0 2.05 4.95l1.41-1.41A5 5 0 0 1 7 12zm5 5a5 5 0 0 1-5-5H5a7 7 0 0 0 7 7v-2z"/></svg>`,
+    jquery: `<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="#0769AD"/><path fill="#FFFFFF" d="M11 16.5c-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5c1.6 0 3 .8 3.8 2.1l-1.7.9c-.4-.6-1.2-1-2.1-1-1.4 0-2.5 1.1-2.5 2.5s1.1 2.5 2.5 2.5c1.4 0 2.5-1.1 2.5-2.5 0-.4-.1-.8-.3-1.2l1.8-.9c.4.6.5 1.3.5 2.1 0 2.5-2 4.5-4.5 4.5z"/></svg>`,
     code: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`,
     server: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>`,
     cloud: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>`,
     palette: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>`,
     shield: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
-    globe: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>`,
     "shopping-bag": `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`,
-    tag: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>`,
-    "file-code": `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="10" y1="13" x2="8" y2="15"></line><line x1="8" y1="15" x2="10" y2="17"></line><line x1="14" y1="13" x2="16" y2="15"></line><line x1="16" y1="15" x2="14" y2="17"></line></svg>`,
-    "credit-card": `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>`,
-    search: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`,
-    "bar-chart": `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>`,
-    "share-2": `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>`
+    "credit-card": `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>`
   };
-  return svgs[iconName] || svgs.layers;
+  return svgs[iconName] || svgs.code;
 }
 
 // Execute Scan
@@ -117,7 +120,7 @@ function runTechnologyScan(targetDomain) {
   setTimeout(() => {
     const analysis = analyzeTargetUrl(domainToScan);
     state.currentScanDomain = analysis.domain;
-    state.currentScanResults = analysis.results;
+    state.currentScanData = analysis;
 
     renderScanResults();
 
@@ -125,61 +128,116 @@ function runTechnologyScan(targetDomain) {
     if (btnText) btnText.style.display = "inline";
     if (spinner) spinner.style.display = "none";
 
-    showToast(`${analysis.results.length} technologies found on ${analysis.domain}`);
-  }, 300);
+    showToast(`${analysis.totalCount} technologies detected for ${analysis.domain}`);
+  }, 250);
 }
 
-function updateScanMetaUI() {
-  const domainEl = document.getElementById("results-domain-name");
-  const countEl = document.getElementById("results-count-text");
-
-  if (domainEl) domainEl.textContent = state.currentScanDomain;
-  if (countEl) {
-    countEl.textContent = `${state.currentScanResults.length} ${t("scanner.scanCount")}`;
-  }
-}
-
+// Render Exact 2-Column Wappalyzer Popup Layout (1:1 with photo)
 function renderScanResults() {
-  updateScanMetaUI();
-  const grid = document.getElementById("tech-cards-grid");
-  if (!grid) return;
+  const container = document.getElementById("popup-columns-container");
+  const moreInfoDomain = document.getElementById("more-info-domain");
 
-  grid.innerHTML = "";
-
-  if (state.currentScanResults.length === 0) {
-    grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: var(--color-on-surface-disabled);">${t("scanner.noResults")}</div>`;
-    return;
+  if (moreInfoDomain) {
+    moreInfoDomain.textContent = `https://${state.currentScanDomain}`;
   }
 
-  state.currentScanResults.forEach((tech) => {
-    const card = document.createElement("div");
-    card.className = "tech-card";
+  if (!container) return;
+  container.innerHTML = "";
 
-    const versionBadge = tech.version
-      ? `<span class="tech-badge-version">${tech.version}</span>`
-      : `<span class="tech-badge-version" style="opacity: 0.6;">Detected</span>`;
+  const leftCol = document.createElement("div");
+  leftCol.className = "popup-column left-column";
 
-    card.innerHTML = `
-      <div class="tech-card-header">
-        <div class="tech-icon-wrap" aria-hidden="true">
-          ${getTechIconSvg(tech.icon)}
-        </div>
-        ${versionBadge}
-      </div>
-      <div>
-        <div class="tech-name">${tech.name}</div>
-        <div class="tech-category">${tech.category}</div>
-      </div>
-      <div class="tech-meta-row">
-        <span class="confidence-meter">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          ${tech.confidence}%
-        </span>
-      </div>
-    `;
+  const rightCol = document.createElement("div");
+  rightCol.className = "popup-column right-column";
 
-    grid.appendChild(card);
+  // Build Left Column Groups
+  state.currentScanData.leftColumn.forEach((group) => {
+    leftCol.appendChild(createCategoryGroupEl(group));
   });
+
+  // Build Right Column Groups
+  state.currentScanData.rightColumn.forEach((group) => {
+    rightCol.appendChild(createCategoryGroupEl(group));
+  });
+
+  container.appendChild(leftCol);
+  container.appendChild(rightCol);
+}
+
+function createCategoryGroupEl(group) {
+  const groupEl = document.createElement("div");
+  groupEl.className = "category-group";
+
+  const titleEl = document.createElement("div");
+  titleEl.className = "category-title";
+  titleEl.textContent = group.category;
+  groupEl.appendChild(titleEl);
+
+  const listEl = document.createElement("div");
+  listEl.className = "tech-items-list";
+
+  group.items.forEach((item) => {
+    const row = document.createElement("div");
+    row.className = "tech-item-row";
+
+    const iconSpan = document.createElement("span");
+    iconSpan.className = "tech-brand-icon";
+    iconSpan.innerHTML = getTechIconSvg(item.icon);
+
+    const link = document.createElement("a");
+    link.className = "tech-name-link";
+    link.href = item.url || "#";
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = item.name;
+
+    row.appendChild(iconSpan);
+    row.appendChild(link);
+
+    if (item.version) {
+      const ver = document.createElement("span");
+      ver.className = "tech-version-tag";
+      ver.textContent = item.version;
+      row.appendChild(ver);
+    }
+
+    listEl.appendChild(row);
+  });
+
+  groupEl.appendChild(listEl);
+  return groupEl;
+}
+
+// Export Stack Data (JSON copy & download)
+function exportTechStack() {
+  const payload = {
+    domain: state.currentScanDomain,
+    url: `https://${state.currentScanDomain}`,
+    detectedAt: new Date().toISOString(),
+    totalCount: state.currentScanData.totalCount,
+    leftColumn: state.currentScanData.leftColumn,
+    rightColumn: state.currentScanData.rightColumn
+  };
+
+  const jsonString = JSON.stringify(payload, null, 2);
+
+  // Copy to clipboard
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(jsonString).catch(() => {});
+  }
+
+  // Trigger JSON download
+  const blob = new Blob([jsonString], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `wappalyzer-${state.currentScanDomain}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  showToast(`Exported ${state.currentScanData.totalCount} technologies for ${state.currentScanDomain}`);
 }
 
 // Toast Notifications
@@ -230,14 +288,49 @@ document.addEventListener("DOMContentLoaded", () => {
   applyTheme(state.theme);
   applyTranslations();
 
-  // Initial Scan directly for polri.go.id
-  const initialData = analyzeTargetUrl("polri.go.id");
-  state.currentScanDomain = initialData.domain;
-  state.currentScanResults = initialData.results;
+  // Initial Scan directly for polri.go.id (Photo Reference)
   renderScanResults();
 
   const scanInput = document.getElementById("scan-domain-input");
   if (scanInput) scanInput.value = "polri.go.id";
+
+  // Popup Switch Toggle
+  const popupSwitch = document.getElementById("popup-switch");
+  if (popupSwitch) {
+    popupSwitch.addEventListener("click", () => {
+      state.isExtensionActive = !state.isExtensionActive;
+      popupSwitch.classList.toggle("active", state.isExtensionActive);
+      showToast(state.isExtensionActive ? "Extension detection active" : "Extension detection paused");
+    });
+  }
+
+  // Popup Tab Switching (TECHNOLOGIES / MORE INFO)
+  const tabTech = document.getElementById("tab-technologies");
+  const tabMore = document.getElementById("tab-more-info");
+  const popupGrid = document.getElementById("popup-columns-container");
+  const moreInfoPanel = document.getElementById("popup-more-info-panel");
+
+  if (tabTech && tabMore && popupGrid && moreInfoPanel) {
+    tabTech.addEventListener("click", () => {
+      tabTech.classList.add("active");
+      tabMore.classList.remove("active");
+      popupGrid.style.display = "grid";
+      moreInfoPanel.style.display = "none";
+    });
+
+    tabMore.addEventListener("click", () => {
+      tabMore.classList.add("active");
+      tabTech.classList.remove("active");
+      popupGrid.style.display = "none";
+      moreInfoPanel.style.display = "block";
+    });
+  }
+
+  // Export Button Click
+  const exportBtn = document.getElementById("popup-export-btn");
+  if (exportBtn) {
+    exportBtn.addEventListener("click", exportTechStack);
+  }
 
   // Theme Toggle Event
   const themeBtn = document.getElementById("theme-toggle-btn");
@@ -263,8 +356,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Quick Target Chips
-  document.querySelectorAll(".quick-target-chip").forEach((chip) => {
+  document.querySelectorAll(".quick-chip").forEach((chip) => {
     chip.addEventListener("click", () => {
+      document.querySelectorAll(".quick-chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+
       const domain = chip.getAttribute("data-domain");
       if (scanInput) scanInput.value = domain;
       runTechnologyScan(domain);

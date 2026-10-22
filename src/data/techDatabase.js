@@ -1,73 +1,188 @@
 export const KNOWN_DOMAINS = {
-  "polri.go.id": [
-    { name: "Laravel", category: "Web Framework", version: "10.x", icon: "code", confidence: 100 },
-    { name: "PHP", category: "Programming Language", version: "8.2", icon: "file-code", confidence: 100 },
-    { name: "F5 BIG-IP", category: "Web Application Firewall", version: null, icon: "shield", confidence: 100 },
-    { name: "HSTS", category: "Security", version: null, icon: "shield", confidence: 100 },
-    { name: "Google Font API", category: "Font Script", version: null, icon: "palette", confidence: 100 },
-    { name: "jsDelivr", category: "CDN", version: null, icon: "cloud", confidence: 100 },
-    { name: "Google Maps", category: "Map Service", version: null, icon: "globe", confidence: 100 }
-  ],
-  "github.com": [
-    { name: "Ruby on Rails", category: "Web Framework", version: "7.1", icon: "code", confidence: 100 },
-    { name: "React", category: "JavaScript Framework", version: "18.3", icon: "layers", confidence: 100 },
-    { name: "TypeScript", category: "Programming Language", version: "5.4", icon: "file-code", confidence: 100 },
-    { name: "HAProxy", category: "Load Balancer", version: "2.8", icon: "server", confidence: 95 },
-    { name: "Fastly", category: "CDN", version: null, icon: "cloud", confidence: 100 },
-    { name: "Primer CSS", category: "UI Framework", version: "21.0", icon: "palette", confidence: 100 },
-    { name: "GraphQL", category: "API Technology", version: null, icon: "share-2", confidence: 95 },
-    { name: "HSTS", category: "Security", version: null, icon: "shield", confidence: 100 }
-  ],
-  "vercel.com": [
-    { name: "Next.js", category: "Web Framework", version: "15.0", icon: "layers", confidence: 100 },
-    { name: "React", category: "JavaScript Framework", version: "19.0", icon: "layers", confidence: 100 },
-    { name: "Tailwind CSS", category: "UI Framework", version: "3.4", icon: "palette", confidence: 100 },
-    { name: "Vercel Edge Network", category: "Hosting / CDN", version: null, icon: "cloud", confidence: 100 },
-    { name: "TypeScript", category: "Programming Language", version: "5.5", icon: "file-code", confidence: 100 },
-    { name: "Node.js", category: "Runtime Environment", version: "22.x", icon: "server", confidence: 95 },
-    { name: "Google Analytics 4", category: "Analytics", version: null, icon: "bar-chart", confidence: 100 },
-    { name: "HSTS", category: "Security", version: null, icon: "shield", confidence: 100 }
-  ],
-  "shopify.com": [
-    { name: "Shopify Core", category: "Ecommerce Platform", version: "Cloud", icon: "shopping-bag", confidence: 100 },
-    { name: "Ruby on Rails", category: "Web Framework", version: "7.0", icon: "code", confidence: 90 },
-    { name: "Cloudflare", category: "CDN / Reverse Proxy", version: null, icon: "cloud", confidence: 100 },
-    { name: "GraphQL", category: "API Technology", version: null, icon: "share-2", confidence: 95 },
-    { name: "Polaris Design System", category: "UI Framework", version: "12.0", icon: "palette", confidence: 100 },
-    { name: "Bugsnag", category: "Issue Tracking", version: null, icon: "alert-triangle", confidence: 90 },
-    { name: "Google Tag Manager", category: "Tag Management", version: null, icon: "tag", confidence: 100 }
-  ],
-  "wappalyzer.com": [
-    { name: "Nuxt.js", category: "Web Framework", version: "2.15", icon: "layers", confidence: 100 },
-    { name: "Vue.js", category: "JavaScript Framework", version: "2.7", icon: "layers", confidence: 100 },
-    { name: "Vuetify", category: "UI Framework", version: "2.6", icon: "palette", confidence: 100 },
-    { name: "Google Tag Manager", category: "Tag Management", version: null, icon: "tag", confidence: 100 },
-    { name: "Google Analytics 4", category: "Analytics", version: null, icon: "bar-chart", confidence: 100 },
-    { name: "Cloudflare", category: "CDN / Security", version: null, icon: "cloud", confidence: 100 },
-    { name: "Stripe", category: "Payment Processor", version: null, icon: "credit-card", confidence: 95 },
-    { name: "HSTS", category: "Security", version: null, icon: "shield", confidence: 100 }
-  ],
-  "wordpress.org": [
-    { name: "WordPress", category: "CMS", version: "6.6", icon: "globe", confidence: 100 },
-    { name: "PHP", category: "Programming Language", version: "8.2", icon: "code", confidence: 100 },
-    { name: "Nginx", category: "Web Server", version: "1.24", icon: "server", confidence: 100 },
-    { name: "MySQL", category: "Database", version: "8.0", icon: "database", confidence: 90 },
-    { name: "jQuery", category: "JavaScript Library", version: "3.7", icon: "code", confidence: 100 },
-    { name: "Fastly", category: "CDN", version: null, icon: "cloud", confidence: 95 }
-  ],
-  "react.dev": [
-    { name: "Next.js", category: "Web Framework", version: "14.2", icon: "layers", confidence: 100 },
-    { name: "React", category: "JavaScript Framework", version: "19.0", icon: "layers", confidence: 100 },
-    { name: "Tailwind CSS", category: "UI Framework", version: "3.4", icon: "palette", confidence: 100 },
-    { name: "Vercel", category: "Hosting / CDN", version: null, icon: "cloud", confidence: 100 },
-    { name: "Algolia DocSearch", category: "Search Engine", version: "3.0", icon: "search", confidence: 100 },
-    { name: "HSTS", category: "Security", version: null, icon: "shield", confidence: 100 }
-  ]
+  "polri.go.id": {
+    domain: "polri.go.id",
+    leftColumn: [
+      {
+        category: "CMS",
+        items: [
+          { name: "WordPress", version: "7.1", icon: "wordpress", url: "https://wordpress.org" }
+        ]
+      },
+      {
+        category: "Analytics",
+        items: [
+          { name: "Google Analytics", version: "GA4", icon: "google-analytics", url: "https://analytics.google.com" }
+        ]
+      },
+      {
+        category: "Blogs",
+        items: [
+          { name: "WordPress", version: "7.1", icon: "wordpress", url: "https://wordpress.org" }
+        ]
+      },
+      {
+        category: "Video players",
+        items: [
+          { name: "YouTube", version: null, icon: "youtube", url: "https://youtube.com" }
+        ]
+      },
+      {
+        category: "Font scripts",
+        items: [
+          { name: "Font Awesome", version: null, icon: "font-awesome", url: "https://fontawesome.com" }
+        ]
+      }
+    ],
+    rightColumn: [
+      {
+        category: "Maps",
+        items: [
+          { name: "Google Maps", version: null, icon: "google-maps", url: "https://maps.google.com" }
+        ]
+      },
+      {
+        category: "Page builder",
+        items: [
+          { name: "Elementor", version: "4.3.5", icon: "elementor", url: "https://elementor.com" }
+        ]
+      },
+      {
+        category: "JavaScript libraries",
+        items: [
+          { name: ".Select2", version: null, icon: "select2", url: "https://select2.org" },
+          { name: "Masonry", version: null, icon: "masonry", url: "https://masonry.desandro.com" },
+          { name: "jQuery UI", version: "1.14.2", icon: "jquery-ui", url: "https://jqueryui.com" },
+          { name: "jQuery Migrate", version: "3.4.1", icon: "jquery-migrate", url: "https://github.com/jquery/jquery-migrate" },
+          { name: "jQuery", version: "3.7.1", icon: "jquery", url: "https://jquery.com" }
+        ]
+      }
+    ]
+  },
+  "github.com": {
+    domain: "github.com",
+    leftColumn: [
+      {
+        category: "Web frameworks",
+        items: [{ name: "Ruby on Rails", version: "7.1", icon: "code", url: "https://rubyonrails.org" }]
+      },
+      {
+        category: "JavaScript frameworks",
+        items: [{ name: "React", version: "18.3", icon: "code", url: "https://react.dev" }]
+      },
+      {
+        category: "Programming languages",
+        items: [{ name: "TypeScript", version: "5.4", icon: "code", url: "https://typescriptlang.org" }]
+      },
+      {
+        category: "Security",
+        items: [{ name: "HSTS", version: null, icon: "shield", url: "https://developer.mozilla.org" }]
+      }
+    ],
+    rightColumn: [
+      {
+        category: "Web servers",
+        items: [{ name: "HAProxy", version: "2.8", icon: "server", url: "https://haproxy.org" }]
+      },
+      {
+        category: "CDN",
+        items: [{ name: "Fastly", version: null, icon: "cloud", url: "https://fastly.com" }]
+      },
+      {
+        category: "UI frameworks",
+        items: [{ name: "Primer CSS", version: "21.0", icon: "palette", url: "https://primer.style" }]
+      }
+    ]
+  },
+  "vercel.com": {
+    domain: "vercel.com",
+    leftColumn: [
+      {
+        category: "Web frameworks",
+        items: [{ name: "Next.js", version: "15.0", icon: "code", url: "https://nextjs.org" }]
+      },
+      {
+        category: "JavaScript frameworks",
+        items: [{ name: "React", version: "19.0", icon: "code", url: "https://react.dev" }]
+      },
+      {
+        category: "UI frameworks",
+        items: [{ name: "Tailwind CSS", version: "3.4", icon: "palette", url: "https://tailwindcss.com" }]
+      }
+    ],
+    rightColumn: [
+      {
+        category: "PaaS / Hosting",
+        items: [{ name: "Vercel Edge Network", version: null, icon: "cloud", url: "https://vercel.com" }]
+      },
+      {
+        category: "Analytics",
+        items: [{ name: "Google Analytics", version: "GA4", icon: "google-analytics", url: "https://analytics.google.com" }]
+      },
+      {
+        category: "Security",
+        items: [{ name: "HSTS", version: null, icon: "shield", url: "https://developer.mozilla.org" }]
+      }
+    ]
+  },
+  "shopify.com": {
+    domain: "shopify.com",
+    leftColumn: [
+      {
+        category: "Ecommerce",
+        items: [{ name: "Shopify Core", version: "Cloud", icon: "shopping-bag", url: "https://shopify.com" }]
+      },
+      {
+        category: "Web frameworks",
+        items: [{ name: "Ruby on Rails", version: "7.0", icon: "code", url: "https://rubyonrails.org" }]
+      }
+    ],
+    rightColumn: [
+      {
+        category: "CDN",
+        items: [{ name: "Cloudflare", version: null, icon: "cloud", url: "https://cloudflare.com" }]
+      },
+      {
+        category: "Analytics",
+        items: [{ name: "Google Tag Manager", version: null, icon: "google-analytics", url: "https://tagmanager.google.com" }]
+      }
+    ]
+  },
+  "wappalyzer.com": {
+    domain: "wappalyzer.com",
+    leftColumn: [
+      {
+        category: "Web frameworks",
+        items: [{ name: "Nuxt.js", version: "2.15", icon: "code", url: "https://nuxtjs.org" }]
+      },
+      {
+        category: "JavaScript frameworks",
+        items: [{ name: "Vue.js", version: "2.7", icon: "code", url: "https://vuejs.org" }]
+      },
+      {
+        category: "UI frameworks",
+        items: [{ name: "Vuetify", version: "2.6", icon: "palette", url: "https://vuetifyjs.com" }]
+      }
+    ],
+    rightColumn: [
+      {
+        category: "Analytics",
+        items: [{ name: "Google Tag Manager", version: null, icon: "google-analytics", url: "https://tagmanager.google.com" }]
+      },
+      {
+        category: "Payment processors",
+        items: [{ name: "Stripe", version: null, icon: "credit-card", url: "https://stripe.com" }]
+      },
+      {
+        category: "CDN",
+        items: [{ name: "Cloudflare", version: null, icon: "cloud", url: "https://cloudflare.com" }]
+      }
+    ]
+  }
 };
 
 export function analyzeTargetUrl(rawInput) {
   if (!rawInput || typeof rawInput !== "string") {
-    return { domain: "", results: [] };
+    return prepareDomainData("polri.go.id", KNOWN_DOMAINS["polri.go.id"]);
   }
 
   let cleaned = rawInput.trim().toLowerCase();
@@ -76,46 +191,61 @@ export function analyzeTargetUrl(rawInput) {
   cleaned = cleaned.split("/")[0].split("?")[0].split("#")[0];
 
   if (!cleaned) {
-    return { domain: "", results: [] };
+    return prepareDomainData("polri.go.id", KNOWN_DOMAINS["polri.go.id"]);
   }
 
-  // Exact or partial match in database
   if (KNOWN_DOMAINS[cleaned]) {
-    return { domain: cleaned, results: KNOWN_DOMAINS[cleaned] };
+    return prepareDomainData(cleaned, KNOWN_DOMAINS[cleaned]);
   }
 
-  // Check substring matches
   for (const [key, value] of Object.entries(KNOWN_DOMAINS)) {
     if (cleaned.includes(key) || key.includes(cleaned)) {
-      return { domain: cleaned, results: value };
+      return prepareDomainData(cleaned, value);
     }
   }
 
-  // Smart heuristic detection for any other domain
-  const results = [];
-  results.push({ name: "HTTPS / TLS", category: "Security", version: "1.3", icon: "shield", confidence: 100 });
-  results.push({ name: "HSTS", category: "Security", version: null, icon: "shield", confidence: 100 });
-  results.push({ name: "Cloudflare", category: "CDN / DNS", version: null, icon: "cloud", confidence: 92 });
+  // Generic fallback
+  return prepareDomainData(cleaned, {
+    domain: cleaned,
+    leftColumn: [
+      {
+        category: "Web servers",
+        items: [{ name: "Nginx", version: "1.24", icon: "server", url: "https://nginx.org" }]
+      },
+      {
+        category: "Security",
+        items: [
+          { name: "HTTPS / TLS", version: "1.3", icon: "shield", url: "https://developer.mozilla.org" },
+          { name: "HSTS", version: null, icon: "shield", url: "https://developer.mozilla.org" }
+        ]
+      }
+    ],
+    rightColumn: [
+      {
+        category: "CDN",
+        items: [{ name: "Cloudflare", version: null, icon: "cloud", url: "https://cloudflare.com" }]
+      },
+      {
+        category: "Analytics",
+        items: [{ name: "Google Analytics", version: "GA4", icon: "google-analytics", url: "https://analytics.google.com" }]
+      }
+    ]
+  });
+}
 
-  if (cleaned.includes("shop") || cleaned.includes("store")) {
-    results.push({ name: "Shopify Core", category: "Ecommerce Platform", version: "Cloud", icon: "shopping-bag", confidence: 95 });
-    results.push({ name: "Stripe", category: "Payment Processor", version: null, icon: "credit-card", confidence: 90 });
-    results.push({ name: "Google Analytics 4", category: "Analytics", version: null, icon: "bar-chart", confidence: 95 });
-  } else if (cleaned.includes("blog") || cleaned.includes("news")) {
-    results.push({ name: "WordPress", category: "CMS", version: "6.5", icon: "globe", confidence: 92 });
-    results.push({ name: "PHP", category: "Programming Language", version: "8.2", icon: "code", confidence: 88 });
-    results.push({ name: "Nginx", category: "Web Server", version: "1.24", icon: "server", confidence: 90 });
-  } else if (cleaned.includes("app") || cleaned.includes("io") || cleaned.includes("dev")) {
-    results.push({ name: "React", category: "JavaScript Framework", version: "18.3", icon: "layers", confidence: 96 });
-    results.push({ name: "Next.js", category: "Web Framework", version: "14.2", icon: "layers", confidence: 94 });
-    results.push({ name: "Vercel Edge Network", category: "Hosting / CDN", version: null, icon: "cloud", confidence: 90 });
-    results.push({ name: "Tailwind CSS", category: "UI Framework", version: "3.4", icon: "palette", confidence: 92 });
-  } else {
-    results.push({ name: "Nginx", category: "Web Server", version: "1.22", icon: "server", confidence: 85 });
-    results.push({ name: "Google Analytics 4", category: "Analytics", version: null, icon: "bar-chart", confidence: 90 });
-    results.push({ name: "Open Graph Protocol", category: "SEO / Metadata", version: null, icon: "share-2", confidence: 98 });
-    results.push({ name: "Google Tag Manager", category: "Tag Management", version: null, icon: "tag", confidence: 88 });
+function prepareDomainData(domain, config) {
+  let count = 0;
+  if (config.leftColumn) {
+    config.leftColumn.forEach(g => { count += g.items.length; });
+  }
+  if (config.rightColumn) {
+    config.rightColumn.forEach(g => { count += g.items.length; });
   }
 
-  return { domain: cleaned, results };
+  return {
+    domain,
+    leftColumn: config.leftColumn || [],
+    rightColumn: config.rightColumn || [],
+    totalCount: count
+  };
 }

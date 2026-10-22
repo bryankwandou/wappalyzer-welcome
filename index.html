@@ -146,7 +146,7 @@
 
         <!-- Scan Form -->
         <form id="tech-scan-form" class="scan-form">
-          <input type="text" class="scan-input" id="scan-domain-input" placeholder="Enter URL or domain (e.g., github.com, vercel.com, shopify.com)" required>
+          <input type="text" class="scan-input" id="scan-domain-input" placeholder="Enter URL or domain (e.g., polri.go.id, github.com, vercel.com)" value="polri.go.id" required>
           <button type="submit" class="scan-submit-btn" id="scan-submit-btn">
             <span id="scan-btn-text" data-i18n="scanner.scanBtn">Inspect Stack</span>
             <span id="scan-spinner" class="spinner" style="display:none;"></span>
@@ -154,24 +154,70 @@
         </form>
 
         <!-- Popular target quick chips -->
-        <div class="quick-targets-row">
-          <span class="quick-tag-label" data-i18n="scanner.popularSearches">Try popular targets:</span>
-          <button type="button" class="quick-target-chip" data-domain="polri.go.id">polri.go.id</button>
-          <button type="button" class="quick-target-chip" data-domain="github.com">github.com</button>
-          <button type="button" class="quick-target-chip" data-domain="vercel.com">vercel.com</button>
-          <button type="button" class="quick-target-chip" data-domain="shopify.com">shopify.com</button>
-          <button type="button" class="quick-target-chip" data-domain="wappalyzer.com">wappalyzer.com</button>
-          <button type="button" class="quick-target-chip" data-domain="wordpress.org">wordpress.org</button>
+        <div class="quick-targets-wrap">
+          <span class="quick-label" data-i18n="scanner.popularSearches">Try popular targets:</span>
+          <button type="button" class="quick-chip active" data-domain="polri.go.id">polri.go.id</button>
+          <button type="button" class="quick-chip" data-domain="github.com">github.com</button>
+          <button type="button" class="quick-chip" data-domain="vercel.com">vercel.com</button>
+          <button type="button" class="quick-chip" data-domain="shopify.com">shopify.com</button>
+          <button type="button" class="quick-chip" data-domain="wappalyzer.com">wappalyzer.com</button>
         </div>
 
-        <!-- Scan Results -->
-        <div class="scan-results-box" id="scan-results-box">
-          <div class="results-meta">
-            <div class="results-domain" id="results-domain-name">github.com</div>
-            <div class="results-count" id="results-count-text">8 technologies identified with high confidence</div>
+        <!-- 1:1 Wappalyzer Extension Popup Window (Matching Exact Reference Photo) -->
+        <div class="wappalyzer-popup-card" id="wappalyzer-popup" style="margin-top: 24px;">
+          <!-- Top Header (#1e1160) -->
+          <div class="wappalyzer-popup-header">
+            <div class="popup-brand">
+              <svg class="popup-diamond-icon" viewBox="0 0 114 97" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <polygon opacity="0.6" points="57.0285 74.6616 6.5385 48.4526 0.0015 53.1396 -0.0005 56.0066 57.0285 96.9046 114.0545 56.0086 114.0585 53.1426 107.5185 48.4526" fill="#FFFFFF"></polygon>
+                <path d="M57.0285 0 L0.0025 40.8963 L-0.0005 43.7633 L57.0285 84.6623 L114.0545 43.7653 L114.0575 40.8983 L57.0285 0 Z M64.4895 40.3623 L57.5365 30.7743 L63.4645 26.4363 L75.8235 44.7273 L70.8465 48.3703 L57.5555 42.8723 L57.4985 42.9133 L65.0675 52.5983 L60.0905 56.2403 L35.0915 47.1963 L41.0385 42.8443 L54.1065 47.9333 L54.1805 47.8783 L46.9285 38.5343 L51.6075 35.1113 L64.4145 40.4173 L64.4895 40.3623 Z" fill="#FFFFFF"></path>
+              </svg>
+              <span class="popup-brand-title">Wappalyzer</span>
+            </div>
+            <div class="popup-header-controls">
+              <div class="popup-switch active" id="popup-switch" role="button" aria-label="Toggle extension detection" tabindex="0">
+                <div class="popup-switch-knob"></div>
+              </div>
+              <button type="button" class="popup-gear-btn" id="popup-gear-btn" aria-label="Extension settings" title="Settings">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+              </button>
+            </div>
           </div>
-          <div class="tech-cards-grid" id="tech-cards-grid">
-            <!-- Dynamic tech cards inserted by JavaScript -->
+
+          <!-- Popup Subheader Tabs Bar -->
+          <div class="wappalyzer-popup-tabs">
+            <div class="popup-tab-group">
+              <button type="button" class="popup-tab-btn active" id="tab-technologies">TECHNOLOGIES</button>
+              <button type="button" class="popup-tab-btn" id="tab-more-info">MORE INFO</button>
+            </div>
+            <button type="button" class="popup-export-btn" id="popup-export-btn" title="Export detected technologies">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Export</span>
+            </button>
+          </div>
+
+          <!-- Popup Body (2 Columns matching reference photo) -->
+          <div class="wappalyzer-popup-body">
+            <div class="popup-columns-grid" id="popup-columns-container">
+              <!-- Dynamically populated 2 columns by main.js -->
+            </div>
+            <!-- More Info Tab Content (hidden by default) -->
+            <div class="popup-more-info-panel" id="popup-more-info-panel" style="display: none; padding: 12px 0;">
+              <div style="font-size: 13px; line-height: 1.8; color: var(--color-on-surface-variant);">
+                <div><strong>Target:</strong> <span id="more-info-domain">https://polri.go.id</span></div>
+                <div><strong>Status:</strong> <span style="color: #10b981; font-weight: 600;">Active 200 OK</span></div>
+                <div><strong>Response time:</strong> 142 ms</div>
+                <div><strong>Security Protocol:</strong> TLS 1.3 / HTTPS Strict Transport Security</div>
+                <div><strong>Server Location:</strong> Jakarta, Indonesia (ID)</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
