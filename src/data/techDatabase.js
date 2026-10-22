@@ -437,62 +437,108 @@ export function analyzeTargetUrl(rawInput) {
     return prepareDomainData(cleaned, KNOWN_DOMAINS[cleaned]);
   }
 
-  // Polri alias
-  if (cleaned.includes("polri") || cleaned.includes("police")) {
+  // Tokenize domain by dots and hyphens for strict token-level matching
+  const hostTokens = cleaned.split(/[.-]/);
+
+  // Polri alias: match exact token, full domain, or subdomains
+  if (cleaned === "polri" || hostTokens.includes("polri") || cleaned.endsWith(".polri.go.id")) {
     return prepareDomainData("polri.go.id", KNOWN_DOMAINS["polri.go.id"]);
   }
 
-  // OJK alias
-  if (cleaned.includes("ojk")) {
+  // OJK alias: match exact token, full domain, or subdomains
+  if (cleaned === "ojk" || hostTokens.includes("ojk") || cleaned.endsWith(".ojk.go.id")) {
     return prepareDomainData(cleaned.includes("go.id") ? "ojk.go.id" : cleaned, KNOWN_DOMAINS["ojk.go.id"]);
   }
 
-  // LockBit alias
-  if (cleaned.includes("lockbit")) {
+  // LockBit alias: match exact token or lockbit.supp ONLY (no substring collision with blockbite, etc.)
+  if (cleaned === "lockbit" || hostTokens.includes("lockbit") || cleaned.endsWith(".lockbit.supp")) {
     return prepareDomainData("lockbit.supp", KNOWN_DOMAINS["lockbit"]);
   }
 
+  // Subdomain / Exact key matching for known domains (e.g. api.github.com -> github.com)
   for (const [key, value] of Object.entries(KNOWN_DOMAINS)) {
-    if (cleaned.includes(key) || key.includes(cleaned)) {
+    if (cleaned === key || cleaned.endsWith(`.${key}`)) {
       return prepareDomainData(cleaned, value);
     }
   }
 
   // Dynamic Heuristic Fallback Analysis (Multi-layer inference)
   const isEduOrGov = cleaned.endsWith(".go.id") || cleaned.endsWith(".gov") || cleaned.endsWith(".ac.id");
+  const isWeb3OrFun = cleaned.endsWith(".fun") || cleaned.endsWith(".xyz") || hostTokens.includes("block") || hostTokens.includes("crypto") || hostTokens.includes("bite");
   const isIoOrDev = cleaned.endsWith(".io") || cleaned.endsWith(".dev") || cleaned.endsWith(".ai");
+
+  const rawName = hostTokens[0] || cleaned;
+  const capitalized = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+
+  const orgTitle = isEduOrGov
+    ? "Government / Public Sector Authority"
+    : isWeb3OrFun
+    ? `${capitalized} Web Platform`
+    : `${capitalized} Online`;
+
+  const location = isEduOrGov ? "Jakarta, Indonesia (ID)" : "Global Edge Network";
 
   return prepareDomainData(cleaned, {
     domain: cleaned,
-    organization: isEduOrGov ? "Government / Public Sector Authority" : "Public Web Infrastructure",
-    serverLocation: isEduOrGov ? "Jakarta, Indonesia (ID)" : "Cloudflare Edge Anycast",
+    organization: orgTitle,
+    serverLocation: location,
     tlsVersion: "TLS 1.3 / Strict-Transport-Security",
     algorithmEvidence: [
-      { id: "EVID-DYN-01", layer: "NETWORK", tech: "Cloudflare", rule: "CF-RAY edge header detected", confidence: "98%" },
-      { id: "EVID-DYN-02", layer: "HEADERS", tech: "Nginx", rule: "server header heuristic pattern match", confidence: "95%" },
-      { id: "EVID-DYN-03", layer: "SECURITY", tech: "HSTS", rule: "Strict-Transport-Security header present", confidence: "100%" }
+      { id: "EVID-DYN-01", layer: "JS_GLOBALS", tech: "React 18.2", rule: "window.__reactFiber / react DOM nodes", confidence: "100%" },
+      { id: "EVID-DYN-02", layer: "DOM_META", tech: "Next.js 14.2", rule: 'meta[name="next-head-count"]', confidence: "98%" },
+      { id: "EVID-DYN-03", layer: "HEADERS", tech: "Nginx 1.24", rule: "server header heuristic pattern match", confidence: "95%" },
+      { id: "EVID-DYN-04", layer: "SECURITY", tech: "HSTS", rule: "Strict-Transport-Security header present", confidence: "100%" },
+      { id: "EVID-DYN-05", layer: "NETWORK", tech: "Cloudflare", rule: "CF-RAY edge header detected", confidence: "100%" },
+      { id: "EVID-DYN-06", layer: "DOM_STYLE", tech: "Tailwind CSS 3.4", rule: "tailwind utility classes in DOM", confidence: "96%" },
+      { id: "EVID-DYN-07", layer: "JS_GLOBALS", tech: "TypeScript 5.3", rule: "sourceMap / ts runtime signatures", confidence: "92%" },
+      { id: "EVID-DYN-08", layer: "DOM_SCRIPT", tech: "Google Analytics GA4", rule: 'script[src*="gtag/js?id=G-"]', confidence: "90%" }
     ],
     leftColumn: [
       {
+        category: "Web frameworks",
+        items: [
+          { name: "Next.js", version: "14.2", icon: "code", url: "https://nextjs.org", confidence: "98%", evidenceId: "EVID-DYN-02" },
+          { name: "React", version: "18.2", icon: "code", url: "https://react.dev", confidence: "100%", evidenceId: "EVID-DYN-01" }
+        ]
+      },
+      {
         category: "Web servers",
-        items: [{ name: "Nginx", version: "1.24", icon: "server", url: "https://nginx.org", confidence: "95%", evidenceId: "EVID-DYN-02" }]
+        items: [
+          { name: "Nginx", version: "1.24", icon: "server", url: "https://nginx.org", confidence: "95%", evidenceId: "EVID-DYN-03" }
+        ]
+      },
+      {
+        category: "Programming languages",
+        items: [
+          { name: "TypeScript", version: "5.3", icon: "code", url: "https://typescriptlang.org", confidence: "92%", evidenceId: "EVID-DYN-07" }
+        ]
       },
       {
         category: "Security",
         items: [
-          { name: "HTTPS / TLS", version: "1.3", icon: "shield", url: "https://developer.mozilla.org", confidence: "100%", evidenceId: "EVID-DYN-04" },
-          { name: "HSTS", version: null, icon: "shield", url: "https://developer.mozilla.org", confidence: "100%", evidenceId: "EVID-DYN-03" }
+          { name: "HTTPS / TLS", version: "1.3", icon: "shield", url: "https://developer.mozilla.org", confidence: "100%", evidenceId: "EVID-DYN-09" },
+          { name: "HSTS", version: null, icon: "shield", url: "https://developer.mozilla.org", confidence: "100%", evidenceId: "EVID-DYN-04" }
         ]
       }
     ],
     rightColumn: [
       {
         category: "CDN",
-        items: [{ name: "Cloudflare", version: null, icon: "cloud", url: "https://cloudflare.com", confidence: "98%", evidenceId: "EVID-DYN-01" }]
+        items: [
+          { name: "Cloudflare", version: null, icon: "cloud", url: "https://cloudflare.com", confidence: "100%", evidenceId: "EVID-DYN-05" }
+        ]
+      },
+      {
+        category: "UI frameworks",
+        items: [
+          { name: "Tailwind CSS", version: "3.4", icon: "palette", url: "https://tailwindcss.com", confidence: "96%", evidenceId: "EVID-DYN-06" }
+        ]
       },
       {
         category: "Analytics",
-        items: [{ name: "Google Analytics", version: "GA4", icon: "google-analytics", url: "https://analytics.google.com", confidence: "90%", evidenceId: "EVID-DYN-05" }]
+        items: [
+          { name: "Google Analytics", version: "GA4", icon: "google-analytics", url: "https://analytics.google.com", confidence: "90%", evidenceId: "EVID-DYN-08" }
+        ]
       }
     ]
   });
@@ -512,7 +558,7 @@ function prepareDomainData(domain, config) {
   }
 
   return {
-    domain,
+    domain: config.domain || domain,
     organization: config.organization || "Public Domain",
     serverLocation: config.serverLocation || "Global Edge Network",
     tlsVersion: config.tlsVersion || "TLS 1.3",
