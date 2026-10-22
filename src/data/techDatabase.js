@@ -1,4 +1,13 @@
 export const KNOWN_DOMAINS = {
+  "polri.go.id": [
+    { name: "Laravel", category: "Web Framework", version: "10.x", icon: "code", confidence: 100 },
+    { name: "PHP", category: "Programming Language", version: "8.2", icon: "file-code", confidence: 100 },
+    { name: "F5 BIG-IP", category: "Web Application Firewall", version: null, icon: "shield", confidence: 100 },
+    { name: "HSTS", category: "Security", version: null, icon: "shield", confidence: 100 },
+    { name: "Google Font API", category: "Font Script", version: null, icon: "palette", confidence: 100 },
+    { name: "jsDelivr", category: "CDN", version: null, icon: "cloud", confidence: 100 },
+    { name: "Google Maps", category: "Map Service", version: null, icon: "globe", confidence: 100 }
+  ],
   "github.com": [
     { name: "Ruby on Rails", category: "Web Framework", version: "7.1", icon: "code", confidence: 100 },
     { name: "React", category: "JavaScript Framework", version: "18.3", icon: "layers", confidence: 100 },

@@ -33,10 +33,11 @@ export const id = {
     secondaryCta: "Buka Dokumentasi"
   },
   auth: {
-    signInTitle: "Masuk untuk melanjutkan",
+    optionalBadge: "Opsional - Tidak perlu login untuk memeriksa situs web",
+    signInTitle: "Masuk Akun (Opsional)",
     createAccountTitle: "Buat akun gratis Anda",
     resetPasswordTitle: "Atur ulang kata sandi",
-    welcomeBack: "Selamat datang kembali! Silakan masuk dengan email atau akun Google Anda.",
+    welcomeBack: "Masuk untuk menyinkronkan daftar teknologi antar perangkat, atau gunakan alat pemindai langsung tanpa akun.",
     welcomeNew: "Bergabunglah dengan lebih dari 1.000.000 pengembang dan analis web di seluruh dunia.",
     welcomeReset: "Masukkan alamat email terverifikasi Anda untuk menerima instruksi pemulihan aman.",
     emailLabel: "Alamat email",

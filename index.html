@@ -140,14 +140,15 @@
       <!-- Column 1: Reverse-Engineered Authentication & Account Module -->
       <div class="card auth-card" id="auth-section">
         <div class="auth-header">
+          <span class="scanner-badge" style="background-color: var(--color-surface-subtle); color: var(--color-on-surface-variant); border: 1px solid var(--color-outline); margin-bottom: 12px;" data-i18n="auth.optionalBadge">Optional - No login required to inspect websites</span>
           <div class="auth-tabs" role="tablist">
             <button type="button" class="auth-tab-btn active" id="tab-btn-signin" role="tab" aria-selected="true" data-tab="signin" data-i18n="auth.signInBtn">Sign in</button>
             <button type="button" class="auth-tab-btn" id="tab-btn-create" role="tab" aria-selected="false" data-tab="create" data-i18n="auth.createAccountBtn">Create Account</button>
             <button type="button" class="auth-tab-btn" id="tab-btn-reset" role="tab" aria-selected="false" data-tab="reset" data-i18n="auth.forgotPasswordLink">Reset Password</button>
           </div>
-          <h2 class="auth-title" id="auth-heading" data-i18n="auth.signInTitle">Sign in to continue</h2>
+          <h2 class="auth-title" id="auth-heading" data-i18n="auth.signInTitle">Sign in (Optional)</h2>
           <p class="auth-subtitle" id="auth-subheading" data-i18n="auth.welcomeBack">
-            Welcome back! Please sign in with your email address or Google account.
+            Sign in to sync your saved lists across devices, or use the technology inspector directly below without any account.
           </p>
         </div>
 
@@ -237,6 +238,7 @@
         <!-- Popular target quick chips -->
         <div class="quick-targets-row">
           <span class="quick-tag-label" data-i18n="scanner.popularSearches">Try popular targets:</span>
+          <button type="button" class="quick-target-chip" data-domain="polri.go.id">polri.go.id</button>
           <button type="button" class="quick-target-chip" data-domain="github.com">github.com</button>
           <button type="button" class="quick-target-chip" data-domain="vercel.com">vercel.com</button>
           <button type="button" class="quick-target-chip" data-domain="shopify.com">shopify.com</button>

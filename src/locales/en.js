@@ -33,10 +33,11 @@ export const en = {
     secondaryCta: "View Documentation"
   },
   auth: {
-    signInTitle: "Sign in to continue",
+    optionalBadge: "Optional - No login required to inspect websites",
+    signInTitle: "Sign in (Optional)",
     createAccountTitle: "Create your free account",
     resetPasswordTitle: "Reset account password",
-    welcomeBack: "Welcome back! Please sign in with your email address or Google account.",
+    welcomeBack: "Sign in to sync your saved lists across devices, or use the technology inspector directly below without any account.",
     welcomeNew: "Join over 1,000,000 developers and analysts discovering the technologies behind the web.",
     welcomeReset: "Enter your verified email address and we will send you secure recovery instructions.",
     emailLabel: "Email address",
