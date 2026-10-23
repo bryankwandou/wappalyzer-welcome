@@ -197,7 +197,6 @@
             <div class="popup-tab-group">
               <button type="button" class="popup-tab-btn active" id="tab-technologies">TECHNOLOGIES</button>
               <button type="button" class="popup-tab-btn" id="tab-more-info">MORE INFO</button>
-              <button type="button" class="popup-tab-btn" id="tab-benchmark">BENCHMARK (250)</button>
             </div>
             <button type="button" class="popup-export-btn" id="popup-export-btn" title="Export detected technologies">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -222,32 +221,6 @@
                 <div><strong>Response time:</strong> 142 ms</div>
                 <div><strong>Security Protocol:</strong> TLS 1.3 / HTTPS Strict Transport Security</div>
                 <div><strong>Server Location:</strong> Jakarta, Indonesia (ID)</div>
-              </div>
-            </div>
-            <!-- Benchmark 250 Tab Content -->
-            <div class="popup-benchmark-panel" id="popup-benchmark-panel" style="display: none; padding: 12px 0;">
-              <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                <div style="font-size: 13px; font-weight: 600; color: var(--color-on-surface);">
-                  Audit Paritas 250 Domain: <span style="color: #10b981;">250/250 Lolos (100.0% Cocok)</span>
-                </div>
-                <input type="text" id="benchmark-filter-input" placeholder="Cari domain / sektor..." style="padding: 4px 10px; font-size: 12px; border: 1px solid var(--color-outline); border-radius: 4px; background: var(--color-surface); color: var(--color-on-surface); max-width: 200px;">
-              </div>
-              <div style="max-height: 380px; overflow-y: auto; border: 1px solid var(--color-outline); border-radius: 6px;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left;">
-                  <thead style="position: sticky; top: 0; background: var(--color-surface); border-bottom: 2px solid var(--color-outline); z-index: 1;">
-                    <tr>
-                      <th style="padding: 6px 8px;">#</th>
-                      <th style="padding: 6px 8px;">Domain</th>
-                      <th style="padding: 6px 8px;">Sektor</th>
-                      <th style="padding: 6px 8px;">Stack Terdeteksi</th>
-                      <th style="padding: 6px 8px;">Paritas</th>
-                      <th style="padding: 6px 8px;">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody id="benchmark-table-body">
-                    <!-- Populated dynamically -->
-                  </tbody>
-                </table>
               </div>
             </div>
           </div>

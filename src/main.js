@@ -1,7 +1,6 @@
 import { en } from "./locales/en.js";
 import { id } from "./locales/id.js";
 import { analyzeTargetUrl, analyzeTargetUrlSync } from "./data/techDatabase.js";
-import { BENCHMARK_DOMAINS, getDomainSector } from "./data/benchmarkDomains.js";
 
 // State Management - 100% Public Access (No Login Required)
 const state = {
@@ -389,104 +388,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Render Benchmark 250 Table
-  function renderBenchmarkTable(filterText = "") {
-    const tbody = document.getElementById("benchmark-table-body");
-    if (!tbody) return;
-
-    const lowerFilter = (filterText || "").toLowerCase().trim();
-    tbody.innerHTML = "";
-
-    let count = 0;
-    BENCHMARK_DOMAINS.forEach((domain, idx) => {
-      const sector = getDomainSector(domain);
-      if (lowerFilter && !domain.toLowerCase().includes(lowerFilter) && !sector.toLowerCase().includes(lowerFilter)) {
-        return;
-      }
-
-      count++;
-      const profile = analyzeTargetUrlSync(domain);
-      const techNames = [];
-      (profile.leftColumn || []).forEach(g => g.items.forEach(it => techNames.push(it.name)));
-      (profile.rightColumn || []).forEach(g => g.items.forEach(it => techNames.push(it.name)));
-
-      const tr = document.createElement("tr");
-      tr.style.borderBottom = "1px solid var(--color-outline)";
-      tr.style.cursor = "pointer";
-      tr.title = `Klik untuk scan ${domain}`;
-      tr.innerHTML = `
-        <td style="padding: 6px 8px; color: var(--color-on-surface-variant); font-weight: 600;">${idx + 1}</td>
-        <td style="padding: 6px 8px; font-weight: 700; color: #2563eb;">${domain}</td>
-        <td style="padding: 6px 8px; color: var(--color-on-surface-variant);">${sector}</td>
-        <td style="padding: 6px 8px;"><strong>${profile.totalCount} tech</strong> <span style="color:var(--color-on-surface-variant); font-size:10px;">(${techNames.slice(0, 4).join(", ")}${techNames.length > 4 ? "..." : ""})</span></td>
-        <td style="padding: 6px 8px; color: #10b981; font-weight: 700;">100.0%</td>
-        <td style="padding: 6px 8px;"><span style="background: #dcffd6; color: #166534; font-weight: 700; padding: 2px 6px; border-radius: 4px; font-size: 10px;">PASS</span></td>
-      `;
-
-      tr.addEventListener("click", () => {
-        const scanInput = document.getElementById("scan-domain-input");
-        if (scanInput) scanInput.value = domain;
-        runTechnologyScan(domain);
-
-        const tabTech = document.getElementById("tab-technologies");
-        if (tabTech) tabTech.click();
-      });
-
-      tbody.appendChild(tr);
-    });
-
-    if (count === 0) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="6" style="padding: 16px; text-align: center; color: var(--color-on-surface-variant);">Tidak ditemukan domain yang sesuai filter</td>`;
-      tbody.appendChild(tr);
-    }
-  }
-
-  // Popup Tab Switching (TECHNOLOGIES / MORE INFO / BENCHMARK 250)
+  // Popup Tab Switching (TECHNOLOGIES / MORE INFO)
   const tabTech = document.getElementById("tab-technologies");
   const tabMore = document.getElementById("tab-more-info");
-  const tabBench = document.getElementById("tab-benchmark");
   const popupGrid = document.getElementById("popup-columns-container");
   const moreInfoPanel = document.getElementById("popup-more-info-panel");
-  const benchmarkPanel = document.getElementById("popup-benchmark-panel");
 
   if (tabTech && tabMore && popupGrid && moreInfoPanel) {
     tabTech.addEventListener("click", () => {
       tabTech.classList.add("active");
       tabMore.classList.remove("active");
-      if (tabBench) tabBench.classList.remove("active");
       popupGrid.style.display = "grid";
       moreInfoPanel.style.display = "none";
-      if (benchmarkPanel) benchmarkPanel.style.display = "none";
     });
 
     tabMore.addEventListener("click", () => {
       tabMore.classList.add("active");
       tabTech.classList.remove("active");
-      if (tabBench) tabBench.classList.remove("active");
       popupGrid.style.display = "none";
       moreInfoPanel.style.display = "block";
-      if (benchmarkPanel) benchmarkPanel.style.display = "none";
     });
-
-    if (tabBench && benchmarkPanel) {
-      tabBench.addEventListener("click", () => {
-        tabBench.classList.add("active");
-        tabTech.classList.remove("active");
-        tabMore.classList.remove("active");
-        popupGrid.style.display = "none";
-        moreInfoPanel.style.display = "none";
-        benchmarkPanel.style.display = "block";
-        renderBenchmarkTable();
-      });
-    }
-
-    const filterInput = document.getElementById("benchmark-filter-input");
-    if (filterInput) {
-      filterInput.addEventListener("input", (e) => {
-        renderBenchmarkTable(e.target.value);
-      });
-    }
   }
 
   // Export Button Click
