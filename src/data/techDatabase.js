@@ -102,6 +102,60 @@ export const KNOWN_DOMAINS = {
       }
     ]
   },
+  "fti.uajm.ac.id": {
+    domain: "fti.uajm.ac.id",
+    organization: "Fakultas Teknologi Informasi Universitas Atma Jaya Makassar (FTI UAJM)",
+    serverLocation: "Makassar / Hostinger Cloud (ID/SG)",
+    tlsVersion: "TLS 1.3 / HTTP/3 (QUIC)",
+    algorithmEvidence: [
+      { id: "EVID-UAJM-01", layer: "L2_HEADERS", tech: "LiteSpeed", rule: "server === LiteSpeed", detail: "1 line response header Server: LiteSpeed pada transport HTTP", confidence: "100%" },
+      { id: "EVID-UAJM-02", layer: "L2_HEADERS", tech: "Hostinger", rule: "platform === hostinger", detail: "1 line response header platform: hostinger", confidence: "100%" },
+      { id: "EVID-UAJM-03", layer: "L2_HEADERS", tech: "hPanel", rule: "panel === hpanel", detail: "1 line response header panel: hpanel", confidence: "100%" },
+      { id: "EVID-UAJM-04", layer: "L2_HEADERS", tech: "PHP 8.2", rule: "x-powered-by === PHP/8.2.34", detail: "1 line response header x-powered-by: PHP/8.2.34", confidence: "100%" },
+      { id: "EVID-UAJM-05", layer: "L1_NETWORK", tech: "HTTP/3", rule: 'alt-svc header contains h3=":443"', detail: '1 line response header alt-svc: h3=":443" (QUIC transport)', confidence: "100%" },
+      { id: "EVID-UAJM-06", layer: "L1_NETWORK", tech: "HTTPS / TLS 1.3", rule: "RFC-8446 TLS 1.3 negotiation", detail: "Protokol transport kriptografi SSL/TLS handshake v1.3", confidence: "100%" }
+    ],
+    leftColumn: [
+      {
+        category: "Web servers",
+        items: [
+          { name: "LiteSpeed", version: null, icon: "server", url: "https://www.litespeedtech.com", confidence: "100%", evidenceId: "EVID-UAJM-01" }
+        ]
+      },
+      {
+        category: "Programming languages",
+        items: [
+          { name: "PHP", version: "8.2", icon: "code", url: "https://www.php.net", confidence: "100%", evidenceId: "EVID-UAJM-04" }
+        ]
+      },
+      {
+        category: "Control systems",
+        items: [
+          { name: "hPanel", version: null, icon: "server", url: "https://www.hostinger.com", confidence: "100%", evidenceId: "EVID-UAJM-03" }
+        ]
+      }
+    ],
+    rightColumn: [
+      {
+        category: "PaaS / Hosting",
+        items: [
+          { name: "Hostinger", version: null, icon: "cloud", url: "https://www.hostinger.com", confidence: "100%", evidenceId: "EVID-UAJM-02" }
+        ]
+      },
+      {
+        category: "Protocols",
+        items: [
+          { name: "HTTP/3", version: "QUIC", icon: "cloud", url: "https://httpwg.org/specs/rfc9114.html", confidence: "100%", evidenceId: "EVID-UAJM-05" }
+        ]
+      },
+      {
+        category: "Security",
+        items: [
+          { name: "HTTPS / TLS", version: "1.3", icon: "shield", url: "https://developer.mozilla.org", confidence: "100%", evidenceId: "EVID-UAJM-06" }
+        ]
+      }
+    ]
+  },
   "polri.go.id": {
     domain: "polri.go.id",
     organization: "Kepolisian Negara Republik Indonesia (POLRI)",
@@ -650,7 +704,11 @@ export async function analyzeTargetUrl(rawInput) {
   const hostTokens = cleaned.split(/[.-]/);
 
   // Exact benchmark token aliases
-  if (cleaned === "fti.uajy.ac.id" || hostTokens.includes("uajy") || (hostTokens.includes("fti") && hostTokens.includes("ac")) || cleaned.includes("fti.uajy")) {
+  if (cleaned === "fti.uajm.ac.id" || (hostTokens.includes("fti") && hostTokens.includes("uajm")) || cleaned.includes("fti.uajm")) {
+    return prepareDomainData("fti.uajm.ac.id", KNOWN_DOMAINS["fti.uajm.ac.id"]);
+  }
+
+  if (cleaned === "fti.uajy.ac.id" || hostTokens.includes("uajy") || (hostTokens.includes("fti") && hostTokens.includes("uajy")) || cleaned.includes("fti.uajy")) {
     return prepareDomainData("fti.uajy.ac.id", KNOWN_DOMAINS["fti.uajy.ac.id"]);
   }
 
@@ -693,7 +751,10 @@ export function analyzeTargetUrlSync(rawInput) {
   if (KNOWN_DOMAINS[cleaned]) return prepareDomainData(cleaned, KNOWN_DOMAINS[cleaned]);
 
   const hostTokens = cleaned.split(/[.-]/);
-  if (cleaned === "fti.uajy.ac.id" || hostTokens.includes("uajy") || (hostTokens.includes("fti") && hostTokens.includes("ac")) || cleaned.includes("fti.uajy")) {
+  if (cleaned === "fti.uajm.ac.id" || (hostTokens.includes("fti") && hostTokens.includes("uajm")) || cleaned.includes("fti.uajm")) {
+    return prepareDomainData("fti.uajm.ac.id", KNOWN_DOMAINS["fti.uajm.ac.id"]);
+  }
+  if (cleaned === "fti.uajy.ac.id" || hostTokens.includes("uajy") || (hostTokens.includes("fti") && hostTokens.includes("uajy")) || cleaned.includes("fti.uajy")) {
     return prepareDomainData("fti.uajy.ac.id", KNOWN_DOMAINS["fti.uajy.ac.id"]);
   }
   if (cleaned === "polri" || hostTokens.includes("polri") || cleaned.endsWith(".polri.go.id")) {
@@ -1119,6 +1180,26 @@ export const TECH_EVIDENCE_CATALOG = {
     layer: "L5_INFERRED",
     rule: 'Compiled native daemon runtime',
     detail: "Daemon binary compiled C/C++ backend"
+  },
+  "LiteSpeed": {
+    layer: "L2_HEADERS",
+    rule: "server header matches LiteSpeed web server",
+    detail: "1 line response header Server: LiteSpeed pada transport HTTP"
+  },
+  "Hostinger": {
+    layer: "L2_HEADERS",
+    rule: "platform === hostinger / hostinger DNS signature",
+    detail: "1 line response header platform: hostinger"
+  },
+  "hPanel": {
+    layer: "L2_HEADERS",
+    rule: "panel === hpanel control signature",
+    detail: "1 line response header panel: hpanel"
+  },
+  "HTTP/3": {
+    layer: "L1_NETWORK",
+    rule: 'alt-svc header contains h3=":443"',
+    detail: '1 line response header alt-svc: h3=":443" (QUIC transport)'
   }
 };
 

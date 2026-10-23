@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-22T19:13:28.082Z",
+  "timestamp": "2026-10-23T05:04:21.055Z",
   "specification": "REA-MCP Reverse Engineering Protocol v44",
   "version": "6.5.0-autonomous",
   "totalDomainsTested": 250,
@@ -11,8 +11,8 @@
   "totalEvidenceRowsEvaluated": 2178,
   "averageEvidencePerDomain": "8.71",
   "evidenceStackCoverage": "100.0%",
-  "durationMilliseconds": 31,
-  "throughputDomainsPerSec": "8064.5",
+  "durationMilliseconds": 42,
+  "throughputDomainsPerSec": "5952.4",
   "domainsBreakdown": [
     {
       "index": 1,
