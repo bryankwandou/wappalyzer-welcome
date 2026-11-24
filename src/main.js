@@ -2,12 +2,16 @@ import { en } from "./locales/en.js";
 import { id } from "./locales/id.js";
 import { analyzeTargetUrl, normalizeDomain, validateHostname } from "./data/techDatabase.js";
 
-// State Management - 100% Public Access (No Login Required)
+// Application State (100% Public Access)
 const state = {
   lang: localStorage.getItem("wappalyzer_lang") || (navigator.language.startsWith("id") ? "id" : "en"),
   theme: localStorage.getItem("wappalyzer_theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"),
   currentScanDomain: "fti.uajy.ac.id",
   currentScanData: null,
+  activeTab: "technologies",
+  activeEvidenceLayer: "ALL",
+  techSearchQuery: "",
+  highlightedEvidenceId: null,
   isExtensionActive: true,
   isScanning: false
 };
@@ -15,6 +19,7 @@ const state = {
 // Monotonic scan coordinator to eliminate async race conditions
 let activeScanId = 0;
 let activeAbortController = null;
+let pipelineAnimTimer = null;
 
 const dictionaries = { en, id };
 
@@ -33,6 +38,12 @@ function escapeHtml(value) {
 function safeHttpUrl(url) {
   if (!url || typeof url !== "string") return "#";
   return /^https?:\/\//i.test(url.trim()) ? url.trim() : "#";
+}
+
+function formatBytes(bytes) {
+  if (typeof bytes !== "number" || bytes <= 0) return "--";
+  if (bytes < 1024) return `${bytes} B`;
+  return `${(bytes / 1024).toFixed(1)} KB`;
 }
 
 // Helper to get nested translation value
@@ -66,7 +77,6 @@ function applyTranslations() {
   }
 }
 
-// Switch Language
 function setLanguage(lang) {
   state.lang = lang;
   localStorage.setItem("wappalyzer_lang", lang);
@@ -75,7 +85,6 @@ function setLanguage(lang) {
   showToast(lang === "id" ? "Bahasa diubah ke Bahasa Indonesia" : "Language set to English");
 }
 
-// Theme handling
 function applyTheme(theme) {
   state.theme = theme;
   localStorage.setItem("wappalyzer_theme", theme);
@@ -129,19 +138,19 @@ function getTechIconSvg(iconName) {
     litespeed: `<svg viewBox="0 0 24 24" width="18" height="18"><polygon points="13 2 5 13 11 13 10 22 19 10 13 10" fill="#2B6CB0"/></svg>`,
     drupal: `<svg viewBox="0 0 24 24" width="18" height="18"><path fill="#0678BE" d="M12 2.5C9.5 6 5 9.5 5 14a7 7 0 0 0 14 0c0-4.5-4.5-8-7-11.5z"/></svg>`,
     joomla: `<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="8" cy="8" r="4" fill="#F44321"/><circle cx="16" cy="8" r="4" fill="#7AC143"/><circle cx="8" cy="16" r="4" fill="#5091CD"/><circle cx="16" cy="16" r="4" fill="#F9A541"/></svg>`,
-    shopify: `<svg viewBox="0 0 24 24" width="18" height="18"><path fill="#95BF47" d="M18.5 6.5L17 20l-11-1.5L5.5 6.5h13z"/><path fill="#5E8E3E" d="M15 6.5a3 3 0 0 0-6 0" stroke="#5E8E3E" stroke-width="1.6" fill="none"/></svg>`,
+    shopify: `<svg viewBox="0 0 24 24" width="18" height="18"><path fill="#95BF47" d="M18.5 6.5L17 20l-11-1.5L5.5 6.5h13z"/><path fill="none" stroke="#5E8E3E" stroke-width="1.6" d="M15 6.5a3 3 0 0 0-6 0"/></svg>`,
     woocommerce: `<svg viewBox="0 0 24 24" width="18" height="18"><rect x="2" y="5" width="20" height="13" rx="3" fill="#7F54B3"/><text x="12" y="14" text-anchor="middle" fill="#ffffff" font-size="7" font-weight="700" font-family="sans-serif">WOO</text></svg>`,
     stripe: `<svg viewBox="0 0 24 24" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="4" fill="#635BFF"/><text x="12" y="16" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700" font-family="sans-serif">S</text></svg>`,
     meta: `<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="#1877F2"/><path fill="#ffffff" d="M13.5 18v-5h1.7l.3-2h-2V9.8c0-.6.2-1 1-1h1.1V7h-1.8c-1.8 0-2.8 1-2.8 2.7V11H9.5v2H11v5h2.5z"/></svg>`,
     recaptcha: `<svg viewBox="0 0 24 24" width="18" height="18"><path fill="#1C3AA9" d="M12 3a9 9 0 0 1 8.5 6h-3.2A6 6 0 0 0 12 6V3z"/><path fill="#4285F4" d="M12 21a9 9 0 0 1-8.5-6h3.2a6 6 0 0 0 5.3 3v3z"/></svg>`,
     network: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>`,
-    code: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`,
-    server: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>`,
-    cloud: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>`,
-    palette: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>`,
-    shield: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
-    "shopping-bag": `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`,
-    "credit-card": `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>`,
+    code: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`,
+    server: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>`,
+    cloud: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>`,
+    palette: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4608ad" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>`,
+    shield: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
+    "shopping-bag": `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`,
+    "credit-card": `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4608ad" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>`,
     microsoft: `<svg viewBox="0 0 24 24" width="18" height="18"><rect x="2" y="2" width="9.5" height="9.5" fill="#F25022"/><rect x="12.5" y="2" width="9.5" height="9.5" fill="#7FBA00"/><rect x="2" y="12.5" width="9.5" height="9.5" fill="#00A4EF"/><rect x="12.5" y="12.5" width="9.5" height="9.5" fill="#FFB900"/></svg>`,
     bootstrap: `<svg viewBox="0 0 24 24" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="4" fill="#7952B3"/><path fill="#ffffff" d="M8.5 6.5h4.2c1.7 0 2.8.9 2.8 2.2 0 1-.6 1.7-1.5 1.9 1.2.3 1.9 1.1 1.9 2.2 0 1.5-1.2 2.5-3.1 2.5H8.5V6.5zm2.1 3.5h1.8c.6 0 1-.3 1-.8s-.4-.8-1-.8h-1.8V10zm0 3.7h2c.7 0 1.1-.3 1.1-.9s-.4-.9-1.1-.9h-2v1.8z"/></svg>`,
     f5: `<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="#E2231A"/><path fill="#ffffff" d="M8 7h8v2H10v3h5v2h-5v3H8V7z"/></svg>`
@@ -149,6 +158,296 @@ function getTechIconSvg(iconName) {
   return svgs[iconName] || svgs.code;
 }
 
+// ==========================================================================
+// GPU-ACCELERATED HERO CONSTELLATION MOTION CANVAS
+// ==========================================================================
+function initHeroMotionCanvas() {
+  const canvas = document.getElementById("hero-motion-canvas");
+  if (!canvas) return;
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  let width = 0;
+  let height = 0;
+  let rafId = null;
+  let nodes = [];
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = rect.width;
+    height = rect.height;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const count = Math.min(34, Math.max(16, Math.floor(width / 38)));
+    nodes = Array.from({ length: count }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.42,
+      vy: (Math.random() - 0.5) * 0.32,
+      r: 1.4 + Math.random() * 1.8
+    }));
+  }
+
+  function step() {
+    if (document.hidden) {
+      rafId = requestAnimationFrame(step);
+      return;
+    }
+
+    ctx.clearRect(0, 0, width, height);
+
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < 0 || n.x > width) n.vx *= -1;
+      if (n.y < 0 || n.y > height) n.vy *= -1;
+
+      for (let j = i + 1; j < nodes.length; j++) {
+        const m = nodes[j];
+        const dx = n.x - m.x;
+        const dy = n.y - m.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 135) {
+          const alpha = (1 - dist / 135) * 0.24;
+          ctx.strokeStyle = `rgba(196, 181, 253, ${alpha.toFixed(3)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(n.x, n.y);
+          ctx.lineTo(m.x, m.y);
+          ctx.stroke();
+        }
+      }
+
+      ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    rafId = requestAnimationFrame(step);
+  }
+
+  resize();
+  window.addEventListener("resize", resize, { passive: true });
+  rafId = requestAnimationFrame(step);
+
+  window.addEventListener("beforeunload", () => {
+    if (rafId) cancelAnimationFrame(rafId);
+  });
+}
+
+// Scroll Reveal Observer & Header Elevation
+function initScrollChoreography() {
+  const header = document.querySelector(".site-header");
+  const updateHeader = () => {
+    if (header) header.classList.toggle("scrolled", window.scrollY > 12);
+  };
+  window.addEventListener("scroll", updateHeader, { passive: true });
+  updateHeader();
+
+  const targets = document.querySelectorAll(".reveal-on-scroll");
+  if (!("IntersectionObserver" in window)) {
+    targets.forEach((el) => el.classList.add("is-visible"));
+    return;
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12 }
+  );
+  targets.forEach((el) => io.observe(el));
+}
+
+// Smooth Count-Up Metric Animator
+function animateMetric(el, targetNumber, suffix = "") {
+  if (!el) return;
+  if (typeof targetNumber !== "number" || Number.isNaN(targetNumber)) {
+    el.textContent = "--";
+    return;
+  }
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    el.textContent = `${targetNumber}${suffix}`;
+    return;
+  }
+
+  const startTime = performance.now();
+  const duration = 380;
+  function tick(now) {
+    const progress = Math.min(1, (now - startTime) / duration);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(targetNumber * eased);
+    el.textContent = `${current}${suffix}`;
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ==========================================================================
+// 5-LAYER PIPELINE & TELEMETRY UPDATERS
+// ==========================================================================
+function setPipelineScanning(isScanning) {
+  const track = document.getElementById("scan-pipeline-bar");
+  const pill = document.getElementById("engine-status-pill");
+  const pillLabel = document.getElementById("engine-status-label");
+  const gearBtn = document.getElementById("popup-gear-btn");
+
+  clearInterval(pipelineAnimTimer);
+  if (!track) return;
+
+  const stages = Array.from(track.querySelectorAll(".pipeline-stage"));
+  if (isScanning) {
+    track.classList.add("is-scanning");
+    if (pill) {
+      pill.classList.remove("is-error");
+      pill.classList.add("is-scanning");
+    }
+    if (pillLabel) pillLabel.textContent = "Probing Wire...";
+    if (gearBtn) gearBtn.classList.add("is-spinning");
+
+    let activeIdx = 0;
+    const pulseStep = () => {
+      stages.forEach((st, i) => {
+        st.classList.remove("is-done");
+        st.classList.toggle("is-active", i === activeIdx);
+      });
+      activeIdx = (activeIdx + 1) % stages.length;
+    };
+    pulseStep();
+    pipelineAnimTimer = setInterval(pulseStep, 260);
+  } else {
+    track.classList.remove("is-scanning");
+    if (pill) pill.classList.remove("is-scanning");
+    if (gearBtn) gearBtn.classList.remove("is-spinning");
+    stages.forEach((st) => st.classList.remove("is-active"));
+  }
+}
+
+function updatePipelineCounts(data) {
+  const track = document.getElementById("scan-pipeline-bar");
+  const pill = document.getElementById("engine-status-pill");
+  const pillLabel = document.getElementById("engine-status-label");
+  if (!track || !data) return;
+
+  const counts = { L1: 0, L2: 0, L3: 0, L4: 0, L5: 0 };
+  (data.algorithmEvidence || []).forEach((ev) => {
+    const prefix = String(ev.layer || "").slice(0, 2);
+    if (prefix in counts) counts[prefix] += 1;
+  });
+
+  Object.entries(counts).forEach(([layerKey, count]) => {
+    const stage = track.querySelector(`.pipeline-stage[data-layer="${layerKey}"]`);
+    const badge = track.querySelector(`[data-count-for="${layerKey}"]`);
+    if (badge) badge.textContent = String(count);
+    if (stage) {
+      stage.classList.remove("is-active");
+      stage.classList.toggle("is-done", count > 0 && !data.isGhost);
+    }
+  });
+
+  if (pill && pillLabel) {
+    pill.classList.toggle("is-error", Boolean(data.isGhost || data.isInvalid));
+    if (data.isInvalid) pillLabel.textContent = "Validation Rejected";
+    else if (data.isGhost) pillLabel.textContent = "NXDOMAIN / 404";
+    else if (data.partialScan) pillLabel.textContent = "Partial Wire Scan";
+    else pillLabel.textContent = data.cached ? "Verified (Cached)" : "Live Verified";
+  }
+}
+
+function updateTelemetryStrip(data) {
+  const statusEl = document.getElementById("metric-http-status");
+  const latencyEl = document.getElementById("metric-latency");
+  const countEl = document.getElementById("metric-tech-count");
+  const domEl = document.getElementById("metric-dom-size");
+
+  if (!data) return;
+
+  if (statusEl) {
+    statusEl.classList.remove("status-ok", "status-warn", "status-err");
+    if (data.isInvalid) {
+      statusEl.textContent = "400 Invalid";
+      statusEl.classList.add("status-warn");
+    } else if (data.isGhost) {
+      statusEl.textContent = data.httpStatus ? `HTTP ${data.httpStatus}` : "NXDOMAIN";
+      statusEl.classList.add("status-err");
+    } else if (data.httpStatus >= 200 && data.httpStatus < 400) {
+      statusEl.textContent = `HTTP ${data.httpStatus} OK`;
+      statusEl.classList.add("status-ok");
+    } else if (data.httpStatus > 0) {
+      statusEl.textContent = `HTTP ${data.httpStatus}`;
+      statusEl.classList.add("status-warn");
+    } else {
+      statusEl.textContent = "DNS Wire";
+      statusEl.classList.add("status-warn");
+    }
+  }
+
+  animateMetric(latencyEl, data.responseTimeMs ? Math.round(data.responseTimeMs) : null, " ms");
+  animateMetric(countEl, data.totalCount || 0, "");
+
+  if (domEl) {
+    if (data.domMetrics && data.domMetrics.htmlBytes > 0) {
+      const assets = (data.domMetrics.scriptCount || 0) + (data.domMetrics.stylesheetCount || 0);
+      domEl.textContent = `${formatBytes(data.domMetrics.htmlBytes)} / ${assets} assets`;
+    } else {
+      domEl.textContent = data.isGhost ? "0 B" : "Headers/DNS";
+    }
+  }
+}
+
+// ==========================================================================
+// SLIDING TAB INDICATOR CONTROLLER
+// ==========================================================================
+function updateTabIndicator() {
+  const indicator = document.getElementById("popup-tab-indicator");
+  const activeBtn = document.querySelector(".popup-tab-btn.active");
+  if (!indicator || !activeBtn) return;
+
+  indicator.style.width = `${activeBtn.offsetWidth}px`;
+  indicator.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
+}
+
+function switchPopupTab(tabKey) {
+  state.activeTab = tabKey;
+
+  const map = {
+    technologies: { btn: "tab-technologies", panel: "panel-technologies" },
+    "more-info": { btn: "tab-more-info", panel: "popup-more-info-panel" },
+    "wire-trace": { btn: "tab-wire-trace", panel: "popup-wire-trace-panel" }
+  };
+
+  Object.entries(map).forEach(([key, cfg]) => {
+    const btn = document.getElementById(cfg.btn);
+    const panel = document.getElementById(cfg.panel);
+    const isActive = key === tabKey;
+    if (btn) {
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-selected", String(isActive));
+    }
+    if (panel) {
+      panel.style.display = isActive ? "block" : "none";
+      panel.classList.toggle("active", isActive);
+    }
+  });
+
+  updateTabIndicator();
+}
+
+// ==========================================================================
+// SHIMMER SKELETON & PAUSED VIEWS
+// ==========================================================================
 function syncActiveChip(domain) {
   const norm = normalizeDomain(domain);
   document.querySelectorAll(".quick-chip").forEach((chip) => {
@@ -157,20 +456,42 @@ function syncActiveChip(domain) {
   });
 }
 
-function renderLoadingState(targetDomain) {
+function renderSkeletonState(targetDomain) {
+  const pill = document.getElementById("popup-active-domain");
+  if (pill) pill.textContent = targetDomain;
+
+  const filterBar = document.getElementById("popup-filter-bar");
+  if (filterBar) filterBar.style.display = "none";
+
   const container = document.getElementById("popup-columns-container");
   if (!container) return;
-  container.innerHTML = `
-    <div style="grid-column: 1 / -1; padding: 48px 24px; text-align: center;">
-      <div class="spinner" style="border-color: rgba(70,8,173,0.2); border-top-color: #4608ad; width: 28px; height: 28px; margin: 0 auto 14px;"></div>
-      <div style="font-size: 14px; font-weight: 600; color: #1e1160;">
-        Memindai header HTTP, DNS, dan DOM untuk ${escapeHtml(targetDomain)}...
+
+  const makeSkeletonCol = () => `
+    <div class="skeleton-col">
+      <div class="skeleton-group">
+        <div class="skeleton-line" style="width: 34%;"></div>
+        <div class="skeleton-row"><div class="skeleton-circle"></div><div class="skeleton-line" style="width: 58%;"></div></div>
+        <div class="skeleton-row"><div class="skeleton-circle"></div><div class="skeleton-line" style="width: 44%;"></div></div>
+      </div>
+      <div class="skeleton-group">
+        <div class="skeleton-line" style="width: 42%;"></div>
+        <div class="skeleton-row"><div class="skeleton-circle"></div><div class="skeleton-line" style="width: 64%;"></div></div>
+      </div>
+      <div class="skeleton-group">
+        <div class="skeleton-line" style="width: 38%;"></div>
+        <div class="skeleton-row"><div class="skeleton-circle"></div><div class="skeleton-line" style="width: 52%;"></div></div>
+        <div class="skeleton-row"><div class="skeleton-circle"></div><div class="skeleton-line" style="width: 48%;"></div></div>
       </div>
     </div>
   `;
+
+  container.innerHTML = `${makeSkeletonCol()}${makeSkeletonCol()}`;
 }
 
 function renderPausedState() {
+  const filterBar = document.getElementById("popup-filter-bar");
+  if (filterBar) filterBar.style.display = "none";
+
   const container = document.getElementById("popup-columns-container");
   if (!container) return;
   container.innerHTML = `
@@ -178,14 +499,16 @@ function renderPausedState() {
       <div style="font-size: 15px; font-weight: 700; color: #1e1160; margin-bottom: 6px;">
         Deteksi Ekstensi Dijeda
       </div>
-      <div style="font-size: 13px; color: #6b7280; max-width: 360px; margin: 0 auto;">
-        Aktifkan kembali sakelar di pojok kanan atas kartu Wappalyzer untuk melanjutkan pemindaian.
+      <div style="font-size: 13px; color: #6b7280; max-width: 380px; margin: 0 auto; line-height: 1.55;">
+        Aktifkan kembali sakelar di pojok kanan atas kartu Wappalyzer untuk melanjutkan pemindaian langsung.
       </div>
     </div>
   `;
 }
 
-// Execute Live Scan with Abort & Race-Condition Protection
+// ==========================================================================
+// LIVE SCAN EXECUTOR (ABORT + RACE-CONDITION SAFE)
+// ==========================================================================
 async function runTechnologyScan(targetDomain, { fresh = false } = {}) {
   if (!state.isExtensionActive) {
     renderPausedState();
@@ -197,7 +520,6 @@ async function runTechnologyScan(targetDomain, { fresh = false } = {}) {
   const rawTarget = targetDomain !== undefined ? targetDomain : (domainInput ? domainInput.value.trim() : "");
   if (!rawTarget) return;
 
-  // Cancel any in-flight scan immediately
   if (activeAbortController) {
     activeAbortController.abort();
   }
@@ -209,12 +531,21 @@ async function runTechnologyScan(targetDomain, { fresh = false } = {}) {
   const spinner = document.getElementById("scan-spinner");
 
   state.isScanning = true;
+  state.techSearchQuery = "";
+  state.activeEvidenceLayer = "ALL";
+  state.highlightedEvidenceId = null;
+
+  const filterInput = document.getElementById("tech-filter-input");
+  if (filterInput) filterInput.value = "";
+
   if (submitBtn) submitBtn.disabled = true;
   if (btnText) btnText.style.display = "none";
   if (spinner) spinner.style.display = "inline-block";
 
-  syncActiveChip(rawTarget);
-  renderLoadingState(normalizeDomain(rawTarget) || rawTarget);
+  const displayTarget = normalizeDomain(rawTarget) || rawTarget;
+  syncActiveChip(displayTarget);
+  setPipelineScanning(true);
+  renderSkeletonState(displayTarget);
 
   try {
     const analysis = await analyzeTargetUrl(rawTarget, {
@@ -222,13 +553,16 @@ async function runTechnologyScan(targetDomain, { fresh = false } = {}) {
       fresh
     });
 
-    // Drop stale out-of-order responses
     if (scanId !== activeScanId) return;
 
     state.currentScanDomain = analysis.domain;
     state.currentScanData = analysis;
 
+    setPipelineScanning(false);
+    updatePipelineCounts(analysis);
+    updateTelemetryStrip(analysis);
     renderScanResults();
+
     if (analysis.isInvalid) {
       showToast(analysis.ghostReason || "Format domain tidak valid");
     } else if (analysis.isGhost) {
@@ -237,9 +571,7 @@ async function runTechnologyScan(targetDomain, { fresh = false } = {}) {
       showToast(`${analysis.totalCount} technologies detected for ${analysis.domain}`);
     }
   } catch (err) {
-    if (err && err.name === "AbortError") {
-      return;
-    }
+    if (err && err.name === "AbortError") return;
     if (scanId !== activeScanId) return;
 
     const cleaned = normalizeDomain(rawTarget) || rawTarget;
@@ -253,6 +585,8 @@ async function runTechnologyScan(targetDomain, { fresh = false } = {}) {
       ghostReason: "Gagal menghubungi layanan pemindai jaringan. Periksa koneksi lalu coba lagi.",
       leftColumn: [],
       rightColumn: [],
+      redirectChain: [],
+      rawHeaders: {},
       algorithmEvidence: [
         {
           id: "EVID-L1-NETERR",
@@ -264,6 +598,9 @@ async function runTechnologyScan(targetDomain, { fresh = false } = {}) {
         }
       ]
     };
+    setPipelineScanning(false);
+    updatePipelineCounts(state.currentScanData);
+    updateTelemetryStrip(state.currentScanData);
     renderScanResults();
     showToast(`Pemindaian gagal untuk ${cleaned}`);
   } finally {
@@ -276,100 +613,32 @@ async function runTechnologyScan(targetDomain, { fresh = false } = {}) {
   }
 }
 
-// Render Exact 2-Column Wappalyzer Popup Layout
+// ==========================================================================
+// RENDER ALL 3 POPUP VIEWS (TECHNOLOGIES, MORE INFO, WIRE TRACE)
+// ==========================================================================
 function renderScanResults() {
-  const container = document.getElementById("popup-columns-container");
-  const moreInfoPanel = document.getElementById("popup-more-info-panel");
-  const moreInfoDomain = document.getElementById("more-info-domain");
   const data = state.currentScanData;
-
   if (!data) return;
 
-  if (moreInfoDomain) {
-    moreInfoDomain.textContent = data.finalUrl || `https://${data.domain}`;
-  }
+  const domainPill = document.getElementById("popup-active-domain");
+  if (domainPill) domainPill.textContent = data.domain;
 
-  if (moreInfoPanel) {
-    const isGhost = Boolean(data.isGhost);
-    const isInvalid = Boolean(data.isInvalid);
-    const isPartial = Boolean(data.partialScan);
+  renderTechnologiesColumnView(data);
+  renderMoreInfoEvidenceView(data);
+  renderWireTraceView(data);
+  updateTabIndicator();
+}
 
-    let statusHtml = `<span style="color:#10b981; font-weight:700;">HTTP ${escapeHtml(data.httpStatus || 200)} OK</span>`;
-    if (isInvalid) {
-      statusHtml = `<span style="color:#d97706; font-weight:700;">Input Ditolak / Diblokir</span>`;
-    } else if (isGhost) {
-      statusHtml = `<span style="color:#ef4444; font-weight:700;">Host Unreachable / NXDOMAIN</span>`;
-    } else if (isPartial && data.httpStatus > 0) {
-      statusHtml = `<span style="color:#d97706; font-weight:700;">HTTP ${escapeHtml(data.httpStatus)} (WAF / Partial)</span>`;
-    } else if (isPartial) {
-      statusHtml = `<span style="color:#2563eb; font-weight:700;">DNS Active (Partial Wire)</span>`;
-    }
-
-    const badgeBg = isGhost ? "#fee2e2" : isPartial ? "#fef3c7" : "#dcffd6";
-    const badgeColor = isGhost ? "#b91c1c" : isPartial ? "#92400e" : "#10b981";
-
-    const evidenceRows = (data.algorithmEvidence || []).map((ev) => `
-      <tr style="border-bottom:1px solid rgba(0,0,0,0.06);">
-        <td style="padding:6px 8px; font-family:monospace; font-weight:600; color:#4608ad;">${escapeHtml(ev.id)}</td>
-        <td style="padding:6px 8px;"><span style="background:${isGhost ? "#fee2e2" : "#f0ebf9"}; color:${isGhost ? "#b91c1c" : "#4608ad"}; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">${escapeHtml(ev.layer)}</span></td>
-        <td style="padding:6px 8px; font-weight:600;">${escapeHtml(ev.tech)}</td>
-        <td style="padding:6px 8px; font-family:monospace; font-size:11px; color:#56516d;">${escapeHtml(ev.rule)}</td>
-        <td style="padding:6px 8px; font-size:11px; color:#374151; word-break:break-word;">${escapeHtml(ev.detail || "-")}</td>
-        <td style="padding:6px 8px; color:${isGhost ? "#ef4444" : "#10b981"}; font-weight:700;">${escapeHtml(ev.confidence)}</td>
-      </tr>
-    `).join("");
-
-    const targetHref = safeHttpUrl(data.finalUrl || `https://${data.domain}`);
-    const scanNoteHtml = data.scanNote
-      ? `<div style="margin-bottom:12px; padding:8px 10px; border-radius:6px; background:#fffbeb; border:1px solid #fde68a; color:#92400e; font-size:12px;">${escapeHtml(data.scanNote)}</div>`
-      : "";
-
-    const dnsSummary = data.dns && data.dns.ip
-      ? `<div><strong>DNS IP:</strong> <span>${escapeHtml(data.dns.ip)}</span></div>`
-      : "";
-
-    moreInfoPanel.innerHTML = `
-      <div style="font-size:13px; line-height:1.7; color:#181528;">
-        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid #e5e0f2;">
-          <div><strong>Target:</strong> <a href="${escapeHtml(targetHref)}" target="_blank" rel="noopener noreferrer" style="color:#2196f3; font-weight:600;">${escapeHtml(data.finalUrl || `https://${data.domain}`)}</a></div>
-          <div><strong>Status:</strong> ${statusHtml}</div>
-          <div><strong>Server:</strong> <span>${escapeHtml(data.serverLocation || "Global Edge")}</span></div>
-          ${dnsSummary}
-          <div><strong>Response Time:</strong> <span>${data.responseTimeMs ? `${escapeHtml(data.responseTimeMs)} ms` : "N/A"}</span></div>
-          <div><strong>Protocol:</strong> <span>${escapeHtml(data.tlsVersion || "HTTPS / TLS")}</span></div>
-        </div>
-        ${scanNoteHtml}
-        <div style="margin-top:10px;">
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-            <strong style="color:#1e1160; font-size:12px; text-transform:uppercase; letter-spacing:0.04em;">Technology Evidence Details</strong>
-            <span style="font-size:11px; color:${badgeColor}; background:${badgeBg}; padding:2px 8px; border-radius:9999px; font-weight:700;">${escapeHtml(data.totalCount || 0)} Detected</span>
-          </div>
-          <div style="overflow-x:auto; border:1px solid #e5e0f2; border-radius:8px; background:#ffffff;">
-            <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left;">
-              <thead style="background:#f8f7fc; border-bottom:1px solid #e5e0f2;">
-                <tr>
-                  <th style="padding:6px 8px;">Evidence ID</th>
-                  <th style="padding:6px 8px;">Layer</th>
-                  <th style="padding:6px 8px;">Technology</th>
-                  <th style="padding:6px 8px;">Match Rule</th>
-                  <th style="padding:6px 8px;">Wire / DOM Detail</th>
-                  <th style="padding:6px 8px;">Confidence</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${evidenceRows}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
+function renderTechnologiesColumnView(data) {
+  const container = document.getElementById("popup-columns-container");
+  const filterBar = document.getElementById("popup-filter-bar");
+  const filterCount = document.getElementById("tech-filter-count");
   if (!container) return;
+
   container.innerHTML = "";
 
   if (data.isGhost || data.totalCount === 0) {
+    if (filterBar) filterBar.style.display = "none";
     const titleText = data.isInvalid
       ? "Input Domain Tidak Valid atau Diblokir"
       : data.isGhost
@@ -379,7 +648,7 @@ function renderScanResults() {
 
     container.innerHTML = `
       <div style="grid-column: 1 / -1; padding: 48px 24px; text-align: center;">
-        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="${data.isInvalid ? "#d97706" : "#ef4444"}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 12px; display: inline-block;">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="${data.isInvalid ? "#d97706" : "#dc2626"}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 12px; display: inline-block;">
           <circle cx="12" cy="12" r="10"></circle>
           <line x1="12" y1="8" x2="12" y2="12"></line>
           <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -387,7 +656,7 @@ function renderScanResults() {
         <div style="font-size: 15px; font-weight: 700; color: #1e1160; margin-bottom: 6px;">
           ${escapeHtml(titleText)}
         </div>
-        <div style="font-size: 13px; color: #6b7280; max-width: 420px; margin: 0 auto; line-height: 1.5;">
+        <div style="font-size: 13px; color: #6b7280; max-width: 440px; margin: 0 auto; line-height: 1.55;">
           ${escapeHtml(descText)}
         </div>
       </div>
@@ -395,27 +664,64 @@ function renderScanResults() {
     return;
   }
 
+  if (filterBar) {
+    filterBar.style.display = data.totalCount >= 5 ? "flex" : "none";
+  }
+
+  const query = state.techSearchQuery.trim().toLowerCase();
+  const filterGroups = (groups) => {
+    if (!query) return groups;
+    return groups
+      .map((g) => {
+        const catMatch = g.category.toLowerCase().includes(query);
+        const items = catMatch
+          ? g.items
+          : g.items.filter((it) => it.name.toLowerCase().includes(query) || (it.version && it.version.toLowerCase().includes(query)));
+        return { category: g.category, items };
+      })
+      .filter((g) => g.items.length > 0);
+  };
+
+  const leftFiltered = filterGroups(data.leftColumn || []);
+  const rightFiltered = filterGroups(data.rightColumn || []);
+  const shownCount = [...leftFiltered, ...rightFiltered].reduce((sum, g) => sum + g.items.length, 0);
+
+  if (filterCount) {
+    filterCount.textContent = query ? `${shownCount}/${data.totalCount}` : `${data.totalCount} detected`;
+  }
+
+  if (shownCount === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; padding: 36px 20px; text-align: center; color: #6b7280; font-size: 13px;">
+        Tidak ada teknologi yang cocok dengan filter "${escapeHtml(state.techSearchQuery)}".
+      </div>
+    `;
+    return;
+  }
+
   const leftCol = document.createElement("div");
   leftCol.className = "popup-column left-column";
-
   const rightCol = document.createElement("div");
   rightCol.className = "popup-column right-column";
 
-  data.leftColumn.forEach((group) => {
-    leftCol.appendChild(createCategoryGroupEl(group));
+  let rowCounter = 0;
+  leftFiltered.forEach((group, gIdx) => {
+    const el = createCategoryGroupEl(group, gIdx, () => rowCounter++);
+    leftCol.appendChild(el);
   });
-
-  data.rightColumn.forEach((group) => {
-    rightCol.appendChild(createCategoryGroupEl(group));
+  rightFiltered.forEach((group, gIdx) => {
+    const el = createCategoryGroupEl(group, gIdx + leftFiltered.length, () => rowCounter++);
+    rightCol.appendChild(el);
   });
 
   container.appendChild(leftCol);
   container.appendChild(rightCol);
 }
 
-function createCategoryGroupEl(group) {
+function createCategoryGroupEl(group, groupIdx, nextRowIdx) {
   const groupEl = document.createElement("div");
   groupEl.className = "category-group";
+  groupEl.style.setProperty("--group-idx", String(groupIdx));
 
   const titleEl = document.createElement("div");
   titleEl.className = "category-title";
@@ -428,6 +734,7 @@ function createCategoryGroupEl(group) {
   group.items.forEach((item) => {
     const row = document.createElement("div");
     row.className = "tech-item-row";
+    row.style.setProperty("--row-idx", String(nextRowIdx()));
 
     const iconSpan = document.createElement("span");
     iconSpan.className = "tech-brand-icon";
@@ -450,6 +757,21 @@ function createCategoryGroupEl(group) {
       row.appendChild(ver);
     }
 
+    if (item.evidenceId) {
+      const proofBtn = document.createElement("button");
+      proofBtn.type = "button";
+      proofBtn.className = "tech-proof-btn";
+      proofBtn.textContent = "Proof";
+      proofBtn.title = "Inspect matching wire/DOM rule";
+      proofBtn.addEventListener("click", () => {
+        state.activeEvidenceLayer = "ALL";
+        state.highlightedEvidenceId = item.evidenceId;
+        renderMoreInfoEvidenceView(state.currentScanData);
+        switchPopupTab("more-info");
+      });
+      row.appendChild(proofBtn);
+    }
+
     listEl.appendChild(row);
   });
 
@@ -457,25 +779,216 @@ function createCategoryGroupEl(group) {
   return groupEl;
 }
 
-// Export Stack Data (JSON copy & download)
+function renderMoreInfoEvidenceView(data) {
+  const panel = document.getElementById("popup-more-info-panel");
+  if (!panel) return;
+
+  const isGhost = Boolean(data.isGhost);
+  const isInvalid = Boolean(data.isInvalid);
+  const isPartial = Boolean(data.partialScan);
+
+  let statusHtml = `<span style="color:#059669; font-weight:700;">HTTP ${escapeHtml(data.httpStatus || 200)} OK</span>`;
+  if (isInvalid) statusHtml = `<span style="color:#d97706; font-weight:700;">Input Ditolak / Diblokir</span>`;
+  else if (isGhost) statusHtml = `<span style="color:#dc2626; font-weight:700;">Host Unreachable / NXDOMAIN</span>`;
+  else if (isPartial && data.httpStatus > 0) statusHtml = `<span style="color:#d97706; font-weight:700;">HTTP ${escapeHtml(data.httpStatus)} (WAF / Partial)</span>`;
+  else if (isPartial) statusHtml = `<span style="color:#2563eb; font-weight:700;">DNS Active (Partial Wire)</span>`;
+
+  const allEvidence = data.algorithmEvidence || [];
+  const filteredEvidence = state.activeEvidenceLayer === "ALL"
+    ? allEvidence
+    : allEvidence.filter((ev) => String(ev.layer || "").startsWith(state.activeEvidenceLayer));
+
+  const layers = ["ALL", "L1", "L2", "L3", "L4", "L5"];
+  const pillsHtml = layers.map((l) => {
+    const count = l === "ALL" ? allEvidence.length : allEvidence.filter((ev) => String(ev.layer || "").startsWith(l)).length;
+    return `<button type="button" class="layer-pill ${state.activeEvidenceLayer === l ? "active" : ""}" data-ev-layer="${l}">${l} (${count})</button>`;
+  }).join("");
+
+  const evidenceRows = filteredEvidence.map((ev) => `
+    <tr class="${state.highlightedEvidenceId === ev.id ? "is-highlighted" : ""}">
+      <td class="ev-id-cell">${escapeHtml(ev.id)}</td>
+      <td><span class="ev-layer-badge ${isGhost ? "is-err" : ""}">${escapeHtml(ev.layer)}</span></td>
+      <td style="font-weight:600;">${escapeHtml(ev.tech)}</td>
+      <td class="ev-rule-cell">${escapeHtml(ev.rule)}</td>
+      <td class="ev-detail-cell">${escapeHtml(ev.detail || "-")}</td>
+      <td class="ev-conf-cell" style="color:${isGhost ? "#dc2626" : "#059669"};">${escapeHtml(ev.confidence)}</td>
+    </tr>
+  `).join("");
+
+  const targetHref = safeHttpUrl(data.finalUrl || `https://${data.domain}`);
+  const scanNoteHtml = data.scanNote
+    ? `<div class="info-notice-banner">${escapeHtml(data.scanNote)}</div>`
+    : "";
+
+  panel.innerHTML = `
+    <div class="info-summary-grid">
+      <div><strong>Target:</strong> <a href="${escapeHtml(targetHref)}" target="_blank" rel="noopener noreferrer" style="color:#1d64e8; font-weight:600;">${escapeHtml(data.finalUrl || `https://${data.domain}`)}</a></div>
+      <div><strong>Status:</strong> ${statusHtml}</div>
+      <div><strong>Server:</strong> <span>${escapeHtml(data.serverLocation || "Global Edge")}</span></div>
+      <div><strong>Response:</strong> <span>${data.responseTimeMs ? `${escapeHtml(data.responseTimeMs)} ms` : "N/A"}</span></div>
+      <div><strong>Protocol:</strong> <span>${escapeHtml(data.tlsVersion || "HTTPS / TLS")}</span></div>
+    </div>
+    ${scanNoteHtml}
+    <div class="evidence-controls">
+      <strong class="wire-section-title">Signature Match Evidence</strong>
+      <div class="layer-filter-pills">${pillsHtml}</div>
+    </div>
+    <div class="evidence-table-wrap">
+      <table class="evidence-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Layer</th>
+            <th>Technology</th>
+            <th>Match Rule</th>
+            <th>Wire / DOM Artifact</th>
+            <th>Conf.</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${evidenceRows || `<tr><td colspan="6" style="text-align:center; padding:18px; color:#6b7280;">Tidak ada bukti pada layer ${escapeHtml(state.activeEvidenceLayer)}.</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  panel.querySelectorAll(".layer-pill").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.activeEvidenceLayer = btn.getAttribute("data-ev-layer") || "ALL";
+      state.highlightedEvidenceId = null;
+      renderMoreInfoEvidenceView(data);
+    });
+  });
+}
+
+function renderWireTraceView(data) {
+  const panel = document.getElementById("popup-wire-trace-panel");
+  if (!panel) return;
+
+  const hops = Array.isArray(data.redirectChain) ? data.redirectChain : [];
+  const hopsHtml = hops.length > 0
+    ? hops.map((hop) => {
+        const sClass = hop.status >= 500 ? "s5xx" : hop.status >= 400 ? "s4xx" : hop.status >= 300 ? "s3xx" : "s2xx";
+        return `
+          <div class="hop-item">
+            <span style="color:#6b7280;">#${escapeHtml(hop.hop)}</span>
+            <span class="hop-status-pill ${sClass}">HTTP ${escapeHtml(hop.status)}</span>
+            <span style="color:#111827; word-break:break-all; flex:1;">${escapeHtml(hop.url)}</span>
+            <span style="color:#6b7280;">${escapeHtml(hop.latencyMs)} ms</span>
+          </div>
+        `;
+      }).join("")
+    : `<div class="dns-kv-card" style="color:#6b7280;">Tidak ada redirect chain HTTP (koneksi DNS-only atau host tidak terjangkau).</div>`;
+
+  const dns = data.dns || {};
+  const dnsCards = [
+    { key: "A / IPv4", val: (dns.ips && dns.ips.length ? dns.ips.join(", ") : dns.ip) || "None" },
+    { key: "CNAME", val: dns.cname || "None" },
+    { key: "Nameservers (NS)", val: dns.nameservers && dns.nameservers.length ? dns.nameservers.join(", ") : "None" },
+    { key: "Mail Exchangers (MX)", val: dns.mx && dns.mx.length ? dns.mx.slice(0, 3).join(", ") : "None" }
+  ].map((item) => `
+    <div class="dns-kv-card">
+      <div class="dns-kv-key">${escapeHtml(item.key)}</div>
+      <div class="dns-kv-val">${escapeHtml(item.val)}</div>
+    </div>
+  `).join("");
+
+  const headerEntries = Object.entries(data.rawHeaders || {});
+  const headersHtml = headerEntries.length > 0
+    ? headerEntries.map(([k, v]) => `
+        <div class="raw-header-line">
+          <span class="raw-header-k">${escapeHtml(k)}:</span>
+          <span class="raw-header-v">${escapeHtml(v)}</span>
+        </div>
+      `).join("")
+    : `<div style="color:#6b7280;">Tidak ada HTTP response headers yang diterima.</div>`;
+
+  const dm = data.domMetrics;
+  const domHtml = dm
+    ? `
+      <div class="dns-kv-grid">
+        <div class="dns-kv-card"><div class="dns-kv-key">HTML Inspected</div><div class="dns-kv-val">${escapeHtml(formatBytes(dm.htmlBytes))}</div></div>
+        <div class="dns-kv-card"><div class="dns-kv-key">Meta Tags</div><div class="dns-kv-val">${escapeHtml(dm.metaCount)}</div></div>
+        <div class="dns-kv-card"><div class="dns-kv-key">External Scripts</div><div class="dns-kv-val">${escapeHtml(dm.scriptCount)}</div></div>
+        <div class="dns-kv-card"><div class="dns-kv-key">Link / Stylesheets</div><div class="dns-kv-val">${escapeHtml(dm.stylesheetCount)}</div></div>
+      </div>
+    `
+    : `<div class="dns-kv-card" style="color:#6b7280;">DOM tidak diekstraksi pada pemindaian ini.</div>`;
+
+  panel.innerHTML = `
+    <div class="wire-section">
+      <div class="wire-section-header">
+        <strong class="wire-section-title">HTTP Redirect Trace (${hops.length} hop)</strong>
+      </div>
+      <div class="hop-chain">${hopsHtml}</div>
+    </div>
+
+    <div class="wire-section">
+      <div class="wire-section-header">
+        <strong class="wire-section-title">Live Authoritative DNS Records</strong>
+      </div>
+      <div class="dns-kv-grid">${dnsCards}</div>
+    </div>
+
+    <div class="wire-section">
+      <div class="wire-section-header">
+        <strong class="wire-section-title">Sanitized HTTP Response Headers (${headerEntries.length})</strong>
+        <button type="button" class="wire-copy-btn" id="copy-raw-headers-btn">Copy JSON</button>
+      </div>
+      <div class="raw-headers-box">${headersHtml}</div>
+    </div>
+
+    <div class="wire-section">
+      <div class="wire-section-header">
+        <strong class="wire-section-title">DOM Extraction Metrics</strong>
+      </div>
+      ${domHtml}
+    </div>
+  `;
+
+  const copyBtn = document.getElementById("copy-raw-headers-btn");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", () => {
+      const payload = JSON.stringify({
+        domain: data.domain,
+        finalUrl: data.finalUrl,
+        httpStatus: data.httpStatus,
+        redirectChain: data.redirectChain,
+        dns: data.dns,
+        rawHeaders: data.rawHeaders,
+        domMetrics: data.domMetrics
+      }, null, 2);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(payload).then(() => {
+          showToast("Wire trace JSON disalin ke clipboard");
+        }).catch(() => {});
+      }
+    });
+  }
+}
+
+// Export Full Stack + Wire Trace JSON
 function exportTechStack() {
   if (!state.currentScanData) return;
-
+  const d = state.currentScanData;
   const payload = {
     domain: state.currentScanDomain,
-    url: state.currentScanData.finalUrl || `https://${state.currentScanDomain}`,
-    httpStatus: state.currentScanData.httpStatus ?? null,
-    responseTimeMs: state.currentScanData.responseTimeMs ?? null,
-    totalCount: state.currentScanData.totalCount,
-    leftColumn: state.currentScanData.leftColumn,
-    rightColumn: state.currentScanData.rightColumn,
-    evidence: state.currentScanData.algorithmEvidence || []
+    finalUrl: d.finalUrl || `https://${state.currentScanDomain}`,
+    httpStatus: d.httpStatus ?? null,
+    responseTimeMs: d.responseTimeMs ?? null,
+    totalCount: d.totalCount,
+    leftColumn: d.leftColumn,
+    rightColumn: d.rightColumn,
+    evidence: d.algorithmEvidence || [],
+    redirectChain: d.redirectChain || [],
+    dns: d.dns || null,
+    rawHeaders: d.rawHeaders || {},
+    domMetrics: d.domMetrics || null
   };
 
   const jsonString = JSON.stringify(payload, null, 2);
-
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(jsonString).catch(() => { });
+    navigator.clipboard.writeText(jsonString).catch(() => {});
   }
 
   const blob = new Blob([jsonString], { type: "application/json" });
@@ -488,10 +1001,10 @@ function exportTechStack() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 
-  showToast(`Exported ${state.currentScanData.totalCount} technologies for ${state.currentScanDomain}`);
+  showToast(`Exported ${d.totalCount} technologies & wire trace for ${state.currentScanDomain}`);
 }
 
-// Toast Notifications (XSS-safe text rendering)
+// XSS-Safe Toast Notifications
 function showToast(message) {
   const container = document.getElementById("toast-container");
   if (!container) return;
@@ -500,12 +1013,12 @@ function showToast(message) {
   toast.className = "toast";
 
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("width", "18");
-  svg.setAttribute("height", "18");
+  svg.setAttribute("width", "16");
+  svg.setAttribute("height", "16");
   svg.setAttribute("viewBox", "0 0 24 24");
   svg.setAttribute("fill", "none");
   svg.setAttribute("stroke", "currentColor");
-  svg.setAttribute("stroke-width", "2");
+  svg.setAttribute("stroke-width", "2.4");
   const poly = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
   poly.setAttribute("points", "20 6 9 17 4 12");
   svg.appendChild(poly);
@@ -519,9 +1032,9 @@ function showToast(message) {
 
   setTimeout(() => {
     toast.style.opacity = "0";
-    toast.style.transform = "translateX(100%)";
-    toast.style.transition = "all 0.3s ease";
-    setTimeout(() => toast.remove(), 300);
+    toast.style.transform = "translateX(28px)";
+    toast.style.transition = "opacity 240ms ease, transform 240ms ease";
+    setTimeout(() => toast.remove(), 260);
   }, 3200);
 }
 
@@ -530,7 +1043,6 @@ function openModal(title, contentHtml) {
   const modal = document.getElementById("generic-modal");
   const titleEl = document.getElementById("modal-title-text");
   const bodyEl = document.getElementById("modal-body-content");
-
   if (!modal || !titleEl || !bodyEl) return;
 
   titleEl.textContent = title;
@@ -546,28 +1058,37 @@ function closeModal() {
   modal.setAttribute("aria-hidden", "true");
 }
 
-// Initialize Application - 100% Free Public Mode
+// ==========================================================================
+// APPLICATION BOOTSTRAP
+// ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
   applyTheme(state.theme);
   applyTranslations();
+  initHeroMotionCanvas();
+  initScrollChoreography();
+
+  // Position sliding tab indicator on load & resize
+  requestAnimationFrame(updateTabIndicator);
+  window.addEventListener("resize", updateTabIndicator, { passive: true });
 
   const scanInput = document.getElementById("scan-domain-input");
   const initialDomain = (scanInput && scanInput.value.trim()) || state.currentScanDomain;
   if (scanInput) scanInput.value = initialDomain;
 
-  // Trigger genuine live network scan on initial load
   runTechnologyScan(initialDomain);
 
-  // Popup Switch Toggle (actually pauses/resumes scanning)
+  // Popup Switch Toggle
   const popupSwitch = document.getElementById("popup-switch");
   const toggleExtensionState = () => {
     state.isExtensionActive = !state.isExtensionActive;
     popupSwitch.classList.toggle("active", state.isExtensionActive);
+    popupSwitch.setAttribute("aria-checked", String(state.isExtensionActive));
     if (state.isExtensionActive) {
       showToast("Extension detection active");
       runTechnologyScan(scanInput ? scanInput.value.trim() : state.currentScanDomain);
     } else {
       if (activeAbortController) activeAbortController.abort();
+      setPipelineScanning(false);
       renderPausedState();
       showToast("Extension detection paused");
     }
@@ -582,51 +1103,43 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Popup Gear Settings Button (force-refresh uncached live scan)
+  // Force Fresh Live Scan Button
   const gearBtn = document.getElementById("popup-gear-btn");
   if (gearBtn) {
     gearBtn.addEventListener("click", () => {
       const target = (scanInput && scanInput.value.trim()) || state.currentScanDomain;
-      showToast(`Memindai ulang ${normalizeDomain(target) || target} (bypass cache)...`);
+      showToast(`Memindai ulang ${normalizeDomain(target) || target} (fresh live scan)...`);
       runTechnologyScan(target, { fresh: true });
     });
   }
 
-  // Popup Tab Switching (TECHNOLOGIES / MORE INFO)
-  const tabTech = document.getElementById("tab-technologies");
-  const tabMore = document.getElementById("tab-more-info");
-  const popupGrid = document.getElementById("popup-columns-container");
-  const moreInfoPanel = document.getElementById("popup-more-info-panel");
-
-  if (tabTech && tabMore && popupGrid && moreInfoPanel) {
-    tabTech.addEventListener("click", () => {
-      tabTech.classList.add("active");
-      tabMore.classList.remove("active");
-      popupGrid.style.display = "grid";
-      moreInfoPanel.style.display = "none";
+  // Popup 3-Tab Switcher
+  document.querySelectorAll(".popup-tab-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tabKey = btn.getAttribute("data-tab");
+      if (tabKey) switchPopupTab(tabKey);
     });
+  });
 
-    tabMore.addEventListener("click", () => {
-      tabMore.classList.add("active");
-      tabTech.classList.remove("active");
-      popupGrid.style.display = "none";
-      moreInfoPanel.style.display = "block";
+  // Inline Stack Filter Input
+  const techFilterInput = document.getElementById("tech-filter-input");
+  if (techFilterInput) {
+    techFilterInput.addEventListener("input", (e) => {
+      state.techSearchQuery = e.target.value;
+      if (state.currentScanData) {
+        renderTechnologiesColumnView(state.currentScanData);
+      }
     });
   }
 
-  // Export Button Click
+  // Export Button
   const exportBtn = document.getElementById("popup-export-btn");
-  if (exportBtn) {
-    exportBtn.addEventListener("click", exportTechStack);
-  }
+  if (exportBtn) exportBtn.addEventListener("click", exportTechStack);
 
-  // Theme Toggle Event
+  // Theme & Language Toggles
   const themeBtn = document.getElementById("theme-toggle-btn");
-  if (themeBtn) {
-    themeBtn.addEventListener("click", toggleTheme);
-  }
+  if (themeBtn) themeBtn.addEventListener("click", toggleTheme);
 
-  // Language Toggle Event
   const langBtn = document.getElementById("lang-toggle-btn");
   if (langBtn) {
     langBtn.addEventListener("click", () => {
@@ -645,7 +1158,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Smart auto-scan on input: only triggers after 600ms pause AND when input is a syntactically valid FQDN
+  // Smart auto-scan on input (600ms debounce, only for syntactically valid FQDNs)
   if (scanInput) {
     scanInput.addEventListener("input", (e) => {
       clearTimeout(inputDebounce);
@@ -677,18 +1190,18 @@ document.addEventListener("DOMContentLoaded", () => {
         t("modal.searchTitle"),
         `
         <form id="modal-search-form" style="display:flex; gap:8px; margin-bottom:16px;">
-          <input type="text" id="modal-search-field" class="scan-input" placeholder="${escapeHtml(t("modal.searchPlaceholder"))}" autofocus>
+          <input type="text" id="modal-search-field" class="scan-input" style="padding:0 14px;" placeholder="${escapeHtml(t("modal.searchPlaceholder"))}" autofocus>
           <button type="submit" class="scan-submit-btn">Scan</button>
         </form>
-        <div style="font-size:13px; color:var(--color-on-surface-variant); line-height: 1.6;">
-          <div style="margin-bottom:8px; font-weight:600;">Popular Categories:</div>
+        <div style="font-size:13px; color:var(--color-on-surface-variant); line-height: 1.65;">
+          <div style="margin-bottom:8px; font-weight:600;">Detected Capability Matrix:</div>
           <ul style="list-style:inside disc; display:grid; grid-template-columns:1fr 1fr; gap:6px;">
-            <li>Web Frameworks (Laravel, Next.js, Nuxt.js)</li>
-            <li>Programming Languages (PHP, TypeScript)</li>
-            <li>Security & WAF (F5 BIG-IP, Cloudflare)</li>
-            <li>Content Management (WordPress, Ghost)</li>
-            <li>CDN & Hosting (Vercel, Fastly)</li>
-            <li>Analytics (Google Analytics 4, Clarity)</li>
+            <li>Web Frameworks (Next.js, Laravel, Rails)</li>
+            <li>CMS &amp; Builders (WordPress, Elementor)</li>
+            <li>Security &amp; WAF (F5 BIG-IP, Cloudflare)</li>
+            <li>CDN &amp; Edge (Vercel, Fastly, jsDelivr)</li>
+            <li>JS Libraries (jQuery, Swiper, GSAP)</li>
+            <li>Analytics (GA4, GTM, Clarity, Sentry)</li>
           </ul>
         </div>
         `
@@ -710,33 +1223,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Terms Modal Trigger
+  // Terms & Privacy Modals
   const termsBtn = document.getElementById("terms-modal-trigger");
   if (termsBtn) {
     termsBtn.addEventListener("click", () => {
       openModal(
         t("modal.termsTitle"),
-        `<p style="font-size:14px; line-height:1.6; color:var(--color-on-surface-variant);">${escapeHtml(t("modal.termsBody"))}</p>`
+        `<p style="font-size:14px; line-height:1.65; color:var(--color-on-surface-variant);">${escapeHtml(t("modal.termsBody"))}</p>`
       );
     });
   }
 
-  // Privacy Modal Trigger
   const privacyBtn = document.getElementById("privacy-modal-trigger");
   if (privacyBtn) {
     privacyBtn.addEventListener("click", () => {
       openModal(
         t("modal.privacyTitle"),
-        `<p style="font-size:14px; line-height:1.6; color:var(--color-on-surface-variant);">${escapeHtml(t("modal.privacyBody"))}</p>`
+        `<p style="font-size:14px; line-height:1.65; color:var(--color-on-surface-variant);">${escapeHtml(t("modal.privacyBody"))}</p>`
       );
     });
   }
 
-  // Close Modal Events
   const modalCloseBtn = document.getElementById("modal-close-btn");
-  if (modalCloseBtn) {
-    modalCloseBtn.addEventListener("click", closeModal);
-  }
+  if (modalCloseBtn) modalCloseBtn.addEventListener("click", closeModal);
 
   const modalOverlay = document.getElementById("generic-modal");
   if (modalOverlay) {

@@ -8,6 +8,7 @@ import {
   validateHostname,
   isPrivateIp,
   parseHtmlSignals,
+  extractAssetVersion,
   extractSignatures,
   distributeColumns
 } from "../src/engine/signatureEngine.js";
@@ -210,13 +211,23 @@ await runTest("api/probe confirms NXDOMAIN ghost host returns isGhost=true and 0
   assert.equal(body.totalCount, 0);
 });
 
-await runTest("api/probe performs real live scan of github.com with non-empty verified evidence", async () => {
+await runTest("extractAssetVersion parses exact semver from cdnjs, jsDelivr, unpkg, and query params", () => {
+  assert.equal(extractAssetVersion("https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css", "bootstrap"), "5.3.3");
+  assert.equal(extractAssetVersion("https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-bundle.min.js", "swiper"), "11.1.4");
+  assert.equal(extractAssetVersion("https://unpkg.com/axios@1.7.2/dist/axios.min.js", "axios"), "1.7.2");
+  assert.equal(extractAssetVersion("/assets/slick.min.js?ver=1.8.1", "slick"), "1.8.1");
+});
+
+await runTest("api/probe returns redirectChain, domMetrics, and redacts raw Set-Cookie values", async () => {
   const { statusCode, body } = await invokeProbe({ domain: "github.com", fresh: "1" });
   assert.equal(statusCode, 200);
   assert.equal(body.isGhost, false);
+  assert.ok(Array.isArray(body.redirectChain) && body.redirectChain.length >= 1, "Expected redirectChain hops");
+  assert.ok(body.domMetrics && body.domMetrics.htmlBytes > 0, "Expected non-zero domMetrics.htmlBytes");
+  assert.ok(body.rawHeaders && !("set-cookie" in body.rawHeaders), "Raw set-cookie header with values must be redacted");
   assert.ok(body.totalCount > 0, "Expected > 0 technologies on github.com");
   assert.ok(body.evidence.length >= body.totalCount, "Every technology must have evidence");
-  console.log(`       github.com -> HTTP ${body.status}, ${body.totalCount} tech(s), ${body.responseTimeMs}ms`);
+  console.log(`       github.com -> HTTP ${body.status}, ${body.totalCount} tech(s), ${body.redirectChain.length} hop(s), ${body.domMetrics.htmlBytes}B, ${body.responseTimeMs}ms`);
 });
 
 await runTest("analyzeTargetUrl performs real live scan of vercel.com", async () => {

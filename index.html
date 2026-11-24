@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#4608ad">
+  <meta name="theme-color" content="#1e1160">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="description" content="Welcome to Wappalyzer. Start with instant website technology profiling, lead enrichment, and competitor stack tracking.">
-  <title>Welcome to Wappalyzer - Wappalyzer</title>
+  <meta name="description" content="Welcome to Wappalyzer. Inspect website technologies, HTTP response headers, DNS records, and runtime assets in real time.">
+  <title>Welcome to Wappalyzer - Technology Profiler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 114 97'><path d='M57.0285 0 L0 40.89 L57.0285 84.66 L114 40.9 Z' fill='%234608ad'/><polygon points='57 74.6 6.5 48.4 0 53.1 57 96.9 114 56 107.5 48.4' fill='%231c0172'/></svg>">
   <link rel="stylesheet" href="./src/styles.css">
 </head>
@@ -19,10 +22,8 @@
       <a href="#" class="brand-link" aria-label="Wappalyzer Home">
         <svg class="brand-logo-svg" viewBox="0 0 389 97" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <g fill="#FFFFFF">
-            <!-- Diamond Icon -->
             <polygon opacity="0.6" points="57.0285 74.6616 6.5385 48.4526 0.0015 53.1396 -0.0005 56.0066 57.0285 96.9046 114.0545 56.0086 114.0585 53.1426 107.5185 48.4526"></polygon>
             <path d="M57.0285 0 L0.0025 40.8963 L-0.0005 43.7633 L57.0285 84.6623 L114.0545 43.7653 L114.0575 40.8983 L57.0285 0 Z M64.4895 40.3623 L57.5365 30.7743 L63.4645 26.4363 L75.8235 44.7273 L70.8465 48.3703 L57.5555 42.8723 L57.4985 42.9133 L65.0675 52.5983 L60.0905 56.2403 L35.0915 47.1963 L41.0385 42.8443 L54.1065 47.9333 L54.1805 47.8783 L46.9285 38.5343 L51.6075 35.1113 L64.4145 40.4173 L64.4895 40.3623 Z"></path>
-            <!-- Wappalyzer Wordmark -->
             <g transform="translate(133, 24)">
               <polygon points="47.19 1.65 36.84 34.74 29.72 34.74 24.18 12.98 24.11 12.98 18.36 34.74 11.24 34.74 0.89 1.65 9.19 1.65 14.79 21.96 14.85 21.96 19.97 1.65 28.18 1.65 33.23 21.96 33.29 21.96 38.89 1.65"></polygon>
               <path d="M57.87 28.76 C60.53 28.76 62.69 26.64 62.69 23.39 C62.69 20.25 60.62 17.98 57.89 17.98 C55.12 17.98 53.01 20.14 53.01 23.39 C53.01 26.6 55.03 28.76 57.87 28.76 Z M69.69 11.95 L69.69 34.74 L62.78 34.74 L62.78 32.28 L62.69 32.28 C61.24 34.19 59.1 35.17 56.37 35.17 C50.1 35.17 45.64 30.42 45.64 23.37 C45.64 16.41 50.14 11.52 56.03 11.52 C58.49 11.52 60.69 12.48 62.31 14.36 L62.4 14.36 L62.4 11.95 Z"></path>
@@ -41,59 +42,56 @@
 
       <!-- Desktop Nav -->
       <nav class="desktop-nav" aria-label="Main Navigation">
-        <!-- Products Dropdown -->
         <div class="nav-item">
           <button type="button" class="nav-link-btn" aria-expanded="false" id="products-menu-btn">
             <span data-i18n="nav.products">Products</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.41 8.58L12 13.17L16.59 8.58L18 10L12 16L6 10L7.41 8.58Z"/></svg>
+            <svg class="nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.41 8.58L12 13.17L16.59 8.58L18 10L12 16L6 10L7.41 8.58Z"/></svg>
           </button>
           <div class="nav-dropdown" role="menu">
             <a href="#scanner" class="dropdown-item" role="menuitem">
               <strong data-i18n="nav.techLookup">Technology lookup</strong>
               <span data-i18n="nav.techLookupDesc">Find better prospects from the technologies they use</span>
             </a>
-            <a href="#lead-lists" class="dropdown-item" role="menuitem">
+            <a href="#getting-started" class="dropdown-item" role="menuitem">
               <strong data-i18n="nav.leadLists">Lead lists</strong>
               <span data-i18n="nav.leadListsDesc">Build targeted prospect lists by technology or keyword</span>
             </a>
-            <a href="#email-verify" class="dropdown-item" role="menuitem">
+            <a href="#getting-started" class="dropdown-item" role="menuitem">
               <strong data-i18n="nav.emailVerification">Email verification</strong>
               <span data-i18n="nav.emailVerificationDesc">Reduce bounces and protect sender reputation</span>
             </a>
-            <a href="#alerts" class="dropdown-item" role="menuitem">
+            <a href="#getting-started" class="dropdown-item" role="menuitem">
               <strong data-i18n="nav.websiteAlerts">Website alerts</strong>
               <span data-i18n="nav.websiteAlertsDesc">Track website technology changes and competitor stacks</span>
             </a>
-            <a href="#apps" class="dropdown-item" role="menuitem">
+            <a href="#getting-started" class="dropdown-item" role="menuitem">
               <strong data-i18n="nav.apps">Apps</strong>
               <span data-i18n="nav.appsDesc">Bring website intelligence directly into your workflow</span>
             </a>
           </div>
         </div>
 
-        <!-- Pricing Link -->
-        <a href="#pricing" class="nav-link-btn" data-i18n="nav.pricing">Pricing</a>
+        <a href="#getting-started" class="nav-link-btn" data-i18n="nav.pricing">Pricing</a>
 
-        <!-- Resources Dropdown -->
         <div class="nav-item">
           <button type="button" class="nav-link-btn" aria-expanded="false" id="resources-menu-btn">
             <span data-i18n="nav.resources">Resources</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.41 8.58L12 13.17L16.59 8.58L18 10L12 16L6 10L7.41 8.58Z"/></svg>
+            <svg class="nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.41 8.58L12 13.17L16.59 8.58L18 10L12 16L6 10L7.41 8.58Z"/></svg>
           </button>
           <div class="nav-dropdown" role="menu">
-            <a href="#technologies" class="dropdown-item" role="menuitem">
+            <a href="#scanner" class="dropdown-item" role="menuitem">
               <strong data-i18n="nav.technologies">Technologies</strong>
               <span data-i18n="nav.technologiesDesc">Research over 3,000 technologies and categories</span>
             </a>
-            <a href="#articles" class="dropdown-item" role="menuitem">
+            <a href="#getting-started" class="dropdown-item" role="menuitem">
               <strong data-i18n="nav.articles">Articles</strong>
               <span data-i18n="nav.articlesDesc">Articles covering technographics and digital trends</span>
             </a>
-            <a href="#faqs" class="dropdown-item" role="menuitem">
+            <a href="#getting-started" class="dropdown-item" role="menuitem">
               <strong data-i18n="nav.faqs">FAQs</strong>
               <span data-i18n="nav.faqsDesc">Answers to frequently asked questions</span>
             </a>
-            <a href="#docs" class="dropdown-item" role="menuitem">
+            <a href="#getting-started" class="dropdown-item" role="menuitem">
               <strong data-i18n="nav.docs">Documentation</strong>
               <span data-i18n="nav.docsDesc">API reference and developer integration documentation</span>
             </a>
@@ -103,60 +101,92 @@
 
       <!-- Header Action Buttons -->
       <div class="header-actions">
-        <!-- Search Trigger -->
-        <button type="button" class="icon-btn" id="search-modal-trigger" aria-label="Open search dialog" title="Quick Search (Ctrl+K)">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <button type="button" class="icon-btn" id="search-modal-trigger" aria-label="Open quick search dialog" title="Quick Search (Ctrl+K)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </button>
 
-        <!-- Theme Toggle -->
         <button type="button" class="icon-btn" id="theme-toggle-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
-          <svg id="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-          <svg id="theme-icon-moon" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg id="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg id="theme-icon-moon" style="display:none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
         </button>
 
-        <!-- Language Switcher -->
         <button type="button" class="lang-switch-btn" id="lang-toggle-btn" aria-label="Switch language">
-          <span id="current-lang-text">ID / EN</span>
+          <span id="current-lang-text">EN (English)</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Hero Section -->
+  <!-- Architectural Hero Section with Lightweight Telemetry Canvas -->
   <section class="hero-section" aria-label="Hero Overview">
+    <canvas id="hero-motion-canvas" class="hero-motion-canvas" aria-hidden="true"></canvas>
     <div class="container hero-content">
+      <div class="hero-eyebrow">
+        <span class="live-signal-dot" aria-hidden="true"></span>
+        <span>5-Layer Wire &amp; DOM Engine v7.0</span>
+      </div>
       <h1 class="hero-title" data-i18n="hero.title">Thanks for installing Wappalyzer!</h1>
       <p class="hero-subtitle" data-i18n="hero.subtitle">
-        Start with instant website technology profiling, lead enrichment, and competitor stack tracking. Upgrade when you need team automation or bulk exports.
+        Start with instant website technology profiling, lead enrichment, and competitor stack tracking. Inspect live HTTP headers, DNS records, and DOM signatures directly.
       </p>
       <div class="hero-actions">
         <a href="#scanner" class="btn-primary" data-i18n="hero.primaryCta">Explore Technology Lookup</a>
-        <a href="#docs" class="btn-secondary" data-i18n="hero.secondaryCta">View Documentation</a>
+        <a href="#getting-started" class="btn-secondary" data-i18n="hero.secondaryCta">View Documentation</a>
       </div>
     </div>
   </section>
 
-  <!-- Main Content Layout -->
+  <!-- Main Workspace -->
   <main class="main-wrapper container">
     <div class="scanner-container">
-      <!-- Live Technology Profiler / Inspector Scanner (Full Width) -->
-      <div class="card scanner-card" id="scanner">
-        <span class="scanner-badge" data-i18n="scanner.badge">Live Tech Inspector</span>
-        <h2 class="scanner-title" data-i18n="scanner.title">Instant Technology Profiler</h2>
-        <p class="scanner-subtitle" data-i18n="scanner.subtitle">
-          Analyze any domain or URL to inspect its frameworks, CMS, analytics, CDN, and infrastructure in real time.
-        </p>
+      <section class="scanner-card" id="scanner" aria-label="Live Technology Profiler">
+        <!-- Card Header -->
+        <div class="scanner-card-top">
+          <div>
+            <span class="scanner-badge" data-i18n="scanner.badge">Live Tech Inspector</span>
+            <h2 class="scanner-title" data-i18n="scanner.title">Instant Technology Profiler</h2>
+            <p class="scanner-subtitle" data-i18n="scanner.subtitle">
+              Analyze any public domain or URL to inspect its real HTTP headers, DNS resolution, frameworks, CMS, analytics, CDN, and libraries.
+            </p>
+          </div>
+          <div class="scanner-engine-pill" id="engine-status-pill" aria-live="polite">
+            <span class="status-pulse-dot" aria-hidden="true"></span>
+            <span id="engine-status-label">Ready</span>
+          </div>
+        </div>
 
-        <!-- Scan Form -->
-        <form id="tech-scan-form" class="scan-form">
-          <input type="text" class="scan-input" id="scan-domain-input" placeholder="Enter URL or domain (e.g., fti.uajy.ac.id, polri.go.id, vercel.com)" value="fti.uajy.ac.id" required>
+        <!-- Unified Command-Bar Scan Form -->
+        <form id="tech-scan-form" class="scan-form" novalidate>
+          <div class="scan-input-shell">
+            <svg class="scan-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <input
+              type="text"
+              class="scan-input"
+              id="scan-domain-input"
+              placeholder="Enter URL or domain (e.g., fti.uajy.ac.id, polri.go.id, github.com)"
+              value="fti.uajy.ac.id"
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="Target website domain or URL"
+              required
+            >
+            <kbd class="scan-kbd-hint" title="Quick Search">Ctrl K</kbd>
+          </div>
           <button type="submit" class="scan-submit-btn" id="scan-submit-btn">
+            <svg class="scan-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
             <span id="scan-btn-text" data-i18n="scanner.scanBtn">Inspect Stack</span>
-            <span id="scan-spinner" class="spinner" style="display:none;"></span>
+            <span id="scan-spinner" class="spinner" style="display:none;" aria-hidden="true"></span>
           </button>
         </form>
 
-        <!-- Popular target quick chips -->
+        <!-- Quick Target Chips -->
         <div class="quick-targets-wrap">
           <span class="quick-label" data-i18n="scanner.popularSearches">Try popular targets:</span>
           <button type="button" class="quick-chip active" data-domain="fti.uajy.ac.id">fti.uajy.ac.id</button>
@@ -168,9 +198,62 @@
           <button type="button" class="quick-chip" data-domain="wappalyzer.com">wappalyzer.com</button>
         </div>
 
-        <!-- 1:1 Wappalyzer Extension Popup Window (Matching Exact Reference Photo) -->
-        <div class="wappalyzer-popup-card" id="wappalyzer-popup" style="margin-top: 24px;">
-          <!-- Top Header (#1e1160) -->
+        <!-- 5-Layer Real-Time Inspection Pipeline -->
+        <div class="pipeline-track" id="scan-pipeline-bar" aria-label="5-Layer Detection Pipeline">
+          <div class="pipeline-stage" data-layer="L1">
+            <span class="pipeline-dot"></span>
+            <span class="pipeline-name">L1 DNS &amp; Wire</span>
+            <span class="pipeline-count" data-count-for="L1">0</span>
+          </div>
+          <div class="pipeline-connector" aria-hidden="true"><span class="pipeline-beam"></span></div>
+          <div class="pipeline-stage" data-layer="L2">
+            <span class="pipeline-dot"></span>
+            <span class="pipeline-name">L2 Headers</span>
+            <span class="pipeline-count" data-count-for="L2">0</span>
+          </div>
+          <div class="pipeline-connector" aria-hidden="true"><span class="pipeline-beam"></span></div>
+          <div class="pipeline-stage" data-layer="L3">
+            <span class="pipeline-dot"></span>
+            <span class="pipeline-name">L3 DOM &amp; Meta</span>
+            <span class="pipeline-count" data-count-for="L3">0</span>
+          </div>
+          <div class="pipeline-connector" aria-hidden="true"><span class="pipeline-beam"></span></div>
+          <div class="pipeline-stage" data-layer="L4">
+            <span class="pipeline-dot"></span>
+            <span class="pipeline-name">L4 JS &amp; Assets</span>
+            <span class="pipeline-count" data-count-for="L4">0</span>
+          </div>
+          <div class="pipeline-connector" aria-hidden="true"><span class="pipeline-beam"></span></div>
+          <div class="pipeline-stage" data-layer="L5">
+            <span class="pipeline-dot"></span>
+            <span class="pipeline-name">L5 Graph</span>
+            <span class="pipeline-count" data-count-for="L5">0</span>
+          </div>
+        </div>
+
+        <!-- Live Wire Telemetry Strip -->
+        <div class="telemetry-strip" id="telemetry-strip" aria-label="Live Scan Telemetry">
+          <div class="telemetry-tile">
+            <span class="telemetry-label">HTTP Status</span>
+            <strong class="telemetry-value" id="metric-http-status">--</strong>
+          </div>
+          <div class="telemetry-tile">
+            <span class="telemetry-label">Latency</span>
+            <strong class="telemetry-value" id="metric-latency">--</strong>
+          </div>
+          <div class="telemetry-tile">
+            <span class="telemetry-label">Technologies</span>
+            <strong class="telemetry-value" id="metric-tech-count">0</strong>
+          </div>
+          <div class="telemetry-tile">
+            <span class="telemetry-label">DOM Payload</span>
+            <strong class="telemetry-value" id="metric-dom-size">--</strong>
+          </div>
+        </div>
+
+        <!-- Authentic Wappalyzer Extension Popup Window -->
+        <div class="wappalyzer-popup-card" id="wappalyzer-popup">
+          <!-- Popup Header (#1e1160) -->
           <div class="wappalyzer-popup-header">
             <div class="popup-brand">
               <svg class="popup-diamond-icon" viewBox="0 0 114 97" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -178,28 +261,32 @@
                 <path d="M57.0285 0 L0.0025 40.8963 L-0.0005 43.7633 L57.0285 84.6623 L114.0545 43.7653 L114.0575 40.8983 L57.0285 0 Z M64.4895 40.3623 L57.5365 30.7743 L63.4645 26.4363 L75.8235 44.7273 L70.8465 48.3703 L57.5555 42.8723 L57.4985 42.9133 L65.0675 52.5983 L60.0905 56.2403 L35.0915 47.1963 L41.0385 42.8443 L54.1065 47.9333 L54.1805 47.8783 L46.9285 38.5343 L51.6075 35.1113 L64.4145 40.4173 L64.4895 40.3623 Z" fill="#FFFFFF"></path>
               </svg>
               <span class="popup-brand-title">Wappalyzer</span>
+              <span class="popup-domain-pill" id="popup-active-domain">fti.uajy.ac.id</span>
             </div>
             <div class="popup-header-controls">
-              <div class="popup-switch active" id="popup-switch" role="button" aria-label="Toggle extension detection" tabindex="0">
+              <div class="popup-switch active" id="popup-switch" role="switch" aria-checked="true" aria-label="Toggle extension detection" tabindex="0">
                 <div class="popup-switch-knob"></div>
               </div>
-              <button type="button" class="popup-gear-btn" id="popup-gear-btn" aria-label="Extension settings" title="Settings">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="3"></circle>
-                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              <button type="button" class="popup-gear-btn" id="popup-gear-btn" aria-label="Force fresh live scan" title="Force Fresh Scan (Bypass Cache)">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
                 </svg>
               </button>
             </div>
           </div>
 
-          <!-- Popup Subheader Tabs Bar -->
+          <!-- Popup Subheader Tabs Bar with Animated Sliding Indicator -->
           <div class="wappalyzer-popup-tabs">
-            <div class="popup-tab-group">
-              <button type="button" class="popup-tab-btn active" id="tab-technologies">TECHNOLOGIES</button>
-              <button type="button" class="popup-tab-btn" id="tab-more-info">MORE INFO</button>
+            <div class="popup-tab-group" role="tablist" aria-label="Inspection views">
+              <button type="button" class="popup-tab-btn active" id="tab-technologies" role="tab" aria-selected="true" data-tab="technologies">TECHNOLOGIES</button>
+              <button type="button" class="popup-tab-btn" id="tab-more-info" role="tab" aria-selected="false" data-tab="more-info">MORE INFO</button>
+              <button type="button" class="popup-tab-btn" id="tab-wire-trace" role="tab" aria-selected="false" data-tab="wire-trace">WIRE TRACE</button>
+              <span class="popup-tab-indicator" id="popup-tab-indicator" aria-hidden="true"></span>
             </div>
-            <button type="button" class="popup-export-btn" id="popup-export-btn" title="Export detected technologies">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button type="button" class="popup-export-btn" id="popup-export-btn" title="Export detected stack and evidence as JSON">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
                 <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -208,59 +295,75 @@
             </button>
           </div>
 
-          <!-- Popup Body (2 Columns matching reference photo) -->
+          <!-- Popup Body -->
           <div class="wappalyzer-popup-body">
-            <div class="popup-columns-grid" id="popup-columns-container">
-              <!-- Dynamically populated 2 columns by main.js -->
-            </div>
-            <!-- More Info Tab Content (hidden by default) -->
-            <div class="popup-more-info-panel" id="popup-more-info-panel" style="display: none; padding: 12px 0;">
-              <div style="font-size: 13px; line-height: 1.8; color: var(--color-on-surface-variant);">
-                <div><strong>Target:</strong> <span id="more-info-domain">https://polri.go.id</span></div>
-                <div><strong>Status:</strong> <span style="color: #10b981; font-weight: 600;">Active 200 OK</span></div>
-                <div><strong>Response time:</strong> 142 ms</div>
-                <div><strong>Security Protocol:</strong> TLS 1.3 / HTTPS Strict Transport Security</div>
-                <div><strong>Server Location:</strong> Jakarta, Indonesia (ID)</div>
+            <!-- Tab 1: Technologies -->
+            <div class="popup-tab-panel active" id="panel-technologies" role="tabpanel">
+              <div class="popup-filter-bar" id="popup-filter-bar" style="display: none;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="tech-filter-input" class="popup-filter-input" placeholder="Filter detected technologies or categories..." aria-label="Filter detected technologies">
+                <span class="popup-filter-count" id="tech-filter-count"></span>
               </div>
+              <div class="popup-columns-grid" id="popup-columns-container"></div>
             </div>
+
+            <!-- Tab 2: Evidence & Metadata -->
+            <div class="popup-tab-panel" id="popup-more-info-panel" role="tabpanel" style="display: none;"></div>
+
+            <!-- Tab 3: Raw Wire Trace (Redirect Hops, Headers, DNS, DOM Metrics) -->
+            <div class="popup-tab-panel" id="popup-wire-trace-panel" role="tabpanel" style="display: none;"></div>
           </div>
         </div>
-      </div>
-
+      </section>
     </div>
   </main>
 
   <!-- 3-Step Getting Started Section -->
   <section class="steps-section" id="getting-started" aria-label="Getting Started Steps">
     <div class="container">
-      <div class="section-heading-center">
+      <div class="section-heading-center reveal-on-scroll">
         <h2 class="section-title" data-i18n="steps.title">Getting Started with Wappalyzer</h2>
         <p class="section-subtitle" data-i18n="steps.subtitle">
-          Three simple steps to supercharge your tech stack analysis and lead discovery.
+          Three simple steps to inspect live web stacks with transparent wire and DOM verification.
         </p>
       </div>
       <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-number">01</div>
+        <article class="step-card reveal-on-scroll" style="--reveal-delay: 0ms;">
+          <div class="step-icon-row">
+            <span class="step-number">01</span>
+            <span class="step-icon-box" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            </span>
+          </div>
           <h3 class="step-title" data-i18n="steps.step1Title">1. Pin Extension in Browser</h3>
           <p class="step-desc" data-i18n="steps.step1Desc">
             Keep Wappalyzer visible in your toolbar for instant one-click analysis on any page you visit.
           </p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">02</div>
-          <h3 class="step-title" data-i18n="steps.step2Title">2. Lookup Competitors & Leads</h3>
+        </article>
+        <article class="step-card reveal-on-scroll" style="--reveal-delay: 90ms;">
+          <div class="step-icon-row">
+            <span class="step-number">02</span>
+            <span class="step-icon-box" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
+          </div>
+          <h3 class="step-title" data-i18n="steps.step2Title">2. Lookup Competitors &amp; Leads</h3>
           <p class="step-desc" data-i18n="steps.step2Desc">
             Filter prospective leads by the exact CMS, payment gateways, and frameworks they deploy.
           </p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">03</div>
+        </article>
+        <article class="step-card reveal-on-scroll" style="--reveal-delay: 180ms;">
+          <div class="step-icon-row">
+            <span class="step-number">03</span>
+            <span class="step-icon-box" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </span>
+          </div>
           <h3 class="step-title" data-i18n="steps.step3Title">3. Set Automated Alerts</h3>
           <p class="step-desc" data-i18n="steps.step3Desc">
             Receive instant notifications when tracked websites adopt or drop key software components.
           </p>
-        </div>
+        </article>
       </div>
     </div>
   </section>
@@ -268,62 +371,56 @@
   <!-- Site Footer -->
   <footer class="site-footer" role="contentinfo">
     <div class="container">
-      <div class="footer-nav-grid">
-        <!-- Products -->
+      <div class="footer-nav-grid reveal-on-scroll">
         <div>
           <h3 class="footer-column-title" data-i18n="footer.productsTitle">Products</h3>
           <ul class="footer-links-list">
-            <li><a href="#lead-lists" class="footer-link" data-i18n="nav.leadLists">Lead lists</a></li>
+            <li><a href="#scanner" class="footer-link" data-i18n="nav.leadLists">Lead lists</a></li>
             <li><a href="#scanner" class="footer-link" data-i18n="nav.techLookup">Technology lookup</a></li>
-            <li><a href="#email-verify" class="footer-link" data-i18n="nav.emailVerification">Email verification</a></li>
-            <li><a href="#alerts" class="footer-link" data-i18n="nav.websiteAlerts">Website alerts</a></li>
-            <li><a href="#apps" class="footer-link" data-i18n="nav.apps">Apps</a></li>
+            <li><a href="#scanner" class="footer-link" data-i18n="nav.emailVerification">Email verification</a></li>
+            <li><a href="#scanner" class="footer-link" data-i18n="nav.websiteAlerts">Website alerts</a></li>
+            <li><a href="#scanner" class="footer-link" data-i18n="nav.apps">Apps</a></li>
           </ul>
         </div>
 
-        <!-- Use Cases -->
         <div>
           <h3 class="footer-column-title" data-i18n="footer.useCasesTitle">Use cases</h3>
           <ul class="footer-links-list">
-            <li><a href="#lead-gen" class="footer-link" data-i18n="footer.leadGen">Lead generation</a></li>
-            <li><a href="#market-research" class="footer-link" data-i18n="footer.marketResearch">Market research</a></li>
-            <li><a href="#competitor-analysis" class="footer-link" data-i18n="footer.competitorAnalysis">Competitor analysis</a></li>
-            <li><a href="#data-enrichment" class="footer-link" data-i18n="footer.dataEnrichment">Data enrichment</a></li>
-            <li><a href="#security-recon" class="footer-link" data-i18n="footer.securityRecon">Security recon</a></li>
+            <li><a href="#getting-started" class="footer-link" data-i18n="footer.leadGen">Lead generation</a></li>
+            <li><a href="#getting-started" class="footer-link" data-i18n="footer.marketResearch">Market research</a></li>
+            <li><a href="#getting-started" class="footer-link" data-i18n="footer.competitorAnalysis">Competitor analysis</a></li>
+            <li><a href="#getting-started" class="footer-link" data-i18n="footer.dataEnrichment">Data enrichment</a></li>
+            <li><a href="#getting-started" class="footer-link" data-i18n="footer.securityRecon">Security recon</a></li>
           </ul>
         </div>
 
-        <!-- Pricing -->
         <div>
           <h3 class="footer-column-title" data-i18n="footer.pricingTitle">Pricing</h3>
           <ul class="footer-links-list">
-            <li><a href="#pricing" class="footer-link" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="#getting-started" class="footer-link" data-i18n="nav.pricing">Pricing</a></li>
           </ul>
         </div>
 
-        <!-- Resources -->
         <div>
           <h3 class="footer-column-title" data-i18n="footer.resourcesTitle">Resources</h3>
           <ul class="footer-links-list">
-            <li><a href="#technologies" class="footer-link" data-i18n="nav.technologies">Technologies</a></li>
-            <li><a href="#articles" class="footer-link" data-i18n="nav.articles">Articles</a></li>
-            <li><a href="#faqs" class="footer-link" data-i18n="nav.faqs">FAQs</a></li>
-            <li><a href="#docs" class="footer-link" data-i18n="nav.docs">Documentation</a></li>
+            <li><a href="#scanner" class="footer-link" data-i18n="nav.technologies">Technologies</a></li>
+            <li><a href="#getting-started" class="footer-link" data-i18n="nav.articles">Articles</a></li>
+            <li><a href="#getting-started" class="footer-link" data-i18n="nav.faqs">FAQs</a></li>
+            <li><a href="#getting-started" class="footer-link" data-i18n="nav.docs">Documentation</a></li>
           </ul>
         </div>
 
-        <!-- Company -->
         <div>
           <h3 class="footer-column-title" data-i18n="footer.companyTitle">Company</h3>
           <ul class="footer-links-list">
-            <li><a href="#about" class="footer-link" data-i18n="footer.aboutUs">About us</a></li>
-            <li><a href="#logos" class="footer-link" data-i18n="footer.logos">Logos</a></li>
-            <li><a href="#contact" class="footer-link" data-i18n="footer.contactUs">Contact us</a></li>
+            <li><a href="#getting-started" class="footer-link" data-i18n="footer.aboutUs">About us</a></li>
+            <li><a href="#getting-started" class="footer-link" data-i18n="footer.logos">Logos</a></li>
+            <li><a href="#getting-started" class="footer-link" data-i18n="footer.contactUs">Contact us</a></li>
           </ul>
         </div>
       </div>
 
-      <!-- Bottom Bar -->
       <div class="footer-bottom-bar">
         <div class="footer-brand-meta">
           <span class="footer-status-indicator">
@@ -334,17 +431,13 @@
           <button type="button" class="footer-link" id="privacy-modal-trigger" data-i18n="footer.privacy">Privacy policy</button>
         </div>
 
-        <!-- Social Media SVG Links -->
         <div class="social-links-row">
-          <!-- X / Twitter -->
           <a href="https://x.com/Wappalyzer" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Wappalyzer on X">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
-          <!-- Instagram -->
           <a href="https://instagram.com/wappalyzer" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Wappalyzer on Instagram">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
           </a>
-          <!-- LinkedIn -->
           <a href="https://linkedin.com/company/wappalyzer" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Wappalyzer on LinkedIn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M18.5 18.5V13.2A3.26 3.26 0 0 0 15.24 9.94C14.39 9.94 13.4 10.46 12.92 11.24V10.13H10.13V18.5H12.92V13.57C12.92 12.8 13.54 12.17 14.31 12.17A1.4 1.4 0 0 1 15.71 13.57V18.5H18.5M6.88 8.56A1.68 1.68 0 0 0 8.56 6.88C8.56 5.95 7.81 5.19 6.88 5.19A1.69 1.69 0 0 0 5.19 6.88C5.19 7.81 5.95 8.56 6.88 8.56M8.27 18.5V10.13H5.5V18.5H8.27Z"/></svg>
           </a>
@@ -353,22 +446,20 @@
     </div>
   </footer>
 
-  <!-- Generic Modal (Search / Terms / Privacy) -->
+  <!-- Generic Modal -->
   <div class="modal-overlay" id="generic-modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-container">
       <div class="modal-header">
         <h3 class="modal-title" id="modal-title-text">Modal</h3>
         <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Close dialog">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
-      <div class="modal-body" id="modal-body-content">
-        <!-- Dynamic content inserted by JavaScript -->
-      </div>
+      <div class="modal-body" id="modal-body-content"></div>
     </div>
   </div>
 
-  <!-- Toast Notification Container -->
+  <!-- Toast Stack -->
   <div class="toast-container" id="toast-container" aria-live="polite"></div>
 
   <script type="module" src="./src/main.js"></script>

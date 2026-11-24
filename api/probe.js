@@ -8,6 +8,7 @@ import {
   normalizeDomain,
   validateHostname,
   isPrivateIp,
+  parseHtmlSignals,
   extractSignatures
 } from "../src/engine/signatureEngine.js";
 
@@ -50,6 +51,7 @@ async function resolveAndValidateDns(domain) {
     cname: null,
     nameservers: [],
     txt: [],
+    mx: [],
     nxdomain: false,
     ssrfBlocked: false,
     blockReason: null
@@ -85,11 +87,11 @@ async function resolveAndValidateDns(domain) {
     dnsInfo.nxdomain = false;
   }
 
-  // 2. Enrich with Cloudflare DoH (A, NS, TXT) without blocking slow networks
+  // 2. Enrich with Cloudflare DoH (A, NS, TXT, MX) without blocking slow networks
   const dohController = new AbortController();
   const dohTimer = setTimeout(() => dohController.abort(), DNS_TIMEOUT_MS);
   try {
-    const [aRes, nsRes, txtRes] = await Promise.all([
+    const [aRes, nsRes, txtRes, mxRes] = await Promise.all([
       fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=A`, {
         headers: { Accept: "application/dns-json" },
         signal: dohController.signal
@@ -99,6 +101,10 @@ async function resolveAndValidateDns(domain) {
         signal: dohController.signal
       }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
       fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=TXT`, {
+        headers: { Accept: "application/dns-json" },
+        signal: dohController.signal
+      }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+      fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=MX`, {
         headers: { Accept: "application/dns-json" },
         signal: dohController.signal
       }).then((r) => (r.ok ? r.json() : null)).catch(() => null)
@@ -136,6 +142,12 @@ async function resolveAndValidateDns(domain) {
       dnsInfo.txt = txtRes.Answer
         .filter((ans) => ans.type === 16 && ans.data)
         .map((ans) => String(ans.data).replace(/^"|"$/g, ""));
+    }
+
+    if (mxRes && Array.isArray(mxRes.Answer)) {
+      dnsInfo.mx = mxRes.Answer
+        .filter((ans) => ans.type === 15 && ans.data)
+        .map((ans) => String(ans.data).replace(/\.$/, ""));
     }
   } catch {
     // DoH enrichment is optional; native lookup already succeeded
@@ -196,6 +208,7 @@ async function readBoundedText(response) {
 async function safeFetchWithRedirects(initialUrl, timeoutMs = FETCH_TIMEOUT_MS) {
   let currentUrl = initialUrl;
   const allSetCookies = [];
+  const redirectChain = [];
 
   for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
     const parsed = new URL(currentUrl);
@@ -220,6 +233,7 @@ async function safeFetchWithRedirects(initialUrl, timeoutMs = FETCH_TIMEOUT_MS) 
 
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), Math.max(1500, timeoutMs));
+    const hopStart = Date.now();
 
     let response;
     try {
@@ -237,6 +251,7 @@ async function safeFetchWithRedirects(initialUrl, timeoutMs = FETCH_TIMEOUT_MS) 
       clearTimeout(timer);
     }
 
+    const hopMs = Date.now() - hopStart;
     if (typeof response.headers.getSetCookie === "function") {
       allSetCookies.push(...response.headers.getSetCookie());
     } else {
@@ -246,17 +261,42 @@ async function safeFetchWithRedirects(initialUrl, timeoutMs = FETCH_TIMEOUT_MS) 
 
     const isRedirect = response.status >= 300 && response.status < 400;
     const location = response.headers.get("location");
+    redirectChain.push({
+      hop: hop + 1,
+      url: currentUrl,
+      status: response.status,
+      server: response.headers.get("server") || null,
+      location: isRedirect ? location : null,
+      latencyMs: hopMs
+    });
+
     if (isRedirect && location && hop < MAX_REDIRECTS) {
-      // Cancel unused redirect body
       await response.body?.cancel().catch(() => {});
       currentUrl = new URL(location, currentUrl).toString();
       continue;
     }
 
-    return { response, finalUrl: currentUrl, setCookies: allSetCookies };
+    return { response, finalUrl: currentUrl, setCookies: allSetCookies, redirectChain };
   }
 
   throw new Error("Exceeded maximum redirect hops");
+}
+
+function sanitizeResponseHeaders(headers, setCookies) {
+  const safe = {};
+  for (const [k, v] of Object.entries(headers || {})) {
+    const lk = k.toLowerCase();
+    if (lk === "set-cookie") continue;
+    safe[lk] = String(v).slice(0, 320);
+  }
+  const cookieNames = (setCookies || [])
+    .flatMap((raw) => String(raw).split(/,(?=[^;]+=)/))
+    .map((part) => part.split("=")[0].trim())
+    .filter(Boolean);
+  if (cookieNames.length > 0) {
+    safe["set-cookie (names only)"] = Array.from(new Set(cookieNames)).join(", ");
+  }
+  return safe;
 }
 
 function isPlatformGhostResponse(domain, status, headers, bodyText) {
@@ -435,7 +475,7 @@ export default async function handler(req, res) {
     return res.status(200).json(partialPayload);
   }
 
-  const { response, finalUrl, setCookies } = fetchResult;
+  const { response, finalUrl, setCookies, redirectChain } = fetchResult;
   const status = response.status;
   const headers = Object.fromEntries(response.headers.entries());
   const contentType = (headers["content-type"] || "").toLowerCase();
@@ -459,6 +499,7 @@ export default async function handler(req, res) {
       reachable: false,
       responseTimeMs: responseTime,
       dns: dnsInfo,
+      redirectChain,
       totalCount: 0,
       technologies: [],
       evidence: []
@@ -475,6 +516,15 @@ export default async function handler(req, res) {
       return "https:";
     }
   })();
+
+  const domSnapshot = parseHtmlSignals(bodyText);
+  const domMetrics = {
+    htmlBytes: Buffer.byteLength(bodyText || "", "utf8"),
+    metaCount: domSnapshot.metas.length,
+    scriptCount: domSnapshot.scriptSrcs.length,
+    stylesheetCount: domSnapshot.linkHrefs.length,
+    iframeCount: domSnapshot.iframeSrcs.length
+  };
 
   const { technologies, evidence, totalCount } = extractSignatures({
     domain,
@@ -506,6 +556,9 @@ export default async function handler(req, res) {
     scanNote,
     responseTimeMs: responseTime,
     dns: dnsInfo,
+    redirectChain,
+    rawHeaders: sanitizeResponseHeaders(headers, setCookies),
+    domMetrics,
     server: headers["server"] || null,
     xPoweredBy: headers["x-powered-by"] || null,
     technologies,

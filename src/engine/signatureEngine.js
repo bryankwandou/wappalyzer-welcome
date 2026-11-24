@@ -473,6 +473,25 @@ function matchAsset(assetUrls, regex) {
 }
 
 /**
+ * Extract exact semver version from standard CDN URLs (cdnjs, jsDelivr, unpkg) or ?ver= query params.
+ */
+export function extractAssetVersion(url, pkgPattern) {
+  if (!url || typeof url !== "string") return null;
+  const cdnPatterns = [
+    new RegExp(`cdnjs\\.cloudflare\\.com/ajax/libs/${pkgPattern}/([\\d]+(?:\\.[\\d]+){1,3})/`, "i"),
+    new RegExp(`cdn\\.jsdelivr\\.net/npm/${pkgPattern}@([\\d]+(?:\\.[\\d]+){1,3})`, "i"),
+    new RegExp(`unpkg\\.com/${pkgPattern}@([\\d]+(?:\\.[\\d]+){1,3})`, "i"),
+    new RegExp(`${pkgPattern}[/@.-]([\\d]+(?:\\.[\\d]+){1,3})`, "i"),
+    /[?&]ver=([\d]+(?:\.[\d]+){1,3})/i
+  ];
+  for (const rx of cdnPatterns) {
+    const m = url.match(rx);
+    if (m && m[1]) return m[1];
+  }
+  return null;
+}
+
+/**
  * Core 5-Layer Live Signature Extractor.
  * Operates strictly on real HTTP headers, cookies, HTML DOM, and DNS wire signals.
  */
@@ -1288,63 +1307,121 @@ export function extractSignatures({
       });
     }
 
-    const swiperAsset = matchAsset(assetUrls, /swiper(?:-bundle)?(?:[.-]([\d.]+))?(?:\.min)?\.(?:js|css)(?:\?[^"']*?ver=([\d.]+))?/i);
+    const swiperAsset = matchAsset(assetUrls, /swiper(?:-bundle)?(?:[/@.-]([\d.]+))?[^"']*\.(?:js|css)/i);
     if (swiperAsset) {
-      reg.add({ category: "JavaScript libraries", name: "Swiper", version: swiperAsset.match[1] || swiperAsset.match[2] || null, icon: "code", url: "https://swiperjs.com", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset swiper.(js|css)', detail: `Asset: ${swiperAsset.url}` });
+      const ver = swiperAsset.match[1] || extractAssetVersion(swiperAsset.url, "swiper");
+      reg.add({ category: "JavaScript libraries", name: "Swiper", version: ver, icon: "code", url: "https://swiperjs.com", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset swiper.(js|css)', detail: `Asset: ${swiperAsset.url}` });
     }
 
-    const slickAsset = matchAsset(assetUrls, /slick(?:\.min)?\.(?:js|css)/i);
+    const slickAsset = matchAsset(assetUrls, /slick(?:-carousel)?[^"']*\.(?:js|css)/i);
     if (slickAsset) {
-      reg.add({ category: "JavaScript libraries", name: "Slick", version: null, icon: "code", url: "https://kenwheeler.github.io/slick/", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset slick.(js|css)', detail: `Asset: ${slickAsset.url}` });
+      const ver = extractAssetVersion(slickAsset.url, "slick(?:-carousel)?");
+      reg.add({ category: "JavaScript libraries", name: "Slick", version: ver, icon: "code", url: "https://kenwheeler.github.io/slick/", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset slick.(js|css)', detail: `Asset: ${slickAsset.url}` });
     }
 
-    const owlAsset = matchAsset(assetUrls, /owl\.carousel(?:\.min)?\.(?:js|css)/i);
+    const owlAsset = matchAsset(assetUrls, /owl\.carousel[^"']*\.(?:js|css)/i);
     if (owlAsset) {
-      reg.add({ category: "JavaScript libraries", name: "Owl Carousel", version: null, icon: "code", url: "https://owlcarousel2.github.io/OwlCarousel2/", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset owl.carousel', detail: `Asset: ${owlAsset.url}` });
+      const ver = extractAssetVersion(owlAsset.url, "owl\\.?carousel2?");
+      reg.add({ category: "JavaScript libraries", name: "Owl Carousel", version: ver, icon: "code", url: "https://owlcarousel2.github.io/OwlCarousel2/", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset owl.carousel', detail: `Asset: ${owlAsset.url}` });
     }
 
-    const dtAsset = matchAsset(assetUrls, /(?:jquery\.)?dataTables(?:[.-]([\d.]+))?(?:\.min)?\.(?:js|css)/i);
+    const dtAsset = matchAsset(assetUrls, /(?:jquery\.)?dataTables(?:[/@.-]([\d.]+))?[^"']*\.(?:js|css)/i);
     if (dtAsset) {
-      reg.add({ category: "JavaScript libraries", name: "DataTables", version: dtAsset.match[1] || null, icon: "code", url: "https://datatables.net", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset dataTables', detail: `Asset: ${dtAsset.url}` });
+      const ver = dtAsset.match[1] || extractAssetVersion(dtAsset.url, "datatables(?:\\.net)?");
+      reg.add({ category: "JavaScript libraries", name: "DataTables", version: ver, icon: "code", url: "https://datatables.net", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset dataTables', detail: `Asset: ${dtAsset.url}` });
     }
 
-    const lodashAsset = matchAsset(scriptSrcs, /lodash(?:[.-]([\d.]+))?(?:\.min)?\.js/i);
+    const lodashAsset = matchAsset(scriptSrcs, /lodash(?:[/@.-]([\d.]+))?[^"']*\.js/i);
     if (lodashAsset) {
-      reg.add({ category: "JavaScript libraries", name: "Lodash", version: lodashAsset.match[1] || null, icon: "code", url: "https://lodash.com", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'script[src*="lodash"]', detail: `Script: ${lodashAsset.url}` });
+      const ver = lodashAsset.match[1] || extractAssetVersion(lodashAsset.url, "lodash(?:\\.js)?");
+      reg.add({ category: "JavaScript libraries", name: "Lodash", version: ver, icon: "code", url: "https://lodash.com", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'script[src*="lodash"]', detail: `Script: ${lodashAsset.url}` });
     }
 
     const gsapAsset = matchAsset(scriptSrcs, /gsap(?:[/@.-]([\d.]+))?[^"']*\.js/i);
     if (gsapAsset) {
-      reg.add({ category: "JavaScript libraries", name: "GSAP", version: gsapAsset.match[1] || null, icon: "code", url: "https://gsap.com", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'script[src*="gsap"]', detail: `Script: ${gsapAsset.url}` });
+      const ver = gsapAsset.match[1] || extractAssetVersion(gsapAsset.url, "gsap");
+      reg.add({ category: "JavaScript libraries", name: "GSAP", version: ver, icon: "code", url: "https://gsap.com", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'script[src*="gsap"]', detail: `Script: ${gsapAsset.url}` });
     }
 
-    const chartAsset = matchAsset(scriptSrcs, /chart(?:\.umd)?(?:[.-]([\d.]+))?(?:\.min)?\.js/i);
+    const chartAsset = matchAsset(scriptSrcs, /chart(?:\.umd)?(?:[/@.-]([\d.]+))?[^"']*\.js/i);
     if (chartAsset) {
-      reg.add({ category: "JavaScript graphics", name: "Chart.js", version: chartAsset.match[1] || null, icon: "code", url: "https://www.chartjs.org", confidence: 95, layer: "L4_JS_GLOBALS", rule: 'script[src*="chart.js"]', detail: `Script: ${chartAsset.url}` });
+      const ver = chartAsset.match[1] || extractAssetVersion(chartAsset.url, "chart\\.?js");
+      reg.add({ category: "JavaScript graphics", name: "Chart.js", version: ver, icon: "code", url: "https://www.chartjs.org", confidence: 95, layer: "L4_JS_GLOBALS", rule: 'script[src*="chart.js"]', detail: `Script: ${chartAsset.url}` });
     }
 
     const axiosAsset = matchAsset(scriptSrcs, /axios(?:[/@.-]([\d.]+))?[^"']*\.js/i);
     if (axiosAsset) {
-      reg.add({ category: "JavaScript libraries", name: "Axios", version: axiosAsset.match[1] || null, icon: "code", url: "https://axios-http.com", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'script[src*="axios"]', detail: `Script: ${axiosAsset.url}` });
+      const ver = axiosAsset.match[1] || extractAssetVersion(axiosAsset.url, "axios");
+      reg.add({ category: "JavaScript libraries", name: "Axios", version: ver, icon: "code", url: "https://axios-http.com", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'script[src*="axios"]', detail: `Script: ${axiosAsset.url}` });
     }
 
     const sweetAlertAsset = matchAsset(assetUrls, /sweetalert2(?:[/@.-]([\d.]+))?/i);
     if (sweetAlertAsset) {
-      reg.add({ category: "JavaScript libraries", name: "SweetAlert2", version: sweetAlertAsset.match[1] || null, icon: "code", url: "https://sweetalert2.github.io", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset sweetalert2', detail: `Asset: ${sweetAlertAsset.url}` });
+      const ver = sweetAlertAsset.match[1] || extractAssetVersion(sweetAlertAsset.url, "sweetalert2");
+      reg.add({ category: "JavaScript libraries", name: "SweetAlert2", version: ver, icon: "code", url: "https://sweetalert2.github.io", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset sweetalert2', detail: `Asset: ${sweetAlertAsset.url}` });
     }
 
-    const aosAsset = matchAsset(assetUrls, /(?:^|\/)aos(?:\.min)?\.(?:js|css)/i);
+    const aosAsset = matchAsset(assetUrls, /(?:^|\/)aos(?:[/@.-]([\d.]+))?[^"']*\.(?:js|css)/i);
     if (aosAsset) {
-      reg.add({ category: "JavaScript libraries", name: "AOS", version: null, icon: "code", url: "https://michalsnik.github.io/aos/", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset aos.(js|css)', detail: `Asset: ${aosAsset.url}` });
+      const ver = aosAsset.match[1] || extractAssetVersion(aosAsset.url, "aos");
+      reg.add({ category: "JavaScript libraries", name: "AOS", version: ver, icon: "code", url: "https://michalsnik.github.io/aos/", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset aos.(js|css)', detail: `Asset: ${aosAsset.url}` });
+    }
+
+    const momentAsset = matchAsset(scriptSrcs, /moment(?:[/@.-]([\d.]+))?[^"']*\.js/i);
+    if (momentAsset) {
+      const ver = momentAsset.match[1] || extractAssetVersion(momentAsset.url, "moment(?:\\.js)?");
+      reg.add({ category: "JavaScript libraries", name: "Moment.js", version: ver, icon: "code", url: "https://momentjs.com", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'script[src*="moment"]', detail: `Script: ${momentAsset.url}` });
+    }
+
+    const threeAsset = matchAsset(scriptSrcs, /three(?:[/@.-]([\d.]+))?[^"']*\.js/i);
+    if (threeAsset) {
+      const ver = threeAsset.match[1] || extractAssetVersion(threeAsset.url, "three(?:\\.js)?");
+      reg.add({ category: "JavaScript graphics", name: "Three.js", version: ver, icon: "code", url: "https://threejs.org", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'script[src*="three"]', detail: `Script: ${threeAsset.url}` });
+    }
+
+    const d3Asset = matchAsset(scriptSrcs, /(?:^|\/)d3(?:[/@.-]([\d.]+))?(?:\.min)?\.js/i);
+    if (d3Asset) {
+      const ver = d3Asset.match[1] || extractAssetVersion(d3Asset.url, "d3");
+      reg.add({ category: "JavaScript graphics", name: "D3", version: ver, icon: "code", url: "https://d3js.org", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'script[src*="d3.js"]', detail: `Script: ${d3Asset.url}` });
+    }
+
+    const viteAsset = matchAsset(assetUrls, /\/@vite\/client|vite\/preload-helper/i);
+    if (viteAsset) {
+      reg.add({ category: "Build tools", name: "Vite", version: null, icon: "code", url: "https://vite.dev", confidence: 100, layer: "L4_JS_GLOBALS", rule: 'Asset /@vite/client', detail: `Asset: ${viteAsset.url}` });
+    }
+
+    if (srcHtml.includes("webpackChunk") || srcHtml.includes("webpackJsonp")) {
+      reg.add({ category: "Build tools", name: "webpack", version: null, icon: "code", url: "https://webpack.js.org", confidence: 95, layer: "L4_JS_GLOBALS", rule: "Global webpackChunk / webpackJsonp", detail: "Webpack runtime chunk loader detected in inline script" });
+    }
+
+    if (srcHtml.includes("wire:id=") && srcHtml.includes("wire:initial-data")) {
+      reg.add({ category: "Web frameworks", name: "Laravel Livewire", version: null, icon: "php", url: "https://livewire.laravel.com", confidence: 100, layer: "L3_DOM_META", rule: "DOM attributes wire:id + wire:initial-data", detail: "Laravel Livewire component markers detected" });
+    }
+
+    if (srcHtml.includes("data-page=") && htmlLower.includes('id="app"')) {
+      reg.add({ category: "Web frameworks", name: "Inertia.js", version: null, icon: "code", url: "https://inertiajs.com", confidence: 90, layer: "L3_DOM_META", rule: 'DOM #app[data-page]', detail: "Inertia.js page payload attribute detected" });
+    }
+
+    if (linkTags.some((l) => l.rel === "manifest")) {
+      reg.add({ category: "Miscellaneous", name: "PWA", version: null, icon: "network", url: "https://web.dev/progressive-web-apps/", confidence: 95, layer: "L3_DOM_META", rule: 'link[rel="manifest"]', detail: "Web App Manifest linked in document head" });
+    }
+
+    if (metas.some((mt) => mt.property === "og:title" || mt.property === "og:type")) {
+      reg.add({ category: "Miscellaneous", name: "Open Graph", version: null, icon: "network", url: "https://ogp.me", confidence: 100, layer: "L3_DOM_META", rule: 'meta[property^="og:"]', detail: "Open Graph social metadata protocol detected" });
+    }
+
+    if (htmlLower.includes('type="application/ld+json"') || htmlLower.includes("type='application/ld+json'")) {
+      reg.add({ category: "SEO", name: "Schema.org (JSON-LD)", version: null, icon: "code", url: "https://schema.org", confidence: 100, layer: "L3_DOM_META", rule: 'script[type="application/ld+json"]', detail: "Structured JSON-LD linked data block detected" });
     }
 
     // 3E. UI Frameworks & Fonts (strict rules to avoid false positives)
     const bsAsset = matchAsset(assetUrls, /bootstrap(?:[/@.-]([\d.]+))?[^"']*(?:\.bundle)?(?:\.min)?\.(?:js|css)(?:\?[^"']*?ver=([\d.]+))?/i);
     if (bsAsset || /\bdata-bs-(?:toggle|target|dismiss)\s*=/.test(srcHtml)) {
+      const bsVer = bsAsset ? (bsAsset.match[1] || bsAsset.match[2] || extractAssetVersion(bsAsset.url, "bootstrap")) : null;
       reg.add({
         category: "UI frameworks",
         name: "Bootstrap",
-        version: bsAsset?.match?.[1] || bsAsset?.match?.[2] || null,
+        version: bsVer,
         icon: "bootstrap",
         url: "https://getbootstrap.com",
         confidence: 100,
@@ -1393,10 +1470,11 @@ export function extractSignatures({
     // Font Scripts
     const faAsset = matchAsset(assetUrls, /(?:font-?awesome|use\.fontawesome\.com|kit\.fontawesome\.com)(?:[/@.-]([\d.]+))?[^"']*(?:[?&]ver=([\d.]+))?/i);
     if (faAsset || /\bclass=["'][^"']*\b(?:fa-solid|fa-regular|fa-brands|fas fa-|fab fa-|far fa-)\b/.test(srcHtml)) {
+      const faVer = faAsset ? (faAsset.match[1] || faAsset.match[2] || extractAssetVersion(faAsset.url, "font-?awesome")) : null;
       reg.add({
         category: "Font scripts",
         name: "Font Awesome",
-        version: faAsset?.match?.[1] || faAsset?.match?.[2] || null,
+        version: faVer,
         icon: "font-awesome",
         url: "https://fontawesome.com",
         confidence: 100,
@@ -1404,6 +1482,11 @@ export function extractSignatures({
         rule: faAsset ? 'Asset font-awesome / fontawesome' : "DOM classes fa-solid / fas fa-",
         detail: faAsset ? `Asset: ${faAsset.url}` : "Font Awesome icon classes detected"
       });
+    }
+
+    const bsIconsAsset = matchAsset(assetUrls, /bootstrap-icons(?:[/@.-]([\d.]+))?/i);
+    if (bsIconsAsset) {
+      reg.add({ category: "Font scripts", name: "Bootstrap Icons", version: bsIconsAsset.match[1] || extractAssetVersion(bsIconsAsset.url, "bootstrap-icons"), icon: "bootstrap", url: "https://icons.getbootstrap.com", confidence: 100, layer: "L3_DOM_META", rule: 'Asset bootstrap-icons', detail: `Asset: ${bsIconsAsset.url}` });
     }
 
     const gFontAsset = matchAsset(assetUrls, /fonts\.googleapis\.com\/css|fonts\.gstatic\.com/i);
