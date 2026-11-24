@@ -1,7 +1,274 @@
 /**
- * Real-Time Technographic Probe & Dynamic Inspection Engine
- * Executes live HTTP requests, parses wire headers, and extracts DOM signatures.
+ * Real-Time Technographic Probe & Dynamic Inspection API
+ * Executes SSRF-hardened live DNS + multi-hop HTTP inspection and 5-layer signature extraction.
  */
+
+import dns from "node:dns/promises";
+import {
+  normalizeDomain,
+  validateHostname,
+  isPrivateIp,
+  extractSignatures
+} from "../src/engine/signatureEngine.js";
+
+const FETCH_TIMEOUT_MS = 7000;
+const TOTAL_HTTP_BUDGET_MS = 8500;
+const DNS_TIMEOUT_MS = 2200;
+const MAX_REDIRECTS = 4;
+const MAX_BODY_BYTES = 512 * 1024;
+const CACHE_TTL_MS = 60 * 1000;
+const CACHE_MAX_ENTRIES = 100;
+
+const responseCache = new Map();
+
+function getCached(domain) {
+  const entry = responseCache.get(domain);
+  if (!entry) return null;
+  if (Date.now() > entry.expiresAt) {
+    responseCache.delete(domain);
+    return null;
+  }
+  return entry.data;
+}
+
+function setCached(domain, data) {
+  if (responseCache.size >= CACHE_MAX_ENTRIES) {
+    const oldestKey = responseCache.keys().next().value;
+    if (oldestKey) responseCache.delete(oldestKey);
+  }
+  responseCache.set(domain, { data, expiresAt: Date.now() + CACHE_TTL_MS });
+}
+
+/**
+ * Resolve DNS via native OS resolver + Cloudflare DoH for NS/CNAME/TXT enrichment.
+ * Strictly checks all resolved IPs against private/loopback/metadata CIDR blocks.
+ */
+async function resolveAndValidateDns(domain) {
+  const dnsInfo = {
+    ip: null,
+    ips: [],
+    cname: null,
+    nameservers: [],
+    txt: [],
+    nxdomain: false,
+    ssrfBlocked: false,
+    blockReason: null
+  };
+
+  // 1. Authoritative lookup via Node DNS
+  let lookupResults = [];
+  try {
+    lookupResults = await dns.lookup(domain, { all: true });
+  } catch (err) {
+    if (err && (err.code === "ENOTFOUND" || err.code === "ENODATA")) {
+      // Check www.<domain> before declaring NXDOMAIN
+      try {
+        lookupResults = await dns.lookup(`www.${domain}`, { all: true });
+      } catch {
+        dnsInfo.nxdomain = true;
+      }
+    }
+  }
+
+  for (const rec of lookupResults) {
+    if (rec && rec.address) {
+      if (isPrivateIp(rec.address)) {
+        dnsInfo.ssrfBlocked = true;
+        dnsInfo.blockReason = `Akses diblokir: host ${domain} mengarah ke alamat IP privat/internal (${rec.address}).`;
+        return dnsInfo;
+      }
+      dnsInfo.ips.push(rec.address);
+    }
+  }
+  if (dnsInfo.ips.length > 0) {
+    dnsInfo.ip = dnsInfo.ips[0];
+    dnsInfo.nxdomain = false;
+  }
+
+  // 2. Enrich with Cloudflare DoH (A, NS, TXT) without blocking slow networks
+  const dohController = new AbortController();
+  const dohTimer = setTimeout(() => dohController.abort(), DNS_TIMEOUT_MS);
+  try {
+    const [aRes, nsRes, txtRes] = await Promise.all([
+      fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=A`, {
+        headers: { Accept: "application/dns-json" },
+        signal: dohController.signal
+      }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+      fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=NS`, {
+        headers: { Accept: "application/dns-json" },
+        signal: dohController.signal
+      }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+      fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=TXT`, {
+        headers: { Accept: "application/dns-json" },
+        signal: dohController.signal
+      }).then((r) => (r.ok ? r.json() : null)).catch(() => null)
+    ]);
+
+    if (aRes) {
+      if (aRes.Status === 3 && dnsInfo.ips.length === 0) {
+        dnsInfo.nxdomain = true;
+      }
+      if (Array.isArray(aRes.Answer)) {
+        for (const ans of aRes.Answer) {
+          if (ans.type === 1 && ans.data) {
+            if (isPrivateIp(ans.data)) {
+              dnsInfo.ssrfBlocked = true;
+              dnsInfo.blockReason = `Akses diblokir: DNS A-record mengarah ke IP privat (${ans.data}).`;
+              return dnsInfo;
+            }
+            if (!dnsInfo.ip) dnsInfo.ip = ans.data;
+            if (!dnsInfo.ips.includes(ans.data)) dnsInfo.ips.push(ans.data);
+            dnsInfo.nxdomain = false;
+          } else if (ans.type === 5 && ans.data && !dnsInfo.cname) {
+            dnsInfo.cname = String(ans.data).replace(/\.$/, "");
+          }
+        }
+      }
+    }
+
+    if (nsRes && Array.isArray(nsRes.Answer)) {
+      dnsInfo.nameservers = nsRes.Answer
+        .filter((ans) => ans.type === 2 && ans.data)
+        .map((ans) => String(ans.data).replace(/\.$/, ""));
+    }
+
+    if (txtRes && Array.isArray(txtRes.Answer)) {
+      dnsInfo.txt = txtRes.Answer
+        .filter((ans) => ans.type === 16 && ans.data)
+        .map((ans) => String(ans.data).replace(/^"|"$/g, ""));
+    }
+  } catch {
+    // DoH enrichment is optional; native lookup already succeeded
+  } finally {
+    clearTimeout(dohTimer);
+  }
+
+  return dnsInfo;
+}
+
+/**
+ * Read bounded UTF-8 response text up to MAX_BODY_BYTES to prevent memory exhaustion.
+ */
+async function readBoundedText(response) {
+  if (!response.body || typeof response.body.getReader !== "function") {
+    const full = await response.text().catch(() => "");
+    return full.slice(0, MAX_BODY_BYTES);
+  }
+
+  const reader = response.body.getReader();
+  const chunks = [];
+  let total = 0;
+
+  try {
+    while (total < MAX_BODY_BYTES) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (value) {
+        const remaining = MAX_BODY_BYTES - total;
+        if (value.byteLength > remaining) {
+          chunks.push(value.subarray(0, remaining));
+          total += remaining;
+          await reader.cancel().catch(() => {});
+          break;
+        }
+        chunks.push(value);
+        total += value.byteLength;
+      }
+    }
+  } catch {
+    // Return partial content already buffered
+  } finally {
+    reader.releaseLock();
+  }
+
+  const merged = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    merged.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return new TextDecoder("utf-8", { fatal: false }).decode(merged);
+}
+
+/**
+ * SSRF-safe manual redirect HTTP fetch: validates every redirect hop hostname and resolved IP.
+ */
+async function safeFetchWithRedirects(initialUrl, timeoutMs = FETCH_TIMEOUT_MS) {
+  let currentUrl = initialUrl;
+  const allSetCookies = [];
+
+  for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+    const parsed = new URL(currentUrl);
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+      throw new Error("Unsupported protocol in redirect chain");
+    }
+
+    // Re-validate redirect targets on hops > 0
+    if (hop > 0) {
+      const hopHost = normalizeDomain(parsed.hostname);
+      const hopValidation = validateHostname(hopHost);
+      if (!hopValidation.valid) {
+        throw new Error(`Redirect target blocked: ${hopValidation.reason}`);
+      }
+      const hopIps = await dns.lookup(parsed.hostname, { all: true }).catch(() => []);
+      for (const rec of hopIps) {
+        if (isPrivateIp(rec.address)) {
+          throw new Error(`Redirect SSRF blocked (${rec.address})`);
+        }
+      }
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), Math.max(1500, timeoutMs));
+
+    let response;
+    try {
+      response = await fetch(currentUrl, {
+        method: "GET",
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+          Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "Accept-Language": "en-US,en;q=0.9,id;q=0.8"
+        },
+        redirect: "manual",
+        signal: controller.signal
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+
+    if (typeof response.headers.getSetCookie === "function") {
+      allSetCookies.push(...response.headers.getSetCookie());
+    } else {
+      const sc = response.headers.get("set-cookie");
+      if (sc) allSetCookies.push(sc);
+    }
+
+    const isRedirect = response.status >= 300 && response.status < 400;
+    const location = response.headers.get("location");
+    if (isRedirect && location && hop < MAX_REDIRECTS) {
+      // Cancel unused redirect body
+      await response.body?.cancel().catch(() => {});
+      currentUrl = new URL(location, currentUrl).toString();
+      continue;
+    }
+
+    return { response, finalUrl: currentUrl, setCookies: allSetCookies };
+  }
+
+  throw new Error("Exceeded maximum redirect hops");
+}
+
+function isPlatformGhostResponse(domain, status, headers, bodyText) {
+  if (status !== 404) return false;
+  const vercelErr = headers["x-vercel-error"] || "";
+  if (vercelErr === "DEPLOYMENT_NOT_FOUND") return true;
+  if (bodyText.includes("DEPLOYMENT_NOT_FOUND")) return true;
+  if (bodyText.includes("There isn't a GitHub Pages site here")) return true;
+  if (domain.endsWith(".vercel.app") && bodyText.includes("404: NOT_FOUND")) return true;
+  if (domain.endsWith(".netlify.app") && (headers["server"] || "").toLowerCase() === "netlify" && bodyText.includes("Page Not Found")) return true;
+  return false;
+}
 
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -12,281 +279,241 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  const rawDomain = req.query.domain || "";
-  const domain = String(rawDomain)
-    .trim()
-    .toLowerCase()
-    .replace(/^https?:\/\//, "")
-    .replace(/^www\./, "")
-    .split("/")[0]
-    .split("?")[0];
+  const rawDomain = (req.query && req.query.domain) || "";
+  const domain = normalizeDomain(String(rawDomain));
+  const validation = validateHostname(domain);
 
-  if (!domain) {
-    return res.status(400).json({ error: "Missing domain parameter" });
-  }
-
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3500);
-
-    const targetUrl = `https://${domain}`;
-    const startTime = Date.now();
-    const response = await fetch(targetUrl, {
-      method: "GET",
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
-        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
-      },
-      redirect: "follow",
-      signal: controller.signal
-    });
-    const responseTime = Date.now() - startTime;
-    clearTimeout(timeout);
-
-    const status = response.status;
-    const headers = Object.fromEntries(response.headers.entries());
-    const vercelError = headers["x-vercel-error"] || "";
-
-    let bodyText = "";
-    if (status === 200 || status === 404 || status === 301 || status === 302) {
-      bodyText = await response.text().catch(() => "");
-    }
-
-    const isGhost = status === 404 && (
-      vercelError === "DEPLOYMENT_NOT_FOUND" ||
-      bodyText.includes("DEPLOYMENT_NOT_FOUND") ||
-      bodyText.includes("404: NOT_FOUND") ||
-      bodyText.includes("There isn't a GitHub Pages site here") ||
-      domain.endsWith(".vercel.app") ||
-      domain.endsWith(".netlify.app")
-    );
-
-    if (isGhost) {
-      return res.status(200).json({
-        domain,
-        status,
-        isGhost: true,
-        reason: vercelError || "Target deployment tidak ditemukan di platform publik (404 Not Found)",
-        reachable: false,
-        totalCount: 0,
-        technologies: [],
-        evidence: []
-      });
-    }
-
-    // Dynamic Live Signature Extraction
-    const { technologies, evidence } = extractLiveSignatures(domain, headers, bodyText, status);
-
-    return res.status(200).json({
-      domain,
-      status,
-      isGhost: false,
-      responseTimeMs: responseTime,
-      server: headers["server"] || null,
-      xPoweredBy: headers["x-powered-by"] || null,
-      technologies,
-      evidence,
-      totalCount: technologies.reduce((acc, cat) => acc + cat.items.length, 0),
-      isLiveScan: true
-    });
-
-  } catch (err) {
-    return res.status(200).json({
-      domain,
+  if (!validation.valid) {
+    return res.status(400).json({
+      domain: domain || String(rawDomain).trim(),
       status: 0,
       isGhost: true,
-      reason: `Koneksi gagal atau host tidak ditemukan: ${err.message}`,
+      isInvalid: true,
+      errorCode: validation.code,
+      reason: validation.reason,
       reachable: false,
       totalCount: 0,
       technologies: [],
       evidence: []
     });
   }
-}
 
-/**
- * Heuristic signature extractor from live headers and HTML
- */
-function extractLiveSignatures(domain, headers, html, status) {
-  const categories = {};
-  const evidence = [];
-
-  function addTech(category, tech) {
-    if (!categories[category]) {
-      categories[category] = [];
-    }
-    if (!categories[category].some(t => t.name === tech.name)) {
-      categories[category].push(tech);
+  const bypassCache = req.query && req.query.fresh === "1";
+  if (!bypassCache) {
+    const cached = getCached(domain);
+    if (cached) {
+      return res.status(200).json({ ...cached, cached: true });
     }
   }
 
-  // 1. Web Servers (Headers)
-  const serverHeader = (headers["server"] || "").toLowerCase();
-  if (serverHeader.includes("litespeed")) {
-    addTech("Web servers", { name: "LiteSpeed", version: null, icon: "server", url: "https://www.litespeedtech.com", confidence: "100%" });
-    evidence.push({ id: `EVID-SRV-${evidence.length+1}`, layer: "L2_HEADERS", tech: "LiteSpeed", rule: 'Header Server: LiteSpeed', detail: `Live Header: server: ${headers["server"]}`, confidence: "100%" });
-  } else if (serverHeader.includes("apache")) {
-    const vMatch = headers["server"].match(/Apache\/([\d.]+)/i);
-    const ver = vMatch ? vMatch[1] : null;
-    addTech("Web servers", { name: "Apache", version: ver, icon: "server", url: "https://httpd.apache.org", confidence: "100%" });
-    evidence.push({ id: `EVID-SRV-${evidence.length+1}`, layer: "L2_HEADERS", tech: `Apache ${ver || ""}`.trim(), rule: 'Header Server: Apache', detail: `Live Header: server: ${headers["server"]}`, confidence: "100%" });
-  } else if (serverHeader.includes("nginx")) {
-    const vMatch = headers["server"].match(/nginx\/([\d.]+)/i);
-    const ver = vMatch ? vMatch[1] : null;
-    addTech("Web servers", { name: "Nginx", version: ver, icon: "server", url: "https://nginx.org", confidence: "100%" });
-    evidence.push({ id: `EVID-SRV-${evidence.length+1}`, layer: "L2_HEADERS", tech: `Nginx ${ver || ""}`.trim(), rule: 'Header Server: nginx', detail: `Live Header: server: ${headers["server"]}`, confidence: "100%" });
-  } else if (serverHeader.includes("cloudflare")) {
-    addTech("Web servers", { name: "Cloudflare", version: null, icon: "cloud", url: "https://cloudflare.com", confidence: "100%" });
-    evidence.push({ id: `EVID-SRV-${evidence.length+1}`, layer: "L2_HEADERS", tech: "Cloudflare Web Server", rule: 'Header Server: cloudflare', detail: `Live Header: server: ${headers["server"]}`, confidence: "100%" });
-  } else if (serverHeader.includes("vercel")) {
-    addTech("Web servers", { name: "Vercel", version: null, icon: "cloud", url: "https://vercel.com", confidence: "100%" });
-    evidence.push({ id: `EVID-SRV-${evidence.length+1}`, layer: "L2_HEADERS", tech: "Vercel Edge Proxy", rule: 'Header Server: Vercel', detail: `Live Header: server: ${headers["server"]}`, confidence: "100%" });
-  } else if (serverHeader.includes("caddy")) {
-    addTech("Web servers", { name: "Caddy", version: null, icon: "server", url: "https://caddyserver.com", confidence: "100%" });
-    evidence.push({ id: `EVID-SRV-${evidence.length+1}`, layer: "L2_HEADERS", tech: "Caddy", rule: 'Header Server: Caddy', detail: `Live Header: server: ${headers["server"]}`, confidence: "100%" });
+  const startTime = Date.now();
+
+  // Step 1: DNS Resolution & SSRF Private-IP Check
+  const dnsInfo = await resolveAndValidateDns(domain);
+  if (dnsInfo.ssrfBlocked) {
+    return res.status(403).json({
+      domain,
+      status: 0,
+      isGhost: true,
+      isInvalid: true,
+      errorCode: "SSRF_BLOCKED",
+      reason: dnsInfo.blockReason,
+      reachable: false,
+      totalCount: 0,
+      technologies: [],
+      evidence: []
+    });
   }
 
-  // 2. Programming Languages & Runtime (Headers)
-  const xPowered = (headers["x-powered-by"] || "").toLowerCase();
-  if (xPowered.includes("php")) {
-    const vMatch = headers["x-powered-by"].match(/PHP\/([\d.]+)/i);
-    const ver = vMatch ? vMatch[1] : null;
-    addTech("Programming languages", { name: "PHP", version: ver, icon: "code", url: "https://www.php.net", confidence: "100%" });
-    evidence.push({ id: `EVID-LANG-${evidence.length+1}`, layer: "L2_HEADERS", tech: `PHP ${ver || ""}`.trim(), rule: 'Header X-Powered-By: PHP', detail: `Live Header: x-powered-by: ${headers["x-powered-by"]}`, confidence: "100%" });
-  }
-  if (xPowered.includes("next.js") || html.includes("__NEXT_DATA__") || html.includes("/_next/")) {
-    addTech("Web frameworks", { name: "Next.js", version: null, icon: "code", url: "https://nextjs.org", confidence: "100%" });
-    addTech("JavaScript frameworks", { name: "React", version: null, icon: "code", url: "https://react.dev", confidence: "100%" });
-    evidence.push({ id: `EVID-FW-${evidence.length+1}`, layer: "L3_DOM_META", tech: "Next.js", rule: 'DOM script /_next/ or window.__NEXT_DATA__', detail: 'Script bundle Next.js terdeteksi pada DOM live', confidence: "100%" });
-  }
-  if (xPowered.includes("express")) {
-    addTech("Web frameworks", { name: "Express", version: null, icon: "server", url: "https://expressjs.com", confidence: "100%" });
-    addTech("Programming languages", { name: "Node.js", version: null, icon: "code", url: "https://nodejs.org", confidence: "100%" });
-    evidence.push({ id: `EVID-FW-${evidence.length+1}`, layer: "L2_HEADERS", tech: "Express", rule: 'Header X-Powered-By: Express', detail: `Live Header: x-powered-by: ${headers["x-powered-by"]}`, confidence: "100%" });
+  if (dnsInfo.nxdomain && dnsInfo.ips.length === 0) {
+    const ghostPayload = {
+      domain,
+      status: 0,
+      isGhost: true,
+      reason: "RFC-1035 NXDOMAIN: Domain tidak terdaftar atau tidak memiliki DNS A-record aktif di internet publik",
+      reachable: false,
+      responseTimeMs: Date.now() - startTime,
+      dns: dnsInfo,
+      totalCount: 0,
+      technologies: [],
+      evidence: []
+    };
+    setCached(domain, ghostPayload);
+    return res.status(200).json(ghostPayload);
   }
 
-  // 3. CDN & Reverse Proxies (Headers)
-  if (headers["cf-ray"] || serverHeader.includes("cloudflare")) {
-    addTech("CDN", { name: "Cloudflare", version: null, icon: "cloud", url: "https://cloudflare.com", confidence: "100%" });
-    evidence.push({ id: `EVID-CDN-${evidence.length+1}`, layer: "L1_NETWORK", tech: "Cloudflare CDN", rule: 'Header CF-Ray / Cloudflare Anycast', detail: `Live Header: cf-ray: ${headers["cf-ray"] || "active"}`, confidence: "100%" });
-  }
-  if (headers["x-vercel-id"]) {
-    addTech("PaaS", { name: "Vercel", version: null, icon: "cloud", url: "https://vercel.com", confidence: "100%" });
-  }
-  if (headers["platform"] === "hostinger" || headers["panel"] === "hpanel") {
-    addTech("Hosting", { name: "Hostinger", version: null, icon: "cloud", url: "https://hostinger.com", confidence: "100%" });
-    evidence.push({ id: `EVID-HOST-${evidence.length+1}`, layer: "L2_HEADERS", tech: "Hostinger hPanel", rule: 'Header platform: hostinger', detail: `Live Header: platform: ${headers["platform"]}`, confidence: "100%" });
-  }
+  // Step 2: Budget-Aware Multi-Protocol Live HTTP Probe (https apex -> https www -> http apex)
+  // Retries www. when apex returns transient 5xx or 403 while staying within serverless budget.
+  const candidateUrls = [
+    `https://${domain}`,
+    `https://www.${domain}`,
+    `http://${domain}`
+  ];
 
-  // 4. Transport & Security (Headers)
-  if (headers["strict-transport-security"]) {
-    addTech("Security", { name: "HSTS", version: null, icon: "shield", url: "https://developer.mozilla.org", confidence: "100%" });
-    evidence.push({ id: `EVID-SEC-${evidence.length+1}`, layer: "L2_HEADERS", tech: "HSTS", rule: 'Header Strict-Transport-Security', detail: `Live Header: ${headers["strict-transport-security"]}`, confidence: "100%" });
-  }
-  addTech("Security", { name: "HTTPS / TLS", version: "1.3", icon: "shield", url: "https://developer.mozilla.org", confidence: "100%" });
-  evidence.push({ id: `EVID-SEC-${evidence.length+1}`, layer: "L1_NETWORK", tech: "HTTPS / TLS 1.3", rule: 'TLS Negotiation Handshake', detail: 'Koneksi terenkripsi HTTPS / Port 443', confidence: "100%" });
+  let fetchResult = null;
+  let fallbackResult = null;
+  let lastError = null;
+  const httpStart = Date.now();
 
-  if (headers["alt-svc"] && headers["alt-svc"].includes("h3")) {
-    addTech("Network", { name: "HTTP/3", version: null, icon: "network", url: "https://http3-explained.haxx.se", confidence: "100%" });
-    evidence.push({ id: `EVID-NET-${evidence.length+1}`, layer: "L1_NETWORK", tech: "HTTP/3 QUIC", rule: 'Header Alt-Svc: h3', detail: `Live Header: alt-svc: ${headers["alt-svc"]}`, confidence: "100%" });
-  }
-
-  // 5. CMS Signatures (DOM & HTML)
-  const metaGenMatch = html.match(/<meta[^>]*name=["']generator["'][^>]*content=["']([^"']+)["']/i);
-  if (metaGenMatch) {
-    const genContent = metaGenMatch[1];
-    if (genContent.includes("WordPress")) {
-      const vMatch = genContent.match(/WordPress\s*([\d.]+)/i);
-      const ver = vMatch ? vMatch[1] : null;
-      addTech("CMS", { name: "WordPress", version: ver, icon: "wordpress", url: "https://wordpress.org", confidence: "100%" });
-      addTech("Blogs", { name: "WordPress", version: ver, icon: "wordpress", url: "https://wordpress.org", confidence: "100%" });
-      evidence.push({ id: `EVID-CMS-${evidence.length+1}`, layer: "L3_DOM_META", tech: `WordPress ${ver || ""}`.trim(), rule: 'Meta generator: WordPress', detail: `Live DOM: <meta name="generator" content="${genContent}">`, confidence: "100%" });
-    } else if (genContent.includes("Drupal")) {
-      addTech("CMS", { name: "Drupal", version: null, icon: "drupal", url: "https://drupal.org", confidence: "100%" });
-      evidence.push({ id: `EVID-CMS-${evidence.length+1}`, layer: "L3_DOM_META", tech: "Drupal", rule: 'Meta generator: Drupal', detail: `Live DOM: ${genContent}`, confidence: "100%" });
-    } else if (genContent.includes("Joomla")) {
-      addTech("CMS", { name: "Joomla", version: null, icon: "joomla", url: "https://joomla.org", confidence: "100%" });
-      evidence.push({ id: `EVID-CMS-${evidence.length+1}`, layer: "L3_DOM_META", tech: "Joomla", rule: 'Meta generator: Joomla', detail: `Live DOM: ${genContent}`, confidence: "100%" });
+  for (const candidate of candidateUrls) {
+    const remainingBudget = TOTAL_HTTP_BUDGET_MS - (Date.now() - httpStart);
+    if (remainingBudget < 1200) break;
+    try {
+      const attempt = await safeFetchWithRedirects(candidate, Math.min(FETCH_TIMEOUT_MS, remainingBudget));
+      const attemptStatus = attempt.response.status;
+      if (attemptStatus >= 200 && attemptStatus < 400) {
+        if (fallbackResult) {
+          await fallbackResult.response.body?.cancel().catch(() => {});
+        }
+        fetchResult = attempt;
+        break;
+      }
+      // Keep first 4xx/5xx response as fallback, and try www. for a clean 200 if budget allows
+      if (!fallbackResult) {
+        fallbackResult = attempt;
+      } else {
+        await attempt.response.body?.cancel().catch(() => {});
+      }
+      // Do not fall back from HTTPS 403/404/5xx to plaintext HTTP unless HTTPS failed entirely
+      if (candidate.startsWith("https://www.")) break;
+    } catch (err) {
+      lastError = err;
+      if (err && /SSRF|Redirect target blocked/i.test(err.message)) {
+        if (fallbackResult) {
+          await fallbackResult.response.body?.cancel().catch(() => {});
+        }
+        return res.status(403).json({
+          domain,
+          status: 0,
+          isGhost: true,
+          isInvalid: true,
+          errorCode: "SSRF_BLOCKED",
+          reason: err.message,
+          reachable: false,
+          totalCount: 0,
+          technologies: [],
+          evidence: []
+        });
+      }
     }
   }
 
-  if (html.includes("/wp-content/") || html.includes("/wp-includes/")) {
-    addTech("CMS", { name: "WordPress", version: null, icon: "wordpress", url: "https://wordpress.org", confidence: "100%" });
-    addTech("Blogs", { name: "WordPress", version: null, icon: "wordpress", url: "https://wordpress.org", confidence: "100%" });
-    evidence.push({ id: `EVID-WP-${evidence.length+1}`, layer: "L3_DOM_PATH", tech: "WordPress", rule: 'HTML path /wp-content/', detail: 'Aset tema dan plugin WordPress terdeteksi di DOM', confidence: "100%" });
+  if (!fetchResult && fallbackResult) {
+    fetchResult = fallbackResult;
   }
 
-  // 6. Page Builders (Elementor, Divi, WPBakery)
-  if (html.includes("elementor")) {
-    const elMatch = html.match(/elementor-pro\/assets/i) || html.match(/elementor\/assets/i);
-    const verMatch = html.match(/ver=([\d.]+)['"][^>]*id=['"]elementor/i);
-    const ver = verMatch ? verMatch[1] : null;
-    addTech("Page builders", { name: "Elementor", version: ver, icon: "elementor", url: "https://elementor.com", confidence: "100%" });
-    evidence.push({ id: `EVID-PB-${evidence.length+1}`, layer: "L3_DOM_PATH", tech: `Elementor ${ver || ""}`.trim(), rule: 'script[src*="elementor/assets"]', detail: 'Plugin Elementor Page Builder terdeteksi pada asset stylesheet/script', confidence: "100%" });
+  const responseTime = Date.now() - startTime;
+
+  // Step 3: If DNS is ACTIVE but HTTP timed out / dropped by firewall, return honest partial DNS/Network results
+  if (!fetchResult) {
+    const { technologies, evidence, totalCount } = extractSignatures({
+      domain,
+      finalUrl: "",
+      protocol: "dns:",
+      status: 0,
+      headers: {},
+      setCookies: [],
+      html: "",
+      dns: dnsInfo
+    });
+
+    const partialPayload = {
+      domain,
+      status: 0,
+      isGhost: false,
+      partialScan: true,
+      scanNote: `Host aktif di DNS (${dnsInfo.ip || "resolved"}), namun permintaan HTTP gagal/timeout (${lastError ? lastError.message : "timeout"})`,
+      responseTimeMs: responseTime,
+      dns: dnsInfo,
+      server: null,
+      xPoweredBy: null,
+      technologies,
+      evidence,
+      totalCount,
+      isLiveScan: true
+    };
+    return res.status(200).json(partialPayload);
   }
 
-  // 7. JavaScript Libraries (jQuery, React, Vue, Font Awesome, etc.)
-  if (html.includes("jquery")) {
-    const vMatch = html.match(/jquery[.-]([\d.]+)(?:\.min)?\.js/i) || html.match(/jquery\.js\?ver=([\d.]+)/i);
-    const ver = vMatch ? vMatch[1] : null;
-    addTech("JavaScript libraries", { name: "jQuery", version: ver, icon: "jquery", url: "https://jquery.com", confidence: "100%" });
-    evidence.push({ id: `EVID-JS-${evidence.length+1}`, layer: "L4_JS_GLOBALS", tech: `jQuery ${ver || ""}`.trim(), rule: 'script[src*="jquery"]', detail: `File script jQuery terdeteksi: ${vMatch ? vMatch[0] : "jquery.js"}`, confidence: "100%" });
+  const { response, finalUrl, setCookies } = fetchResult;
+  const status = response.status;
+  const headers = Object.fromEntries(response.headers.entries());
+  const contentType = (headers["content-type"] || "").toLowerCase();
+
+  let bodyText = "";
+  const readableStatus = [200, 201, 301, 302, 401, 403, 404, 405, 503].includes(status);
+  const isTextLike = !contentType || contentType.includes("text/") || contentType.includes("html") || contentType.includes("xml") || contentType.includes("json");
+  if (readableStatus && isTextLike) {
+    bodyText = await readBoundedText(response);
+  } else {
+    await response.body?.cancel().catch(() => {});
   }
 
-  if (html.includes("jquery-ui") || html.includes("jquery.ui")) {
-    addTech("JavaScript libraries", { name: "jQuery UI", version: null, icon: "jquery-ui", url: "https://jqueryui.com", confidence: "100%" });
+  // Step 4: Platform Ghost Deployment Verification
+  if (isPlatformGhostResponse(domain, status, headers, bodyText)) {
+    const ghostPayload = {
+      domain,
+      status,
+      isGhost: true,
+      reason: headers["x-vercel-error"] || "Target deployment tidak ditemukan di platform hosting publik (404 Not Found)",
+      reachable: false,
+      responseTimeMs: responseTime,
+      dns: dnsInfo,
+      totalCount: 0,
+      technologies: [],
+      evidence: []
+    };
+    setCached(domain, ghostPayload);
+    return res.status(200).json(ghostPayload);
   }
 
-  if (html.includes("jquery-migrate")) {
-    addTech("JavaScript libraries", { name: "jQuery Migrate", version: null, icon: "jquery-migrate", url: "https://github.com/jquery/jquery-migrate", confidence: "100%" });
+  // Step 5: 5-Layer Live Signature & Implication Extraction
+  const finalProtocol = (() => {
+    try {
+      return new URL(finalUrl).protocol;
+    } catch {
+      return "https:";
+    }
+  })();
+
+  const { technologies, evidence, totalCount } = extractSignatures({
+    domain,
+    finalUrl,
+    protocol: finalProtocol,
+    status,
+    headers,
+    setCookies,
+    html: bodyText,
+    dns: dnsInfo
+  });
+
+  const isF5WafPage = /The requested URL was rejected\.\s*Please consult with your administrator/i.test(bodyText) && /support ID is:/i.test(bodyText);
+  const isPartial = status === 403 || status === 503 || status === 502 || isF5WafPage;
+  let scanNote = null;
+  if (isF5WafPage) {
+    scanNote = "WAF F5 BIG-IP ASM memblokir ekstraksi DOM penuh; menampilkan deteksi header, cookie, dan WAF aktual.";
+  } else if (status === 403 || status === 503 || status === 502) {
+    scanNote = `Server merespons HTTP ${status} (proteksi WAF atau gangguan upstream); deteksi didasarkan pada header, cookie, dan DNS aktual.`;
   }
 
-  if (html.includes("select2")) {
-    addTech("JavaScript libraries", { name: ".Select2", version: null, icon: "select2", url: "https://select2.org", confidence: "100%" });
-    evidence.push({ id: `EVID-SEL-${evidence.length+1}`, layer: "L4_JS_GLOBALS", tech: ".Select2", rule: 'link/script[src*="select2"]', detail: 'Library dropdown Select2 terdeteksi di DOM', confidence: "100%" });
-  }
+  const payload = {
+    domain,
+    finalUrl,
+    protocol: finalProtocol,
+    status,
+    isGhost: false,
+    partialScan: isPartial,
+    scanNote,
+    responseTimeMs: responseTime,
+    dns: dnsInfo,
+    server: headers["server"] || null,
+    xPoweredBy: headers["x-powered-by"] || null,
+    technologies,
+    evidence,
+    totalCount,
+    isLiveScan: true
+  };
 
-  if (html.includes("masonry")) {
-    addTech("JavaScript libraries", { name: "Masonry", version: null, icon: "masonry", url: "https://masonry.desandro.com", confidence: "100%" });
-  }
-
-  if (html.includes("font-awesome") || html.includes("fontawesome") || html.includes("fa-solid") || html.includes("fa-brands")) {
-    addTech("Font scripts", { name: "Font Awesome", version: null, icon: "font-awesome", url: "https://fontawesome.com", confidence: "100%" });
-    evidence.push({ id: `EVID-FNT-${evidence.length+1}`, layer: "L3_DOM_STYLE", tech: "Font Awesome", rule: 'link[href*="font-awesome"]', detail: 'Stylesheet icon Font Awesome terdeteksi di DOM', confidence: "100%" });
-  }
-
-  if (html.includes("youtube.com/embed") || html.includes("youtu.be")) {
-    addTech("Video players", { name: "YouTube", version: null, icon: "youtube", url: "https://youtube.com", confidence: "100%" });
-  }
-
-  if (html.includes("maps.googleapis.com") || html.includes("google.com/maps")) {
-    addTech("Maps", { name: "Google Maps", version: null, icon: "google-maps", url: "https://maps.google.com", confidence: "100%" });
-  }
-
-  // 8. Analytics & Trackers
-  if (html.includes("gtag/js") || html.includes("google-analytics.com") || html.includes("G-")) {
-    addTech("Analytics", { name: "Google Analytics", version: "GA4", icon: "google-analytics", url: "https://analytics.google.com", confidence: "100%" });
-    evidence.push({ id: `EVID-ANA-${evidence.length+1}`, layer: "L3_DOM_SCRIPT", tech: "Google Analytics GA4", rule: 'script[src*="gtag/js"]', detail: 'Tag script Google Analytics GA4 terdeteksi di DOM', confidence: "100%" });
-  }
-
-  if (html.includes("googletagmanager.com/gtm.js")) {
-    addTech("Tag managers", { name: "Google Tag Manager", version: null, icon: "google-tag-manager", url: "https://tagmanager.google.com", confidence: "100%" });
-  }
-
-  // 9. UI Frameworks (Bootstrap, Tailwind)
-  if (html.includes("bootstrap") || html.includes("btn btn-")) {
-    addTech("UI frameworks", { name: "Bootstrap", version: null, icon: "bootstrap", url: "https://getbootstrap.com", confidence: "95%" });
-  }
-
-  if (html.includes("tailwindcss") || html.match(/class=["'][^"']*\b(flex|grid|hidden|px-\d|py-\d|text-sm)\b[^"']*["']/)) {
-    addTech("UI frameworks", { name: "Tailwind CSS", version: null, icon: "palette", url: "https://tailwindcss.com", confidence: "90%" });
-  }
-
-  // Format into grouped array
-  const formattedTech = Object.entries(categories).map(([catName, items]) => ({
-    category: catName,
-    items
-  }));
-
-  return { technologies: formattedTech, evidence };
+  setCached(domain, payload);
+  return res.status(200).json(payload);
 }
